@@ -1,0 +1,23 @@
+/* ESTILOS GLOBALES PARA LAS ALERTAS */
+
+.swal-confirm-btn {
+    background-color: #4A0042;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 8px;
+}
+
+.swal-cancel-btn {
+    background-color: #ce93d8;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 8px;
+}
