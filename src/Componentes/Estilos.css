@@ -101,3 +101,125 @@
     background-color: #E6DBE5;
     color: #400339;
 }
+
+
+.Piedepagina-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    background-color: #390233;
+    padding: 40px 5%;
+    width: 100%;
+    gap: 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+.links-verticales {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.navegacion-link-Inferior {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.social-icons-wrapper {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.icon-img {
+    width: 25px;
+    height: auto;
+}
+
+
+.buttonPieDePagina {
+    background-color: white;
+    color: #4A0042;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+
+.Titulo-inferior {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    text-align: left;
+    margin-bottom: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+}
+
+
+/* Botones blancos */
+.buttons-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.extra-info {
+    color: white;
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+
+.btn-footer {
+    background-color: white;
+    color: #4A0042;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    max-width: 250px;
+}
+
+/* Estilo para el logo */
+.footer-logo {
+    max-width: 200px;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    color: white;
+    font-size: 13px;
+    margin: 2px 0;
+}
+
+.icon-small {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+.contacto-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
