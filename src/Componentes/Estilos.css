@@ -1,0 +1,103 @@
+.input{
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 12px 20px;
+    border: 1px solid #4A0042;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.label {
+    display: block;
+    font-weight: bold;
+    color: #4c1130;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.button {
+    background-color: #4A0042;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+
+.button-animacion {
+    background-color: #E6DBE5;
+    color: #400339;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5%;
+    background: white;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+/*moviles*/
+@media (max-width: 768px) {
+    .encabezado {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 5%;
+        text-align: center;
+    }
+
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+.navegacion-link {
+    text-decoration: none;
+    color: #400339;
+    font-weight: 700;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-family: sans-serif;
+}
+
+.navegacion-link.active {
+    background-color: #E6DBE5;
+    color: #400339;
+}
