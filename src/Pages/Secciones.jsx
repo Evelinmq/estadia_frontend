@@ -1,24 +1,11 @@
-import SectionCard from '../Components/SectionCard';
+import Pagination from "../Components/Pagination.jsx";
 
-export default function Sidebar(){
-
-    //const handleImageChange = (e) => {
-      //  const file = e.target.files[0];
-        //if (file) {
-          //  const url = URL.createObjectURL(file);
-            //setImagen(url); // guarda esta url en tu estado y pásala como prop
-        //}
-    //};
-
+export default function Secciones() {
     return (
-        <SectionCard
-            titulo="Emprende tu negocio"
-            descripcion="Se busca ayudar a la gente a poder emprender su propio negocio, con precios accesibles."
+        <>
+            <div>Página de Secciones</div>
+            <Pagination />
+        </>
+    );
 
-            onEdit={() => console.log("editar")}
-            onDelete={() => console.log("eliminar")}
-        />
-    )
 }
-
-

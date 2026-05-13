@@ -1,0 +1,115 @@
+.datatable-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.datatable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.datatable thead tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.datatable th {
+    text-align: left;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.datatable__actions-header {
+    width: 100px;
+}
+
+.datatable__row {
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.15s ease;
+}
+
+.datatable__row:last-child {
+    border-bottom: none;
+}
+
+.datatable__row:hover {
+    background: #fdf6ff;
+}
+
+.datatable td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: #555555;
+    vertical-align: middle;
+}
+
+.datatable__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 16px !important;
+}
+
+.datatable__empty {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 14px;
+    padding: 40px 20px !important;
+}
+
+/* RESPONSIVE - Mobile */
+@media (max-width: 600px) {
+    .datatable thead {
+        display: none;
+    }
+
+    .datatable,
+    .datatable tbody,
+    .datatable tr,
+    .datatable td {
+        display: block;
+        width: 100%;
+    }
+
+    .datatable__row {
+        margin-bottom: 12px;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .datatable td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 16px;
+        font-size: 13px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .datatable td:last-child {
+        border-bottom: none;
+    }
+
+    .datatable td[data-label]::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #333;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .datatable__actions {
+        justify-content: flex-end;
+        padding: 10px 16px !important;
+    }
+
+    .datatable__actions::before {
+        display: none;
+    }
+}
