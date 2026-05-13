@@ -1,0 +1,192 @@
+/* =============================
+   SIDEBAR - Juventud x Temixco
+   ============================= */
+
+:root {
+    --sidebar-bg: #4A0042;        /* deep purple/maroon from the image */
+    --sidebar-width: 110px;
+    --sidebar-item-active: rgba(255, 255, 255, 0.15);
+    --sidebar-item-hover: rgba(255, 255, 255, 0.08);
+    --sidebar-text: #ffffff;
+    --sidebar-icon-color: #ffffff;
+    --sidebar-divider: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- Sidebar base ---- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 70px 0 16px 0;
+    z-index: 200;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.25);
+    scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ---- Navigation ---- */
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    gap: 2px;
+    padding: 0 6px;
+}
+
+/* ---- Nav item (button) ---- */
+.sidebar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    padding: 10px 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.18s ease;
+    text-decoration: none;
+    color: var(--sidebar-text);
+}
+
+.sidebar__item:hover {
+    background: var(--sidebar-item-hover);
+}
+
+.sidebar__item--active {
+    background: var(--sidebar-item-active);
+}
+
+/* ---- Icon ---- */
+.sidebar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sidebar-icon-color);
+    width: 28px;
+    height: 28px;
+}
+
+.sidebar__icon img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1); /* Make SVGs white */
+    object-fit: contain;
+}
+
+/* ---- Label ---- */
+.sidebar__label {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--sidebar-text);
+    text-align: center;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* ---- Divider ---- */
+.sidebar__divider {
+    width: 70%;
+    height: 1px;
+    background: var(--sidebar-divider);
+    margin: 10px 0;
+}
+
+/* ---- Logout ---- */
+.sidebar__item--logout {
+    margin-top: auto;
+}
+
+/* ---- Hamburger (mobile only) ---- */
+.sidebar-hamburger {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 300;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sidebar-hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--sidebar-bg);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+/* ---- Overlay (mobile) ---- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 199;
+}
+
+/* =============================
+   RESPONSIVE - Mobile
+   ============================= */
+@media (max-width: 768px) {
+    /* Show hamburger */
+    .sidebar-hamburger {
+        display: flex;
+    }
+
+    /* Show overlay */
+    .sidebar-overlay {
+        display: block;
+    }
+
+    /* Sidebar hidden off-screen on mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 120px;
+        box-shadow: none;
+    }
+
+    /* Slide in when open */
+    .sidebar--open {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* =============================
+   Main content offset (desktop)
+   ============================= */
+.sidebar-page-content {
+    margin-left: var(--sidebar-width);
+    padding: 0;
+    min-height: 100vh;
+    transition: margin-left 0.28s ease;
+}
+
+@media (max-width: 768px) {
+    .sidebar-page-content {
+        margin-left: 0;
+    }
+}

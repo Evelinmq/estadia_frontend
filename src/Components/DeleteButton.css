@@ -1,0 +1,25 @@
+.delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 2px solid #D83232;
+    background: #ffffff;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.delete-btn:hover {
+    background: #ffebee;
+    transform: scale(1.08);
+}
+
+.delete-btn:active {
+    transform: scale(0.96);
+}
+
+.delete-btn img {
+    filter: invert(20%) sepia(90%) saturate(500%) hue-rotate(330deg);
+}
