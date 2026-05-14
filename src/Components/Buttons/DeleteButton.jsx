@@ -1,5 +1,5 @@
 import "./DeleteButton.css";
-import BorrarIcon from "../assets/Borrar.svg";
+import BorrarIcon from "../../assets/Borrar.svg";
 
 export default function DeleteButton({ onClick }) {
     return (

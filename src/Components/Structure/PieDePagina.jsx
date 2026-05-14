@@ -1,12 +1,12 @@
-import logoBlanco from '../Img/logoBlanco.png'
-import './Estilos.css'
-import facebook from "../Img/facebook.png"
-import instagram from "../Img/instagram.png"
-import Whats from "../Img/Whats.png"
+import logoBlanco from '../../Img/logoBlanco.png'
+import '../Estilos.css'
+import facebook from "../../Img/facebook.png"
+import instagram from "../../Img/instagram.png"
+import Whats from "../../Img/Whats.png"
 //import telefono from "../Img/telefono.png"
-import locali from "../Img/locali.png"
-import corre from "../Img/corre.png"
-import {ButtonPieDePagina} from "./Button.jsx";
+import locali from "../../Img/locali.png"
+import corre from "../../Img/corre.png"
+import {ButtonPieDePagina} from "../Buttons/Button.jsx";
 
 export const PieDePagina = () =>{
 

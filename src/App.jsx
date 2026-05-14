@@ -1,7 +1,7 @@
 import './App.css';
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Sidebar from "./Components/Sidebar";
+import Sidebar from "./Components/Structure/Sidebar.jsx";
 import Beneficiarios from "./Pages/Beneficiarios";
 import Afiliados from "./Pages/Afiliados";
 import Administracion from "./Pages/Administracion";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DataTable from "../Components/DataTable";
+import DataTable from "../Components/Admin/Datatable.jsx";
 
 const columns = [
     { key: "objetivo", label: "Objetivo" },
@@ -11,6 +11,10 @@ const datosIniciales = [
         objetivo: "Visión",
         descripcion:
             "Consolidarnos como la organización líder y referente en el estado de Morelos por nuestra capacidad de transformar el entorno social de las comunidades indígenas y grupos vulnerables. Aspiramos a un futuro donde cada ciudadano tenga acceso pleno a la salud, educación de calidad y justicia social, logrando un desarrollo regional sustentable, inclusivo y en total armonía con la cultura y el medio ambiente de nuestra región.",
+    },
+    {
+        objetivo: "Misión",
+        descripcion: "Alguna descripción"
     },
 ];
 

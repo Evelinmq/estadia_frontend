@@ -1,6 +1,6 @@
-import EditButton from "./EditButton";
-import DeleteButton from "./DeleteButton";
-import "./DataTable.css";
+import EditButton from "../Buttons/EditButton.jsx";
+import DeleteButton from "../Buttons/DeleteButton.jsx";
+import "./Datatable.css";
 
 export default function Datatable({ columns, rows, onEdit, onDelete }) {
     return (

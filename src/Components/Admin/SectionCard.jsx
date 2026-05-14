@@ -1,5 +1,5 @@
-import EditButton from "./EditButton";
-import DeleteButton from "./DeleteButton";
+import EditButton from "../Buttons/EditButton.jsx";
+import DeleteButton from "../Buttons/DeleteButton.jsx";
 import "./SectionCard.css";
 
 export default function SectionCard({ titulo, descripcion, imagen, onEdit, onDelete }) {

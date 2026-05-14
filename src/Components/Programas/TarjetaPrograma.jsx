@@ -1,4 +1,4 @@
-import {Button} from "../Button.jsx";
+import {Button} from "../Buttons/Button.jsx";
 import './Programa.css'
 
 

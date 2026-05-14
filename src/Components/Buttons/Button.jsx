@@ -1,6 +1,6 @@
 
 
-import './Estilos.css'
+import '../Estilos.css'
 
 export function Button({ label, onClick }) {
 

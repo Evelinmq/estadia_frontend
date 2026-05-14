@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DataTable from "../Components/DataTable";
+import DataTable from "../Components/Admin/Datatable.jsx";
 
 const columns = [
     { key: "nombre", label: "Nombre completo" },

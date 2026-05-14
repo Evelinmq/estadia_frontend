@@ -1,5 +1,5 @@
 import "./EditButton.css";
-import EditarIcon from "../assets/Editar.svg";
+import EditarIcon from "../../assets/Editar.svg";
 
 export default function EditButton({ onClick }) {
     return (

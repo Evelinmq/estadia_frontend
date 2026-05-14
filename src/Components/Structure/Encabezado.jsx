@@ -1,9 +1,9 @@
 
-import './Estilos.css'
-import logo from '../Img/logo.png'
-import icono from '../Img/icono.png'
-import donacion from '../Img/donacion.png'
-import {Button} from "./Button.jsx";
+import '../Estilos.css'
+import logo from '../../Img/logo.png'
+import icono from '../../Img/icono.png'
+import donacion from '../../Img/donacion.png'
+import {Button} from "../Buttons/Button.jsx";
 
 
 
