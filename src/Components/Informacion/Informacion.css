@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 .valores-card {
     position: relative;
     width: 90%;
@@ -66,4 +68,65 @@
 .valores-card:hover {
     transform: scale(1.03);
     box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+}
+
+
+
+
+.card-Mision {
+    display: flex;
+    align-items: center;
+    background-color: #977490;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-radius: 15px;
+    padding: 10px 40px;
+    width: auto;
+    max-width: 1350px;
+    height: auto;
+    min-height: 330px;
+    gap: 10px;
+    margin: 10px auto;
+    min-height: 330px;
+    flex-direction: column;
+
+}
+
+.card-Vision {
+    display: flex;
+    align-items: center;
+    background-color: #643462;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-radius: 15px;
+    padding: 20px 40px;
+    width: 90%;
+    max-width: 1350px;
+    height: 330px;
+    gap: 10px;
+    margin: 10px auto;
+    flex-direction: column;
+    height: auto;
+    min-height: 330px;
+}
+
+
+.titulo-Vision-Mision {
+    padding: 10px;
+    font-size: 64px;
+    font-weight: 200;
+    color: white;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+
+}
+
+.descripcion-Vision-Mision {
+    font-size: 32px;
+    color: white;
+    margin: 0;
+    line-height: 1.5;
+
+    font-family: 'Poppins', sans-serif;
+    text-align: justify;
+
 }
