@@ -1,0 +1,57 @@
+.image-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+    padding: 20px 20px 16px 20px;
+    width: 220px;
+    gap: 12px;
+}
+
+/* Título */
+.image-card__titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #4A0042;
+    text-align: center;
+    margin: 0;
+}
+
+/* Imagen circular */
+.image-card__imagen-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 10%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid #e0e0e0;
+}
+
+.image-card__imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-card__imagen-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #f3e5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-card__imagen-placeholder span {
+    font-size: 11px;
+    color: #9e9e9e;
+}
+
+/* Botones */
+.image-card__acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
