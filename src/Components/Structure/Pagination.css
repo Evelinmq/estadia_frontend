@@ -1,0 +1,76 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; padding: 24px 0 16px 0;
+}
+
+/* Botón base */
+
+.pagination__btn {
+    display: flex;
+    align-items: center;
+    justify-content:
+            center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: #ffffff;
+    color: #555555;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease; line-height: 1; }
+
+.pagination__btn:hover:not(.pagination__btn--disabled):not(.pagination__btn--active) {
+    background: #f3e5f5;
+    border-color: #ce93d8;
+    color: #6b1f6b;
+}
+
+/* ---- Página activa ---- */
+.pagination__btn--active {
+    background: #4A0042;
+    border-color: #6b1f6b;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: default; }
+
+/* ---- Deshabilitado ---- */
+.pagination__btn--disabled {
+    opacity: 0.35; cursor:
+        not-allowed;
+}
+
+/* ---- Flechas ---- */
+.pagination__arrow {
+    font-size: 20px;
+    font-weight: 400;
+    color: #4A0042;
+}
+
+/* Puntos suspensivos */
+.pagination__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    color: #aaaaaa;
+    font-size: 14px;
+    user-select: none;
+}
+
+/* Lo responsivo */
+@media (max-width: 400px) {
+    .pagination__btn {
+        min-width: 30px;
+        height: 30px;
+        font-size: 13px;
+    }
+
+.pagination__arrow {
+    font-size: 18px; }
+}
