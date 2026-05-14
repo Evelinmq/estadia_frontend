@@ -1,0 +1,21 @@
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 2px solid #8E0073;
+    background: #ffffff;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.download-btn:hover {
+    background: #ffebee;
+    transform: scale(1.08);
+}
+
+.download-btn:active {
+    transform: scale(0.96);
+}

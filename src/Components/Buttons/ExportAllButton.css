@@ -1,0 +1,29 @@
+
+.button-exportar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    color: #8E0073;
+    border: 2px solid #8E0073;
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.button-exportar:hover {
+    background-color: #B01A8A;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(124, 31, 163, 0.3);
+}
+
+.button-exportar:active {
+    background-color: #5A1275;
+    border-color: #5A1275;
+    box-shadow: none;
+}

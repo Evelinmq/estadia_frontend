@@ -1,0 +1,27 @@
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background-color: #ffffff;
+    flex-wrap: wrap;
+    min-height: 68px;
+}
+
+.header--solo {
+    justify-content: flex-start;
+}
+
+.header-logo {
+    height: 52px;
+    object-fit: contain;
+    margin-right: 360px;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    flex-wrap: wrap;
+}
