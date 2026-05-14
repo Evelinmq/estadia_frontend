@@ -19,14 +19,12 @@
     margin: 0;
 }
 
-/* Imagen circular */
 .image-card__imagen-wrapper {
-    width: 90px;
-    height: 90px;
+    width: 200px;
+    height: 180px;
     border-radius: 10%;
     overflow: hidden;
     flex-shrink: 0;
-    border: 3px solid #e0e0e0;
 }
 
 .image-card__imagen {
