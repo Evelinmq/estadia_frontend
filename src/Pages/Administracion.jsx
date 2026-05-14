@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DataTable from "../Components/Admin/Datatable.jsx";
+import {Header} from "../Components/Structure/Header.jsx";
 
 const columns = [
     { key: "nombre", label: "Nombre completo" },
@@ -24,6 +25,7 @@ export default function Administracion() {
 
     return (
         <div style={{ padding: "24px" }}>
+            <Header seccion="administracion"/>
             <DataTable
                 columns={columns}
                 rows={admins}

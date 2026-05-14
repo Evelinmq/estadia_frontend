@@ -1,5 +1,11 @@
-
+import {Header} from "../Components/Structure/Header.jsx";
 
 export default function Programas() {
-    return <div>Página de Programas</div>;
+    return (
+
+        <>
+            <Header seccion="programas"/>
+            <div>Página de Programas</div>
+        </>
+    );
 }

@@ -1,5 +1,11 @@
-
+import {Header} from "../Components/Structure/Header.jsx";
 
 export default function Beneficiarios() {
-    return <div>Página de Beneficiarios</div>;
+    return (
+        <>
+            <Header seccion="beneficiarios"/>
+            <div>Página de Beneficiarios</div>
+
+        </>
+    );
 }

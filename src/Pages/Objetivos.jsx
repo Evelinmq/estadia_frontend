@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DataTable from "../Components/Admin/Datatable.jsx";
+import {Header} from "../Components/Structure/Header.jsx";
 
 const columns = [
     { key: "objetivo", label: "Objetivo" },
@@ -28,6 +29,7 @@ export default function Objetivos() {
 
     return (
         <div style={{ padding: "24px" }}>
+            <Header seccion="objetivos"/>
             <DataTable
                 columns={columns}
                 rows={objetivos}

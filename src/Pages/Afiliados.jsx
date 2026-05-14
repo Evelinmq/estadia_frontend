@@ -1,5 +1,12 @@
-
+import {Header} from "../Components/Structure/Header.jsx";
 
 export default function Afiliados() {
-    return <div>Página de Afiliados</div>;
+    return (
+        <>
+            <Header seccion="afiliados"/>
+            <div>Página de Afiliados</div>
+        </>
+    );
+
+
 }
