@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../Components/Structure/Pagination.jsx";
 import { Header } from "../Components/Structure/Header.jsx";
 import SectionCard from "../Components/Admin/SectionCard.jsx";
-import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
+import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from "../Utils/alerts";
 import "./ModalGlobal.css";
 
 export default function Secciones() {
@@ -11,6 +11,10 @@ export default function Secciones() {
     const [showModal, setShowModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
+
+    const [secciones, setSecciones] = useState([
+        { id: 1, titulo: "Emprende tu negocio", descripcion: "Se busca potenciar el crecimiento..." }
+    ]);
 
     const {
         register,
@@ -43,10 +47,25 @@ export default function Secciones() {
     useEffect(() => {
         if (imagenSeleccionada && imagenSeleccionada.length > 0) {
             const file = imagenSeleccionada[0];
-            setPreviewImage(URL.createObjectURL(file)); // Crea la URL de la imagen
+            setPreviewImage(URL.createObjectURL(file));
         }
     }, [imagenSeleccionada]);
 
+    const eliminar = async (id) => {
+        const confirmar = await confirmarEliminar();
+
+        if (confirmar) {
+            try {
+                // await api.delete(id);
+                alertaExito("Sección eliminada correctamente");
+                // RECARGAR LA VISTA EN TIEMPO REAL
+                setSecciones(secciones.filter(seccion => seccion.id !== id));
+
+            } catch (error) {
+                alertaError("No se pudo eliminar la sección");
+            }
+        }
+    };
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -59,10 +78,15 @@ export default function Secciones() {
             <Header seccion="secciones" onAdd={() => handleOpenModal(false)} />
 
             <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
-                <SectionCard
-                    titulo="Emprende tu negocio"
-                    onEdit={() => handleOpenModal(true)}
-                />
+                {secciones.map((sec) => (
+                    <SectionCard
+                        key={sec.id}
+                        titulo={sec.titulo}
+                        descripcion={sec.descripcion}
+                        onEdit={() => handleOpenModal(true)}
+                        onDelete={() => eliminar(sec.id)}
+                    />
+                ))}
             </div>
 
             {showModal && (
@@ -79,7 +103,6 @@ export default function Secciones() {
                                     <input
                                         type="text"
                                         placeholder="Nombre de la sección"
-                                        /* Aplicamos borde rojo dinámicamente */
                                         className="modal-input"
                                         style={{ borderColor: errors.nombre ? '#ef4444' : '#d1d5db' }}
                                         {...register("nombre", {
@@ -92,11 +115,10 @@ export default function Secciones() {
                                                 val.trim() === val || "No se permiten espacios al inicio o final"
                                         })}
                                     />
-                                    {/* Mensaje de error en rojo debajo */}
                                     {errors.nombre && <span className="error">{errors.nombre.message}</span>}
                                 </div>
 
-                                {/* TEXTAREA DESCRIPCIÓN */}
+                                {/* AREA DESCRIPCIÓN */}
                                 <div className="form-group" style={{ width: '100%' }}>
                                     <label className="label">Descripción:</label>
                                     <textarea
@@ -116,7 +138,7 @@ export default function Secciones() {
                                     {errors.descripcion && <span className="error">{errors.descripcion.message}</span>}
                                 </div>
 
-                                {/* IMAGEN */}
+                                {/* IMAGEN (Estructura idéntica a Programas) */}
                                 <div className="form-group" style={{ width: '100%' }}>
                                     <label className="label">Imagen:</label>
                                     <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
@@ -125,7 +147,7 @@ export default function Secciones() {
                                             flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            height: '100px',
+                                            height: '180px',
                                             borderStyle: previewImage ? 'solid' : 'dashed',
                                             borderColor: errors.imagen ? '#ef4444' : '#d1d5db',
                                             overflow: 'hidden',
@@ -138,7 +160,10 @@ export default function Secciones() {
                                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                 />
                                             ) : (
-                                                <span style={{ color: '#878787' }}>+ Añadir imagen</span>
+                                                <div style={{ textAlign: 'center', color: '#878787' }}>
+                                                    <span style={{ fontSize: '24px' }}>+</span>
+                                                    <p>Añadir Imagen</p>
+                                                </div>
                                             )}
                                         </div>
                                     </label>
@@ -147,20 +172,12 @@ export default function Secciones() {
                                         type="file"
                                         accept="image/*"
                                         style={{ display: 'none' }}
-                                        {...register("imagen", { required: true })}
+                                        {...register("imagen", { required: !isEditing })}
                                     />
                                     {errors.imagen && <span className="error">La imagen es obligatoria</span>}
-
-                                    {previewImage && (
-                                        <p style={{ fontSize: '12px', color: '#8E0073', marginTop: '8px', cursor: 'pointer' }}
-                                           onClick={() => setPreviewImage(null)}>
-                                            Cambiar imagen
-                                        </p>
-                                    )}
                                 </div>
 
                             </div>
-
                             <div className="modal-actions">
                                 <button type="button" className="btn-cancelar" onClick={handleCloseModal}>
                                     Cancelar
