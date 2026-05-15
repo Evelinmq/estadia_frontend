@@ -186,3 +186,17 @@
         text-align: center;
     }
 }
+
+/*para el formulario de beneficiarios y voluntariado*/ 
+.modal-grid-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+    margin-bottom: 24px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
