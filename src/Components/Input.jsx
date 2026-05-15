@@ -1,6 +1,6 @@
 import './Estilos.css'
 
-export function Input({ label, type, value, onChange }) {
+export default function Input({ label, type, value, onChange }) {
 
     return(
         <div>
