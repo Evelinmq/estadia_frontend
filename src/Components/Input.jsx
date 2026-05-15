@@ -1,13 +1,26 @@
 import './Estilos.css'
+import { forwardRef } from 'react';
 
-export default function Input({ label, type, value, onChange }) {
+const Input = forwardRef(({ label, type = "text", error, ...props }, ref) => {
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            {label && <label className="label">{label}</label>}
+            
+            <input 
+                ref={ref}
+                type={type} 
+                placeholder={label}
+                className="modal-input" 
+                /* Si hay un error, el borde se pone rojo de forma dinámica */
+                style={{ borderColor: error ? '#ef4444' : '#d1d5db' }}
+                {...props} 
+            />
 
-    return(
-        <div>
-            <label className="label">{label}</label>
-            <div/>
-            <input type={type} value={value} onChange={onChange} className="input" placeholder={label} />
+            {error && <span className="error" style={{ color: '#ef4444', fontSize: '12px' }}>{error.message}</span>}
         </div>
-    )
+    );
+});
 
-}
+Input.displayName = 'Input';
+
+export default Input;
