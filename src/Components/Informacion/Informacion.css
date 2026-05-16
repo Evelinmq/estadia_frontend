@@ -181,8 +181,6 @@
     background-color: #B795B3;
 }
 
-
-
 .imagen-Voluntariado {
     width: 100%;
     height: auto;
@@ -191,4 +189,150 @@
     overflow: hidden;
     display: block
         
+}
+
+.card-registro-voluntariado {
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    padding: 20px;
+    width: auto;
+    max-width: 1350px;
+    height: auto;
+    max-height: 386px;
+    gap: 10px;
+    margin: 10px auto;
+    min-height: 330px;
+    flex-direction: column;
+}
+
+
+
+/* Contenedor General de la Tarjeta */
+.card-registro-voluntariado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff; 
+    border-radius: 15px;
+    padding: 40px;
+    width: 90%;
+    max-width: 800px; 
+    margin: 20px auto;
+}
+
+.titulo-voluntariado {
+    color: #390233;
+    font-size: 28px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.pasos-contenedor {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.paso-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 160px; 
+    text-align: center;
+}
+
+.icono-flujo {
+    height: 45px; 
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.iconos-dobles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 45px;
+    margin-bottom: 15px;
+}
+
+.descripcion-flujo {
+    color: #390233;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.3;
+}
+
+
+.linea-divisoria {
+    min-width: 60px;
+    max-width: 60px;
+    width: auto;
+    height: auto;
+    align-self: center;
+    margin-bottom: 35px; 
+}
+
+
+.seccion-boton-registro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.texto-ayuda-boton {
+    color: #390233;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .card-registro-voluntariado {
+        padding: 25px 20px;
+    }
+
+    .titulo-voluntariado {
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+
+    
+    .pasos-contenedor {
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    
+    .paso-item {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    
+    .linea-divisoria {
+        width: auto;
+        height: 35px; 
+        transform: rotate(90deg); 
+        margin-bottom: 0;
+        align-self: center;
+    }
+
+    .texto-ayuda-boton {
+        font-size: 14px;
+        text-align: center;
+    }
 }

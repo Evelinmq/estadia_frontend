@@ -1,4 +1,4 @@
-
+import './Informacion.css'
 
 export default function Vision({descripcion }) {
     return (
