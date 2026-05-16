@@ -100,7 +100,7 @@
     padding: 20px 40px;
     width: 90%;
     max-width: 1350px;
-    height: 330px;
+    max-height: 330px;
     gap: 10px;
     margin: 10px auto;
     flex-direction: column;
@@ -129,4 +129,66 @@
     font-family: 'Poppins', sans-serif;
     text-align: justify;
 
+}
+
+.descripcion-Voluntariado {
+    font-size: 20px;
+    color: white;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-align: justify;
+
+}
+
+.card-Voluntariado {
+    display: flex;
+    align-items: center;
+    box-shadow: 4px 4px 6px rgba(0,0,0,0.05);
+    border-radius: 15px;
+    padding: 0px;
+    width: auto;
+    max-width: 291px;
+    height: auto;
+    max-height: 386px;
+    gap: 10px;
+    margin: 10px auto;
+    min-height: 330px;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+.card-texto {
+    padding: 10px 40px;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+.card-morada {
+    background-color: #390233;
+}
+
+.card-morado2{
+    background-color: #674663;
+}
+
+.card-morado3{
+    background-color: #9C7197;
+}
+
+.card-morado4{
+    background-color: #B795B3;
+}
+
+
+
+.imagen-Voluntariado {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    overflow: hidden;
+    display: block
+        
 }
