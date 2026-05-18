@@ -1,0 +1,256 @@
+:root {
+    --brand: #8E0073;
+    --brand-dark: #4A0042;
+    --brand-light: #EDE0F5;
+    --brand-muted: #f7f0fc;
+
+    --text-primary: #4A0042;
+    --text-secondary: #555;
+    --text-hint: #D8CBD6;
+
+    --border: #ddd;
+    --border-focus: #8E0073;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --shadow-card: 0 4px 32px rgba(123, 63, 160, 0.10);
+    --shadow-btn: 0 2px 8px rgba(123, 63, 160, 0.30);
+}
+
+.lf-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    padding: 2rem 1rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.lf-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid #ece6f0;
+    padding: 2.5rem 2.75rem;
+    width: 100%;
+    max-width: 480px;
+}
+
+.lf-logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.lf-logo {
+    height: 72px;
+    width: auto;
+    object-fit: contain;
+}
+
+.lf-logo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lf-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.lf-notice {
+    background: var(--brand-muted);
+    border: 1px solid var(--brand-light);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.lf-notice-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--brand);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.15rem;
+}
+
+.lf-notice-text {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--brand-dark);
+    font-weight: 500;
+}
+
+.lf-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.55;
+    margin: 0 0 1.75rem;
+}
+
+.lf-field {
+    margin-bottom: 1.1rem;
+}
+
+.lf-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.lf-input-wrap {
+    position: relative;
+}
+
+.lf-input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 44px;
+    padding: 0 2.75rem 0 0.875rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.lf-input::placeholder {
+    color: var(--text-hint);
+}
+
+.lf-input:hover {
+    border-color: #bbb;
+}
+
+.lf-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(123, 63, 160, 0.12);
+}
+
+.lf-eye {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-hint);
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+}
+
+.lf-eye:hover {
+    color: var(--brand);
+}
+
+.lf-forgot {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-top: 0.25rem;
+    margin-bottom: 1.75rem;
+    display: inline-block;
+    transition: color 0.15s;
+}
+
+.lf-forgot:hover {
+    color: var(--brand-dark);
+}
+
+.lf-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.lf-btn {
+    height: 44px;
+    padding: 0 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.1s ease, box-shadow 0.18s ease;
+    border: none;
+}
+
+.lf-btn:active {
+    transform: scale(0.97);
+}
+
+.lf-btn--secondary {
+    background: #f0e9f6;
+    color: var(--brand-dark);
+    border: 1.5px solid #d8c4e8;
+}
+
+.lf-btn--secondary:hover {
+    background: #e4d3f0;
+}
+
+.lf-btn--primary {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: var(--shadow-btn);
+    min-width: 140px;
+}
+
+.lf-btn--primary:hover:not(:disabled) {
+    background: var(--brand-dark);
+    box-shadow: 0 4px 12px rgba(123, 63, 160, 0.4);
+}
+
+.lf-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.vc-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0.5rem 0 1rem;
+}
+
+.vc-hint {
+    font-size: 0.78rem;
+    color: #888;
+    text-align: center;
+    margin: 0 0 1.75rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 520px) {
+    .lf-card {
+        padding: 2rem 1.5rem;
+    }
+    .lf-title {
+        font-size: 1.5rem;
+    }
+}

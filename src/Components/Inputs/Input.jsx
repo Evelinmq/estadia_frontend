@@ -1,4 +1,4 @@
-import './Estilos.css'
+import '../Estilos.css'
 import { forwardRef } from 'react';
 
 const Input = forwardRef(({ label, type = "text", error, ...props }, ref) => {
