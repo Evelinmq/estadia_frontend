@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../Components/Structure/Pagination.jsx";
 import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
 import "./ModalGlobal.css";
-import INPUT from "../Components/Input.jsx";
+import Input from "../Components/Inputs/Input.jsx";
 
 export default function Afiliados() {
 
@@ -109,7 +109,7 @@ export default function Afiliados() {
                                        {/* INPUT SECCIÓN */}
                                        <div className="column">
                                        <div className="form-group" style={{ width: '100%' }}>
-                                           <INPUT
+                                           <Input
                                            label="Nombre/s"
                                            TYPE="text"
                                            PLACEHOLDER="Nombre completo"
@@ -126,7 +126,7 @@ export default function Afiliados() {
                                        </div>
        
                                        <div className="form-group" style={{ width: '100%' }}>
-                                          <INPUT
+                                          <Input
                                            label="Apellido Paterno"
                                            TYPE="text"
                                            PLACEHOLDER="Apellido paterno"
@@ -142,7 +142,7 @@ export default function Afiliados() {
                                        </div>
    
                                         <div className="form-group" style={{ width: '100%' }}>
-                                          <INPUT
+                                          <Input
                                            label="Apellido Materno"
                                            TYPE="text"
                                            PLACEHOLDER="Apellido materno"
@@ -158,7 +158,7 @@ export default function Afiliados() {
                                        </div>
    
                                         <div className="form-group" style={{ width: '100%' }}>
-                                          <INPUT
+                                          <Input
                                            label="Genero"
                                            TYPE="text"
                                            PLACEHOLDER="Genero"
@@ -178,7 +178,7 @@ export default function Afiliados() {
                                        <div className="column">
    
                                         <div className="form-group" style={{ width: '100%' }}>
-                                          <INPUT
+                                          <Input
                                            label="Edad"
                                            TYPE="number"
                                            PLACEHOLDER="Edad"
@@ -194,7 +194,7 @@ export default function Afiliados() {
                                        </div>
    
                                         <div className="form-group" style={{ width: '100%' }}>
-                                          <INPUT
+                                          <Input
                                            label="Teléfono"
                                            TYPE="tel"
                                            PLACEHOLDER="Teléfono"

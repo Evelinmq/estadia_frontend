@@ -5,7 +5,7 @@ import { Header } from "../Components/Structure/Header.jsx";
 import BeneficiarioCard from "../Components/Admin/BeneficiarioCard.jsx";
 import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
 import "./ModalGlobal.css";
-import INPUT from "../Components/Input.jsx";
+import Input from "../Components/Inputs/Input.jsx";
 
 export default function Beneficiarios() {
 
@@ -117,7 +117,7 @@ export default function Beneficiarios() {
                                     {/* INPUT SECCIÓN */}
                                     <div className="column">
                                     <div className="form-group" style={{ width: '100%' }}>
-                                        <INPUT
+                                        <Input
                                         label="Nombre/s"
                                         TYPE="text"
                                         PLACEHOLDER="Nombre completo"
@@ -134,7 +134,7 @@ export default function Beneficiarios() {
                                     </div>
     
                                     <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Apellido Paterno"
                                         TYPE="text"
                                         PLACEHOLDER="Apellido paterno"
@@ -150,7 +150,7 @@ export default function Beneficiarios() {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Apellido Materno"
                                         TYPE="text"
                                         PLACEHOLDER="Apellido materno"
@@ -166,7 +166,7 @@ export default function Beneficiarios() {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Genero"
                                         TYPE="text"
                                         PLACEHOLDER="Genero"
@@ -182,7 +182,7 @@ export default function Beneficiarios() {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Edad"
                                         TYPE="number"
                                         PLACEHOLDER="Edad"
@@ -201,7 +201,7 @@ export default function Beneficiarios() {
 
                                 <div className="column">
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Teléfono"
                                         TYPE="tel"
                                         PLACEHOLDER="Teléfono"
@@ -217,7 +217,7 @@ export default function Beneficiarios() {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
                                         label="Municipio"
                                         TYPE="text"
                                         PLACEHOLDER="Municipio"
@@ -233,7 +233,24 @@ export default function Beneficiarios() {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <INPUT
+                                       <Input
+                                        label="Colonia"
+                                        TYPE="text"
+                                        PLACEHOLDER="Colonia"
+                                        error={errors.colonia}
+                                        {...register("colonia", {
+                                            required: "La colonia es obligatoria",
+                                            pattern: {
+                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                                                message: "Solo se permiten letras"
+                                            }
+                                        })}
+                                        />
+                                    </div>
+
+
+                                     <div className="form-group" style={{ width: '100%' }}>
+                                       <Input
                                         label="Correo electrónico"
                                         TYPE="text"
                                         PLACEHOLDER="Correo electrónico"

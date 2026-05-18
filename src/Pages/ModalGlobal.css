@@ -289,3 +289,18 @@
     }
 
 }
+
+.form-container {
+  max-width: 900px;         
+  margin: 0 auto;          
+  padding: 30px 20px;
+  font-family: sans-serif;
+}
+
+.form-actions-card {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+ 
+}
+
