@@ -3,30 +3,41 @@ import '../Estilos.css'
 import facebook from "../../Img/facebook.png"
 import instagram from "../../Img/instagram.png"
 import Whats from "../../Img/Whats.png"
-//import telefono from "../Img/telefono.png"
+import telefono from "../../Img/telefono.png"
 import locali from "../../Img/locali.png"
 import corre from "../../Img/corre.png"
 import {ButtonPieDePagina} from "../Buttons/Button.jsx";
 
-export const PieDePagina = () =>{
+export default function PieDePagina() {
 
     return(
 <footer className="Piedepagina-card">
     <div className="footer-column ">
     <img src={logoBlanco} alt="logo" className="footer-logo"/>
+    
     <div className="contact-info links-verticales">
-        <p>+52 777 257 8970</p>
-        <p>+52 777 134 3182</p>
-        <p>+52 777 790 5459</p>
+
+         <div className="contacto-item">
+            <img src={telefono} alt="teléfono" className="icon-small"/>
+            <p>+52 777 257 8970</p>
+        </div>
+        <div className="contacto-item">
+            <img src={telefono} alt="teléfono" className="icon-small"/>
+            <p>+52 777 134 3182</p>
+        </div>
+        <div className="contacto-item">
+            <img src={telefono} alt="teléfono" className="icon-small"/>
+            <p>+52 777 790 5459</p>
+        </div>
     </div>
 </div>
 
     <div className="footer-column">
         <h3 className="Titulo-inferior">ENLACES</h3>
         <div className="links-verticales">
-        <a href={"#"} className="navegacion-link-Inferior">Inicio</a>
-        <a href={"#"} className="navegacion-link-Inferior">Voluntariado</a>
-        <a href={"#"} className="navegacion-link-Inferior">Programas</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio">Inicio</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio">Voluntariado</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio">Programas</a>
         </div>
     </div>
 
@@ -40,7 +51,7 @@ export const PieDePagina = () =>{
     <div className="extra-info links-verticales">
         <div className="contacto-item">
             <img src={corre} alt="correo" className="icon-small"/>
-            <p>juventud.temixco.2019@hotmail.com</p>
+            <p className="info-pie">juventud.temixco.2019@hotmail.com</p>
         </div>
         <div className="contacto-item">
             <img src={locali} alt="localización" className="icon-small"/>
