@@ -4,6 +4,8 @@ import { Header } from "../Components/Structure/Header.jsx";
 import ImageCard from "../Components/Admin/ImageCard.jsx";
 import Pagination from "../Components/Structure/Pagination.jsx";
 import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from "../Utils/alerts";
+import Select from "../Components/Inputs/Select.jsx";
+import FileInput from "../Components/Inputs/FileInput.jsx";
 import "./ModalGlobal.css";
 
 export default function Programas() {
@@ -119,61 +121,28 @@ export default function Programas() {
                             <div className="modal-center">
 
                                 {/* SELECT DE SECCIÓN */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Sección:</label>
-                                    <select
-                                        className="modal-select"
-                                        style={{ borderColor: errors.seccionId ? '#ef4444' : '#d1d5db' }}
-                                        {...register("seccionId", { required: "Debes seleccionar una sección" })}
-                                    >
-                                        <option value="">Seleccionar</option>
-                                        {seccionesRegistradas.map((sec) => (
-                                            <option key={sec.id} value={sec.id}>
-                                                {sec.nombre}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.seccionId && <span className="error">{errors.seccionId.message}</span>}
-                                </div>
+                                <Select
+                                    label="Sección:"
+                                    error={errors.seccionId}
+                                    {...register("seccionId", { required: "Debes seleccionar una sección a la que corresponde el programa" })}
+                                >
+                                    <option value="">Seleccionar</option>
+                                    {seccionesRegistradas.map((sec) => (
+                                        <option key={sec.id} value={sec.id}>
+                                            {sec.nombre}
+                                        </option>
+                                    ))}
+                                </Select>
 
-                                {/* INPUT DE IMAGEN (VISTA PREVIA) */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Imagen:</label>
-                                    <label htmlFor="file-upload-prog" style={{ cursor: 'pointer' }}>
-                                        <div className="modal-input" style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            height: '180px',
-                                            borderStyle: previewImage ? 'solid' : 'dashed',
-                                            borderColor: errors.imagen ? '#ef4444' : '#d1d5db',
-                                            overflow: 'hidden',
-                                            padding: '0'
-                                        }}>
-                                            {previewImage ? (
-                                                <img
-                                                    src={previewImage}
-                                                    alt="Vista previa"
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            ) : (
-                                                <div style={{ textAlign: 'center', color: '#878787' }}>
-                                                    <span style={{ fontSize: '24px' }}>+</span>
-                                                    <p>Añadir Imagen</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </label>
-                                    <input
-                                        id="file-upload-prog"
-                                        type="file"
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                        {...register("imagen", { required: !isEditing })}
-                                    />
-                                    {errors.imagen && <span className="error">La imagen es obligatoria</span>}
-                                </div>
+                                {/* IMAGEN */}
+                                <FileInput
+                                    label="Imagen:"
+                                    previewImage={previewImage}
+                                    error={errors.imagen}
+                                    {...register("imagen", {
+                                        required: !isEditing ? "La imagen es obligatoria" : false
+                                    })}
+                                />
 
                             </div>
 

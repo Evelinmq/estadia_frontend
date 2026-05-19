@@ -4,6 +4,8 @@ import { Header } from "../Components/Structure/Header.jsx";
 import ImageCard from "../Components/Admin/ImageCard.jsx";
 import Pagination from "../Components/Structure/Pagination.jsx";
 import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from "../Utils/alerts.js";
+import Input from "../Components/Inputs/Input.jsx";
+import FileInput from "../Components/Inputs/FileInput.jsx";
 import "./ModalGlobal.css";
 
 export default function Alianzas() {
@@ -106,64 +108,32 @@ export default function Alianzas() {
                             <div className="modal-center">
 
                                 {/* INPUT DE NOMBRE DEL ALIADO */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Aliado:</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Nombre del aliado"
-                                        className="modal-input"
-                                        style={{ borderColor: errors.nombre ? '#ef4444' : '#d1d5db' }}
-                                        {...register("nombre", {
-                                            required: "Este campo es obligatorio",
-                                            pattern: {
-                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                message: "Solo se permiten letras"
-                                            },
-                                            validate: (val) =>
-                                                val.trim() === val || "No se permiten espacios al inicio o final"
-                                        })}
-                                    />
-                                    {errors.nombre && <span className="error">{errors.nombre.message}</span>}
-                                </div>
+                                <Input
+                                    label="Aliado:"
+                                    type="text"
+                                    placeholder="Nombre del aliado"
+                                    error={errors.nombre}
+                                    {...register("nombre", {
+                                        required: "El nombre del aliado es obligatorio",
+                                        pattern: {
+                                            value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                                            message: "Solo se permiten letras"
+                                        },
+                                        validate: (val) =>
+                                            val.trim() === val || "No se permiten espacios al inicio o final"
+                                    })}
+                                />
 
-                                {/* CONTENEDOR DE IMAGEN (Estilo idéntico a Programas) */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Imagen:</label>
-                                    <label htmlFor="file-upload-aliado" style={{ cursor: 'pointer' }}>
-                                        <div className="modal-input" style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            height: '180px',
-                                            borderStyle: previewImage ? 'solid' : 'dashed',
-                                            borderColor: errors.imagen ? '#ef4444' : '#d1d5db',
-                                            overflow: 'hidden',
-                                            padding: '0'
-                                        }}>
-                                            {previewImage ? (
-                                                <img
-                                                    src={previewImage}
-                                                    alt="Vista previa"
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            ) : (
-                                                <div style={{ textAlign: 'center', color: '#878787' }}>
-                                                    <span style={{ fontSize: '24px' }}>+</span>
-                                                    <p>Añadir imagen</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </label>
-                                    <input
-                                        id="file-upload-aliado"
-                                        type="file"
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                        {...register("imagen", { required: !isEditing })}
-                                    />
-                                    {errors.imagen && <span className="error">La imagen es obligatoria</span>}
-                                </div>
+                                {/* CONTENEDOR DE IMAGEN */}
+                                <FileInput
+                                    id="file-upload-aliado"
+                                    label="Imagen:"
+                                    previewImage={previewImage}
+                                    error={errors.imagen}
+                                    {...register("imagen", {
+                                        required: !isEditing ? "La imagen es obligatoria" : false
+                                    })}
+                                />
 
                             </div>
 

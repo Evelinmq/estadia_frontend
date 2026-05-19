@@ -4,6 +4,9 @@ import Pagination from "../Components/Structure/Pagination.jsx";
 import { Header } from "../Components/Structure/Header.jsx";
 import SectionCard from "../Components/Admin/SectionCard.jsx";
 import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from "../Utils/alerts";
+import Input from "../Components/Inputs/Input.jsx";
+import TextArea from "../Components/Inputs/TextArea.jsx";
+import FileInput from "../Components/Inputs/FileInput.jsx";
 import "./ModalGlobal.css";
 
 export default function Secciones() {
@@ -98,84 +101,43 @@ export default function Secciones() {
                             <div className="modal-center">
 
                                 {/* INPUT SECCIÓN */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Sección:</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Nombre de la sección"
-                                        className="modal-input"
-                                        style={{ borderColor: errors.nombre ? '#ef4444' : '#d1d5db' }}
-                                        {...register("nombre", {
-                                            required: "Este campo es obligatorio",
-                                            pattern: {
-                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                message: "Solo se permiten letras"
-                                            },
-                                            validate: (val) =>
-                                                val.trim() === val || "No se permiten espacios al inicio o final"
-                                        })}
-                                    />
-                                    {errors.nombre && <span className="error">{errors.nombre.message}</span>}
-                                </div>
+                                <Input
+                                    label="Sección:"
+                                    type="text"
+                                    placeholder="Nombre de la sección"
+                                    error={errors.nombre}
+                                    {...register("nombre", {
+                                        required: "El nombre de la sección es obligatorioa",
+                                        pattern: {
+                                            value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                                            message: "Solo se permiten letras"
+                                        },
+                                        validate: (val) =>
+                                            val.trim() === val || "No se permiten espacios al inicio o final"
+                                    })}
+                                />
 
-                                {/* AREA DESCRIPCIÓN */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Descripción:</label>
-                                    <textarea
-                                        placeholder="Descripción"
-                                        className="modal-input"
-                                        style={{
-                                            height: '100px',
-                                            paddingTop: '12px',
-                                            resize: 'none',
-                                            borderColor: errors.descripcion ? '#ef4444' : '#d1d5db'
-                                        }}
-                                        {...register("descripcion", {
-                                            required: "La descripción es obligatoria",
-                                            validate: (val) => val.trim() === val || "Sin espacios al inicio o final"
-                                        })}
-                                    />
-                                    {errors.descripcion && <span className="error">{errors.descripcion.message}</span>}
-                                </div>
+                                {/* ÁREA DESCRIPCIÓN */}
+                                <TextArea
+                                    label="Descripción:"
+                                    placeholder="Descripción"
+                                    error={errors.descripcion}
+                                    style={{ minHeight: '100px' }}
+                                    {...register("descripcion", {
+                                        required: "La descripción es obligatoria",
+                                        validate: (val) => val.trim() === val || "Sin espacios al inicio o final"
+                                    })}
+                                />
 
-                                {/* IMAGEN (Estructura idéntica a Programas) */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Imagen:</label>
-                                    <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
-                                        <div className="modal-input" style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            height: '180px',
-                                            borderStyle: previewImage ? 'solid' : 'dashed',
-                                            borderColor: errors.imagen ? '#ef4444' : '#d1d5db',
-                                            overflow: 'hidden',
-                                            padding: '0'
-                                        }}>
-                                            {previewImage ? (
-                                                <img
-                                                    src={previewImage}
-                                                    alt="Vista previa"
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            ) : (
-                                                <div style={{ textAlign: 'center', color: '#878787' }}>
-                                                    <span style={{ fontSize: '24px' }}>+</span>
-                                                    <p>Añadir Imagen</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </label>
-                                    <input
-                                        id="file-upload"
-                                        type="file"
-                                        accept="image/*"
-                                        style={{ display: 'none' }}
-                                        {...register("imagen", { required: !isEditing })}
-                                    />
-                                    {errors.imagen && <span className="error">La imagen es obligatoria</span>}
-                                </div>
+                                {/* IMAGEN */}
+                                <FileInput
+                                    label="Imagen:"
+                                    previewImage={previewImage}
+                                    error={errors.imagen}
+                                    {...register("imagen", {
+                                        required: !isEditing ? "La imagen es obligatoria" : false
+                                    })}
+                                />
 
                             </div>
                             <div className="modal-actions">

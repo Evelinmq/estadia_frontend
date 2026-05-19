@@ -4,7 +4,7 @@ import DataTable from "../Components/Admin/Datatable.jsx";
 import { Header } from "../Components/Structure/Header.jsx";
 import { alertaExito, alertaCamposVacios } from "../Utils/alerts.js";
 import "./ModalGlobal.css";
-
+import TextArea from "../Components/Inputs/TextArea.jsx";
 const columns = [
     { key: "objetivo", label: "Objetivo" },
     { key: "descripcion", label: "Descripción" },
@@ -89,24 +89,16 @@ export default function Objetivos() {
                             <div className="modal-center" style={{ maxWidth: '100%' }}>
 
                                 {/* ÁREA DE DESCRIPCIÓN */}
-                                <div className="form-group" style={{ width: '100%' }}>
-                                    <label className="label">Descripción:</label>
-                                    <textarea
-                                        placeholder="Descripción"
-                                        className="modal-input"
-                                        style={{
-                                            height: '220px',
-                                            paddingTop: '14px',
-                                            resize: 'none',
-                                            borderColor: errors.descripcion ? '#ef4444' : '#d1d5db'
-                                        }}
-                                        {...register("descripcion", {
-                                            required: "La descripción es obligatoria",
-                                            validate: (val) => val.trim() === val || "No se permiten espacios al inicio o final"
-                                        })}
-                                    />
-                                    {errors.descripcion && <span className="error">{errors.descripcion.message}</span>}
-                                </div>
+                                <TextArea
+                                    label="Descripción:"
+                                    placeholder="Descripción"
+                                    rows={6}
+                                    error={errors.descripcion}
+                                    {...register("descripcion", {
+                                        required: "La descripción del objetivo es obligatoria",
+                                        validate: (val) => val.trim() === val || "No se permiten espacios al inicio o final"
+                                    })}
+                                />
 
                             </div>
 
