@@ -16,8 +16,8 @@ export default function TarjetaPrograma({ titulo, descripcion, imagen }) {
             </div>
 
             <div className="info-wrapper">
-                <h3 className="Programa-titulo">{titulo} Emprende tu negocio</h3>
-                <p className="Programa-descripcion">{descripcion} Se busca ayudar a la gente a poder emprender su propio negocio, con precios accesibles.</p>
+                <h3 className="Programa-titulo">{titulo} </h3>
+                <p className="Programa-descripcion">{descripcion} </p>
             <div className="compartir-link">
                <span>🔗</span> Compartir
             </div>
