@@ -10,6 +10,10 @@ import Secciones from "./Pages/Secciones";
 import Alianzas from "./Pages/Alianzas";
 import Objetivos from "./Pages/Objetivos.jsx";
 import PantallaPrincipal from "./Pages/PantallaPrincipal.jsx";
+import RegistroAfiliados from "./Pages/RegistroAfiliados.jsx"
+import RegistroBeneficiarios from './Pages/RegistroBeneficiarios.jsx';
+import PaginaVoluntariado from './Pages/PaginaVoluntariado.jsx';
+import PaginaSecciones from './Pages/Secciones/PaginaSecciones.jsx';
 
 function PublicLayout() {
     return (
@@ -55,6 +59,17 @@ function App() {
 
                 <Route path="/" element={<Navigate to="/pantalla-principal" />} />
            </Routes>
+           
+           
+           <Routes>
+                <Route path="/voluntariado" element={<PaginaVoluntariado />} />
+                <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
+                <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios/>} />
+                <Route path="/paginaSecciones" element={<PaginaSecciones/>} />
+               
+            </Routes>
+
+
         </BrowserRouter>
     );
 }

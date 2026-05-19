@@ -4,6 +4,7 @@ import icono from '../../Img/icono.png'
 import donacion from '../../Img/donacion.png'
 import {Button} from "../Buttons/Button.jsx";
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Encabezado = () => {
     const [menuAbierto, setMenuAbierto] = useState(false);
@@ -12,32 +13,38 @@ export const Encabezado = () => {
         setMenuAbierto(!menuAbierto);
     };
 
+    const navigate = useNavigate();
+
     return (
         <header className="encabezado">
             <div className="header-logo">
                 <img src={logo} alt="Logo" />
             </div>
 
-            {/* Pasamos la hamburguesa AQUÍ para que sea un hijo directo del header siempre visible */}
             <button className={`menu-hamburguesa ${menuAbierto ? 'abierto' : ''}`} onClick={toggleMenu}>
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
 
+            
+
             <nav className={`navegacion-menu ${menuAbierto ? 'desplegado' : ''}`}>
-                <a href="#" className="navegacion-link active" onClick={() => setMenuAbierto(false)}>Inicio</a>
-                <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>Voluntariado</a>
-                <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>Programas</a>
+                <a href="#" className="navegacion-link active" onClick={(e) => { e.preventDefault(); 
+                navigate("/"); setMenuAbierto(false);  }}>Inicio</a>
+                <a href="#" className="navegacion-link" onClick={(e) => { e.preventDefault(); 
+                navigate("/voluntariado"); setMenuAbierto(false);  }}>Voluntariado</a> 
+                <a href="#" className="navegacion-link" onClick={(e) => { e.preventDefault(); 
+                navigate("/paginaSecciones"); setMenuAbierto(false);  }}>Programas</a>
                 <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>
                     <img src={icono} alt="Icono" />
                 </a>
                 
-                {/* Los dejamos aquí adentro, pero el CSS móvil se encargará de estilizarlos */}
+                
                 <div className="botones-grupo">
-                    <Button label="Iniciar Sesión" onClick={() => {}} />
-                    <Button label="Donación" onClick={() => {}} img={donacion} />
-                    <Button label="Registrarse" onClick={() => {}} />
+                    <Button label="Iniciar Sesión" onClick={() => navigate("/")} />
+                    <Button label="Donación" onClick={() => navigate("/") }img={donacion} />
+                    <Button label="Registrarse" onClick={() => navigate("/registroBeneficiarios")} />
                 </div>
             </nav>
         </header>
