@@ -70,9 +70,11 @@ export default function RegistroBeneficiarios() {
               
 
     return (
-        <div>
-            <h1 className="subtitulo-pantalla">Registro de Beneficiarios</h1>
-            <p style={{ textAlign: 'center', margin: '20px' }}>¡Bienvenido al registro de beneficiarios! Por favor, completa el siguiente formulario para unirte a nuestra comunidad.</p>
+         <div className="registro-page-bg">
+            <div className="registro-card-view">
+                <div className="registro-header"></div>
+            <h1 className="registro-title-main">Registro de Beneficiarios</h1>
+            <p className="registro-text-welcome">¡Bienvenido al registro de beneficiarios! Por favor, completa el siguiente formulario para unirte.</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className="form-container">
                                                <div className="modal-grid-columns">
@@ -277,6 +279,7 @@ export default function RegistroBeneficiarios() {
                                            
         </form>
 
+     </div>
      </div>
     );
 }

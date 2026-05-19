@@ -321,4 +321,65 @@
     background-color: #B795B3;
 }
 
+.registro-page-bg {
+    background-color: #f8f9fa; 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+
+.registro-card-view {
+    background: #ffffff;
+    padding: 50px 55px;
+    border-radius: 28px; 
+    width: 100%;
+    max-width: 950px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+}
+
+.registro-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+
+.registro-title-main {
+    color: #4A0042; 
+    font-size: 2.3rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+
+.registro-text-welcome {
+    color: #6b7280;
+    font-size: 15px;
+    margin: 0 auto;
+    max-width: 650px;
+    line-height: 1.5;
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .registro-card-view {
+        padding: 30px 20px;
+        border-radius: 18px;
+    }
+
+    .registro-title-main {
+        font-size: 1.8rem;
+    }
+
+    .modal-grid-columns {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
 

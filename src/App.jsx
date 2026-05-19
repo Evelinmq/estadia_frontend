@@ -14,6 +14,7 @@ import RegistroAfiliados from "./Pages/RegistroAfiliados.jsx"
 import RegistroBeneficiarios from './Pages/RegistroBeneficiarios.jsx';
 import PaginaVoluntariado from './Pages/PaginaVoluntariado.jsx';
 import PaginaSecciones from './Pages/Secciones/PaginaSecciones.jsx';
+import Login from './Auth/Login.jsx';
 
 function PublicLayout() {
     return (
@@ -66,6 +67,7 @@ function App() {
                 <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
                 <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios/>} />
                 <Route path="/paginaSecciones" element={<PaginaSecciones/>} />
+                <Route path="/login" element={<Login />} />
                
             </Routes>
 

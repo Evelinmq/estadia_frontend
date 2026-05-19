@@ -70,9 +70,12 @@ export default function RegistroAfiliados() {
               
 
     return (
-        <div>
-            <h1 className="subtitulo-pantalla">Registro de Afiliados</h1>
-            <p style={{ textAlign: 'center', margin: '20px' }}>¡Bienvenido al registro de afiliados! Por favor, completa el siguiente formulario para unirte a nuestra comunidad y apoyar nuestra causa.</p>
+
+        <div className="registro-page-bg">
+            <div className="registro-card-view">
+                <div className="registro-header"></div>
+            <h1 className="registro-title-main">Registro de Afiliados</h1>
+            <p className="registro-text-welcome">¡Bienvenido al registro de afiliados! Por favor, completa el siguiente formulario para unirte a nuestra comunidad y apoyar nuestra causa.</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className="form-container">
                                                <div className="modal-grid-columns">
@@ -241,11 +244,14 @@ export default function RegistroAfiliados() {
                      </button>
                      </div>
             </div>
-                                     
+                        
                                            
         </form>
 
      </div>
+
+     </div>
+
     );
 }
                                  
