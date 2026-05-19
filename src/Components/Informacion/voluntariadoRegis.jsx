@@ -6,11 +6,10 @@ import taza from "../../Img/taza.png";
 import user from "../../Img/user.png";
 
 
-export default function(){
+export default function VoluntariadoRegis(){
     return(
 
         <div className="card-registro-voluntariado">
-            <h1 className="titulo-voluntariado">¿Cómo empezar?</h1>
            <div className="pasos-contenedor">
 
             <div className="paso-item">
@@ -36,7 +35,7 @@ export default function(){
            <div className="seccion-boton-registro">
             <p className="texto-ayuda-boton">Dale click al botón de registro para comenzar</p>
             <div className="flecha-abajo">↓</div>
-            <Button label="Registrarse" onClick={() => {}} />
+            <Button label="Registrarse"  onClick={() => {}} />
            </div>
 
         </div>

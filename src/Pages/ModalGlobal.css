@@ -264,7 +264,7 @@
     font-weight: light;
     text-align: center;
     padding-top: 60px;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 
@@ -303,4 +303,22 @@
     gap: 16px;
  
 }
+
+
+.card-morada {
+    background-color: #390233;
+}
+
+.card-morado2{
+    background-color: #674663;
+}
+
+.card-morado3{
+    background-color: #9C7197;
+}
+
+.card-morado4{
+    background-color: #B795B3;
+}
+
 
