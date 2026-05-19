@@ -3,8 +3,11 @@ import { useForm } from "react-hook-form";
 import { alertaExito, alertaCamposVacios } from "../Utils/alerts.js";
 import Input  from "../Components/Inputs/Input.jsx";
 import "./ModalGlobal.css"; 
+import { useNavigate } from 'react-router-dom';
 
 export default function RegistroAfiliados() {
+
+    const navigate = useNavigate();
 
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -230,7 +233,7 @@ export default function RegistroAfiliados() {
                                                    
                                 <div className="form-container">
                                     <div className="form-actions-card">
-                                <button type="button" className="btn-cancelar">
+                                <button type="button" className="btn-cancelar" onClick={()=> navigate("/pantalla-principal")}>
                                     Cancelar
                                 </button>
                                 <button type="submit" className="btn-guardar">

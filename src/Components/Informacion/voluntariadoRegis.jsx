@@ -4,9 +4,14 @@ import foco from "../../Img/foco.png";
 import formulario from "../../Img/formulario.png";
 import taza from "../../Img/taza.png";
 import user from "../../Img/user.png";
+import { useNavigate } from 'react-router-dom';
 
 
 export default function VoluntariadoRegis(){
+    const navigate = useNavigate();
+
+
+
     return(
 
         <div className="card-registro-voluntariado">
@@ -35,7 +40,7 @@ export default function VoluntariadoRegis(){
            <div className="seccion-boton-registro">
             <p className="texto-ayuda-boton">Dale click al botón de registro para comenzar</p>
             <div className="flecha-abajo">↓</div>
-            <Button label="Registrarse"  onClick={() => {}} />
+            <Button label="Registrarse"  onClick={() => navigate("/registroAfiliados")} />
            </div>
 
         </div>
