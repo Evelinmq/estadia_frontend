@@ -4,16 +4,19 @@ import icono from '../../Img/icono.png'
 import donacion from '../../Img/donacion.png'
 import {Button} from "../Buttons/Button.jsx";
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Encabezado = () => {
     const [menuAbierto, setMenuAbierto] = useState(false);
+    const location = useLocation();
 
     const toggleMenu = () => {
         setMenuAbierto(!menuAbierto);
     };
 
     const navigate = useNavigate();
+
+    const esActivo = (ruta) => location.pathname === ruta ? 'active' : '';
 
     return (
         <header className="encabezado">
@@ -30,11 +33,11 @@ export const Encabezado = () => {
             
 
             <nav className={`navegacion-menu ${menuAbierto ? 'desplegado' : ''}`}>
-                <a href="#" className="navegacion-link active" onClick={(e) => { e.preventDefault(); 
+                <a href="#" className={`navegacion-link ${esActivo("/")}`} onClick={(e) => { e.preventDefault(); 
                 navigate("/"); setMenuAbierto(false);  }}>Inicio</a>
-                <a href="#" className="navegacion-link" onClick={(e) => { e.preventDefault(); 
+                <a href="#" className={`navegacion-link ${esActivo("/voluntariado")}`} onClick={(e) => { e.preventDefault(); 
                 navigate("/voluntariado"); setMenuAbierto(false);  }}>Voluntariado</a> 
-                <a href="#" className="navegacion-link" onClick={(e) => { e.preventDefault(); 
+                <a href="#" className={`navegacion-link ${esActivo("/paginaSecciones")}`} onClick={(e) => { e.preventDefault(); 
                 navigate("/paginaSecciones"); setMenuAbierto(false);  }}>Programas</a>
                 <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>
                     <img src={icono} alt="Icono" />

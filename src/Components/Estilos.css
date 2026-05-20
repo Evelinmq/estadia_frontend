@@ -27,6 +27,15 @@
     font-size: 16px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    background-color: #6a0d5f; 
+}
+
+.button:active {
+    transform: scale(0.98);
 }
 
 
@@ -35,6 +44,14 @@
     width: 20px;
     height: 20px;
     object-fit: contain;
+}
+
+.button-animacion:hover {
+    background-color: #d1bdd0;
+}
+
+.button-animacion:active {
+    transform: scale(0.98);
 }
 
 
@@ -155,14 +172,20 @@
     font-weight: 700;
     padding: 10px 20px;
     border-radius: 50px;
-    transition: all 0.3s ease;
     font-family: sans-serif;
     white-space: nowrap;
+
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 
 .navegacion-menu .navegacion-link:first-child {
     margin-left: auto;
+}
+
+.navegacion-link:hover {
+    background-color: #E6DBE5;
+    color: #400339;
 }
 
 .navegacion-link.active {
