@@ -338,7 +338,7 @@
     border-radius: 28px; 
     width: 100%;
     max-width: 950px; 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 30px #ba9fb5;
     box-sizing: border-box;
 }
 

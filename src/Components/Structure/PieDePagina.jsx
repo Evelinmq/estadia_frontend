@@ -7,8 +7,12 @@ import telefono from "../../Img/telefono.png"
 import locali from "../../Img/locali.png"
 import corre from "../../Img/corre.png"
 import {ButtonPieDePagina} from "../Buttons/Button.jsx";
+import { useNavigate } from 'react-router-dom'
 
 export default function PieDePagina() {
+
+    const navigate = useNavigate(); 
+
 
     return(
 <footer className="Piedepagina-card">
@@ -35,9 +39,12 @@ export default function PieDePagina() {
     <div className="footer-column">
         <h3 className="Titulo-inferior">ENLACES</h3>
         <div className="links-verticales">
-        <a href={"#"} className="navegacion-link-Inferior espacio">Inicio</a>
-        <a href={"#"} className="navegacion-link-Inferior espacio">Voluntariado</a>
-        <a href={"#"} className="navegacion-link-Inferior espacio">Programas</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio" onClick={(e) => { e.preventDefault(); 
+                navigate("/"); }}>Inicio</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio" onClick={(e) => { e.preventDefault(); 
+                navigate("/voluntariado");   }}>Voluntariado</a>
+        <a href={"#"} className="navegacion-link-Inferior espacio"onClick={(e) => { e.preventDefault(); 
+                navigate("/paginaSecciones");   }}>Programas</a>
         </div>
     </div>
 
@@ -63,7 +70,7 @@ export default function PieDePagina() {
 
     <div className="footer-column buttons-section">
         <h3 className="Titulo-inferior">ÚNETE A NOSOTROS</h3>
-        <ButtonPieDePagina  label="Registrarse"/>
+        <ButtonPieDePagina  label="Registrarse" onClick={() => navigate("/registroBeneficiarios")} />
         <ButtonPieDePagina label="Donar"/>
     </div>
 
