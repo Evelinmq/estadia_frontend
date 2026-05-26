@@ -6,13 +6,15 @@ import BeneficiarioCard from "../Components/Admin/BeneficiarioCard.jsx";
 import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
 import "./ModalGlobal.css";
 import Input from "../Components/Inputs/Input.jsx";
+import { obtenerDatos } from "../Utils/api.js";
 
 export default function Beneficiarios() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [beneficiarios, setBeneficiarios] = useState([]);
-    const [previewImage, setPreviewImage] = useState(null)
+    const [previewImage, setPreviewImage] = useState(null);
+    const [beneficiarioSeleccionado, setBeneficiarioSeleccionado] = useState(null);
     
         const {
             register,
@@ -25,16 +27,51 @@ export default function Beneficiarios() {
             mode: "onChange"
         });
     
-        const onSubmit = (data) => {
+       /* const onSubmit = (data) => {
             alertaExito("Beneficiario actualizado");
             handleCloseModal();
-        };
+        };*/
     
         const onError = () => {
             if (Object.keys(errors).length > 0) {
                 alertaCamposVacios();
             }
         };
+
+
+        const cargarBeneficiarios = async () => {
+    try {
+      const data = await obtenerDatos('/api/beneficiarios');
+      setBeneficiarios(data);
+    }catch (error) {
+      console.error('Error al cargar beneficiarios:', error);
+    }
+  };
+
+  useEffect(() => {
+    cargarBeneficiarios();
+  }, []);
+
+  // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
+const onSubmit = async (data) => {
+    try {
+      data.nombre = data.nombre.trim();
+
+      if (isEditing && beneficiarioSeleccionado) {
+       //Editar
+       await actualizarDatos(`/api/beneficiarios/${beneficiarioSeleccionado.id}`, data);
+        alertaExito("Carrera actualizada correctamente");
+         handleCloseModal();
+      }
+
+      cargarBeneficiarios();
+      reset();
+      setShowModal(false);
+    } catch (error) {
+      alertaError("Error al procesar la solicitud");
+      console.error("Error:", error);
+    }
+  };
     
         const handleEditar = (user) => {
         reset({
@@ -81,29 +118,26 @@ export default function Beneficiarios() {
                 <Header seccion="beneficiarios" />
     
                 <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
+
+                    {beneficiarios.length > 0 ? (
+        beneficiarios.map((b) => (
             <BeneficiarioCard
-                nombre="Juan"
-                apellidoP="García"
-                apellidoM="López"
-                genero="Masculino"
-                edad={22}
-                telefono="777 123 4567"
-                municipio="Temixco"
-                colonia="Centro"
-                correo="juan@mail.com"
-                 onEdit={() => handleEditar({
-                        id: 1,
-                        nombre: "Juan",
-                        apellidoP: "García",
-                        apellidoM: "López",
-                        genero: "Masculino",
-                        edad: 22,
-                        telefono: "777 123 4567",
-                        municipio: "Temixco",
-                        colonia: "Centro",
-                        correo: "juan@mail.com"
-                    })}
+                key={b.id} 
+                nombre={b.nombres || b.nombre}
+                apellidoP={b.apellidoP}
+                apellidoM={b.apellidoM}
+                genero={b.genero}
+                edad={b.edad}
+                telefono={b.telefono}
+                municipio={b.municipio}
+                colonia={b.colonia}
+                correo={b.correo}
+                onEdit={() => handleEditar(b)}
             />
+        ))
+    ) : (
+        <p>No se encontraron beneficiarios registrados.</p>
+    )}
 
                 </div>
     
