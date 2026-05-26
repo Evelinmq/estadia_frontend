@@ -2,32 +2,24 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DataTable from "../Components/Admin/Datatable.jsx";
 import { Header } from "../Components/Structure/Header.jsx";
-import { alertaExito, alertaCamposVacios } from "../Utils/alerts.js";
+import { alertaExito, alertaCamposVacios, alertaError } from "../Utils/alerts.js";
 import "./ModalGlobal.css";
 import TextArea from "../Components/Inputs/TextArea.jsx";
-const columns = [
-    { key: "objetivo", label: "Objetivo" },
-    { key: "descripcion", label: "Descripción" },
-];
 
-const datosIniciales = [
-    {
-        objetivo: "Visión",
-        descripcion:
-            "Consolidarnos como la organización líder y referente en el estado de Morelos por nuestra capacidad de transformar el entorno social de las comunidades indígenas y grupos vulnerables. Aspiramos a un futuro donde cada ciudadano tenga acceso pleno a la salud, educación de calidad y justicia social, logrando un desarrollo regional sustentable, inclusivo y en total armonía con la cultura y el medio ambiente de nuestra región.",
-    },
-    {
-        objetivo: "Misión",
-        descripcion: "Alguna descripción"
-    },
+import { obtenerDatos, actualizarDatos } from "../Utils/api.js";
+
+const columns = [
+    { key: "name", label: "Objetivo" },
+    { key: "description", label: "Descripción" },
 ];
 
 export default function Objetivos() {
-    const [objetivos, setObjetivos] = useState(datosIniciales);
+    const [objetivos, setObjetivos] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
-    const [indexEdicion, setIndexEdicion] = useState(null);
+    const [idEdicion, setIdEdicion] = useState(null);
     const [objetivoSeleccionado, setObjetivoSeleccionado] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const {
         register,
@@ -35,32 +27,70 @@ export default function Objetivos() {
         reset,
         setValue,
         formState: { errors },
-    } = useForm({
-        mode: "onChange"
-    });
+    } = useForm({ mode: "onChange" });
 
-    const handleEdit = (row, index) => {
-        setIndexEdicion(index);
-        setObjetivoSeleccionado(row.objetivo);
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                setLoading(true);
+
+                const datos = await obtenerDatos("/api/goal");
+                setObjetivos(datos)
+            } catch (error) {
+                alertaError("Ocurrió un error al obtener los datos");
+                console.log("Error al obtener datos de la API: ", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        cargarDatos();
+    }, []);
+
+    const handleEdit = (row) => {
+        const idFila = row.id;
+
+        setIdEdicion(idFila)
+        setObjetivoSeleccionado(row.name);
         setShowModal(true);
 
-        setValue("descripcion", row.descripcion);
+        setValue("descripcion", row.description);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setIndexEdicion(null);
+        setIdEdicion(null);
         setObjetivoSeleccionado("");
         reset();
     };
 
-    const onSubmit = (data) => {
-        const nuevosObjetivos = [...objetivos];
-        nuevosObjetivos[indexEdicion].descripcion = data.descripcion;
+    const onSubmit = async (data) => {
 
-        setObjetivos(nuevosObjetivos);
-        alertaExito(`${objetivoSeleccionado} actualizada con éxito`);
-        handleCloseModal();
+        try {
+                await actualizarDatos(`/api/goal/${idEdicion}`, {
+                    id: idEdicion,
+                    name: objetivoSeleccionado,
+                    description: data.descripcion
+                });
+
+
+            const nuevosObjetivos = objetivos.map((obj) => {
+                if (obj.id === idEdicion) {
+                    return {
+                        ...obj,
+                        description: data.descripcion
+                    };
+                }
+                return obj;
+            });
+
+            setObjetivos(nuevosObjetivos);
+            alertaExito(`${objetivoSeleccionado} actualizada con éxito`);
+            handleCloseModal();
+        } catch (error) {
+            alertaError("Error del servidor");
+            console.error("Error al actualizar: ", error);
+        }
+
     };
 
     const onError = () => {
