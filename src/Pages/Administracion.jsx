@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import Input from "../Components/Inputs/Input.jsx";
 import { alertaCamposVacios } from "../Utils/alerts.js";
+import { obtenerDatos } from "../Utils/api.js";
 
 function InputField({ label, type = "text", placeholder, value, onChange }) {
     const [visible, setVisible] = useState(false);
@@ -69,6 +70,7 @@ export default function Administracion() {
     const [admins, setAdmins] = useState(datosIniciales);
     const [password, setPassword] = useState("");
     const [confirPasswrod, setConfirPassword] = useState("");
+    const [AdministradorSeleccionado, setAdministradorSeleccionado] = useState(null);
 
     const handleEdit = (row, index) => {
         console.log("Editar", row, index);
@@ -115,14 +117,42 @@ export default function Administracion() {
                 setShowModal(false);
                 reset();
             };
-        
-            // Operaciones (Simuladas)
-            const onSubmit = (data) => {
-                console.log("Datos del Administrador:", data);
-                alertaExito(isEditing ? "Administrador actualizado" : "Administrador creado correctamente");
-                handleCloseModal();
-            };
-        
+
+        const cargarAdministradores = async () => {
+                   try {
+                     const data = await obtenerDatos('/api/admin');
+                     setAdmins(data);
+                   }catch (error) {
+                     console.error('Error al cargar Administradores:', error);
+                   }
+                 };
+               
+                 useEffect(() => {
+                   cargarAdministradores();
+                 }, []);
+               
+                 // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
+               const onSubmit = async (data) => {
+                   try {
+                     data.nombre = data.nombre.trim();
+               
+                     if (isEditing && Adm) {
+                      //Editar
+                      await actualizarDatos(`/api/admin/${AdministradorSeleccionado.id}`, data);
+                       alertaExito("Afiliado actualizado correctamente");
+                        handleCloseModal();
+                     }
+               
+                     cargarAdministradores();
+                     reset();
+                     setShowModal(false);
+                   } catch (error) {
+                     alertaError("Error al procesar la solicitud");
+                     console.error("Error:", error);
+                   }
+                 };
+
+            
             const onError = () => {
                 if (Object.keys(errors).length > 0) {
                     alertaCamposVacios();

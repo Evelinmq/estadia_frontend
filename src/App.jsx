@@ -45,7 +45,7 @@ function App() {
         <Routes>
 
         <Route element={<PublicLayout />}>
-        <Route path="/pantalla-principal" element={<PantallaPrincipal />} />
+        <Route path="/pantalla-principal" element={<AdminLayout />} />
         </Route>
             
                 <Route element={<AdminLayout />}>

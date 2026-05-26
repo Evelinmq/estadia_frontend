@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { alertaExito, alertaCamposVacios } from "../Utils/alerts.js";
+import { alertaExito, alertaCamposVacios, alertaError } from "../Utils/alerts.js";
 import Input  from "../Components/Inputs/Input.jsx";
+import Select from '../Components/Inputs/Select.jsx';
 import "./ModalGlobal.css"; 
 import { useNavigate } from 'react-router-dom';
+import {  enviarDatos } from "../Utils/api.js";
 
 export default function RegistroAfiliados() {
 
@@ -26,10 +28,29 @@ export default function RegistroAfiliados() {
                    mode: "onChange"
                });
            
-               const onSubmit = (data) => {
-                   alertaExito("Afiliado registrado con éxito");
-                   handleCloseModal();
-               };
+              const onSubmit = async (data) => {
+    try {
+        const payload = {
+            nombre: data.nombre.trim(),
+            apellidoP: data.apellidoP.trim(),
+            apellidoM: data.apellidoM.trim(),
+            genero: data.genero,           
+            edad: parseInt(data.edad, 10),
+            telefono: data.telefono.trim(),
+            foto: previewImage ? previewImage.split(',')[1] : null 
+        };
+
+        await enviarDatos('/api/afiliados', payload);
+        
+        alertaExito("Afiliado registrado con éxito");
+        setPreviewImage(null);
+        setShowModal(false);
+        reset();
+    } catch (error) {
+        alertaError("Error al procesar la solicitud");
+        console.error("Error:", error);
+    }
+};
            
                const onError = () => {
                    if (Object.keys(errors).length > 0) {
@@ -86,8 +107,8 @@ export default function RegistroAfiliados() {
                                                        label="Nombre/s"
                                                        TYPE="text"
                                                        PLACEHOLDER="Nombre completo"
-                                                       error={errors.nombres}
-                                                       {...register("nombres", {
+                                                       error={errors.nombre}
+                                                       {...register("nombre", {
                                                            required: "El nombre es obligatorio",
                                                            pattern: {
                                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -131,19 +152,16 @@ export default function RegistroAfiliados() {
                                                    </div>
                
                                                     <div className="form-group" style={{ width: '100%' }}>
-                                                      <Input
-                                                       label="Genero"
-                                                       TYPE="text"
-                                                       PLACEHOLDER="Genero"
-                                                       error={errors.genero}
-                                                       {...register("genero", {
-                                                           required: "El genero es obligatorio",
-                                                           pattern: {
-                                                               value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                               message: "Solo se permiten letras"
-                                                           }
-                                                       })}
-                                                       />
+                                                      <Select
+                                                        label="Genero"
+                                                        error={errors.genero}
+                                                        {...register("genero", { required: "El genero es obligatorio" })}>
+                                                            <option value="">Selecciona una opción</option>
+                                                            <option value={0}>Hombre</option>
+                                                            <option value={1}>Mujer</option>
+                                                            <option value={2}>No binario</option>
+                                                            <option value={3}>Otro</option>
+                                                            </Select>     
                                                    </div>
             
                                                    </div>

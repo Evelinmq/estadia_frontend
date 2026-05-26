@@ -82,7 +82,8 @@ export const eliminarDatos = async (endpoint) => {
             throw new Error(`No se pudo eliminar el registro en ${endpoint} (Status: ${response.status})`);
         }
 
-        return response.status === 204 ? { success: true } : await response.json();
+        return true;
+
     } catch (error) {
         console.error('Error en DELETE:', error);
         throw error;

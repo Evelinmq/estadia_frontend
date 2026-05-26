@@ -27,11 +27,6 @@ export default function Beneficiarios() {
             mode: "onChange"
         });
     
-       /* const onSubmit = (data) => {
-            alertaExito("Beneficiario actualizado");
-            handleCloseModal();
-        };*/
-    
         const onError = () => {
             if (Object.keys(errors).length > 0) {
                 alertaCamposVacios();

@@ -3,9 +3,10 @@ import AfiliadoCard from "../Components/Admin/AfiliadoCard.jsx";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Pagination from "../Components/Structure/Pagination.jsx";
-import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
+import { alertaExito, alertaCamposVacios, alertaError, confirmarEliminar} from "../Utils/alerts";
 import "./ModalGlobal.css";
 import Input from "../Components/Inputs/Input.jsx";
+import { obtenerDatos, actualizarDatos, eliminarDatos } from "../Utils/api.js";
 
 export default function Afiliados() {
 
@@ -13,7 +14,10 @@ export default function Afiliados() {
        const [currentPage, setCurrentPage] = useState(1);
        const [showModal, setShowModal] = useState(false);
        const [afiliados, setAfiliados] = useState([]);
-       const [previewImage, setPreviewImage] = useState(null)
+       const [previewImage, setPreviewImage] = useState(null);
+       const [AfiliadoSeleccionado, setAfiliadoSeleccionado] = useState(null);
+
+       const isEditing = !!AfiliadoSeleccionado;
        
            const {
                register,
@@ -25,35 +29,92 @@ export default function Afiliados() {
            } = useForm({
                mode: "onChange"
            });
+
+           register("id");
        
-           const onSubmit = (data) => {
-               alertaExito("Afiliado actualizado");
-               handleCloseModal();
-           };
        
            const onError = () => {
                if (Object.keys(errors).length > 0) {
                    alertaCamposVacios();
                }
            };
-       
+
+          
+
            const handleEditar = (user) => {
-           reset({
-               id: user.id,
-               nombres: user.nombre,
-               apellidoP: user.apellidoP || "",
-               apellidoM: user.apellidoM || "",
-               genero: user.genero || "",
-               edad: user.edad || "",
-               telefono: user.telefono || "",
-               fotografia: null
-           });
-           if (user.fotografia) {
-               setPreviewImage(user.fotografia);
+            
+    setAfiliadoSeleccionado(user);
+    const idCorrecto = user.id;
+
+    reset({
+        id: idCorrecto,
+        nombres: user.nombre || "",
+        apellidoP: user.apellidoP || "",
+        apellidoM: user.apellidoM || "",
+        genero: user.genero || "",
+        edad: user.edad || "",
+        telefono: user.telefono || "",
+        fotografia: null
+    });
+
+    const fotoExistente = user.foto
+        ? `data:image/jpeg;base64,${user.foto}`
+        : null;
+
+    setPreviewImage(fotoExistente);
+
+    setShowModal(true);
+    
+};
+
+        const cargarAfiliados = async () => {
+           try {
+             const data = await obtenerDatos('/api/afiliados');
+             setAfiliados(data);
+           }catch (error) {
+             console.error('Error al cargar Afiliados:', error);
            }
-           setShowModal(true);
+         };
        
-       };
+         useEffect(() => {
+           cargarAfiliados();
+         }, []);
+       
+         // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
+       const onSubmit = async (data) => {
+           try {
+            if (data.nombres) data.nombres = data.nombres.trim()
+
+            if (isEditing) {
+                
+                const afiliadoId = data.id || (AfiliadoSeleccionado && AfiliadoSeleccionado.id);
+
+                if (!afiliadoId) {
+                alertaError("El afiliado no contiene un ID válido.");
+                return;
+            }
+            
+            const datosEnviar = {
+                nombre: data.nombres, 
+                apellidoP: data.apellidoP,
+                apellidoM: data.apellidoM,
+                genero: data.genero,   
+                edad: parseInt(data.edad, 10),
+                telefono: data.telefono,
+                foto: previewImage ? (previewImage.includes(",") ? previewImage.split(",")[1] : previewImage) : null
+            };
+
+           
+            await actualizarDatos(`/api/afiliados/${afiliadoId}`, datosEnviar);
+            alertaExito("Afiliado actualizado correctamente");
+        }
+             await cargarAfiliados();
+             handleCloseModal();
+           } catch (error) {
+             alertaError("Error al procesar la solicitud");
+            
+           }
+         };
    
    
        const handleImageChange = (e) => {
@@ -66,10 +127,39 @@ export default function Afiliados() {
                reader.readAsDataURL(file);
            }
        };
+
+
+     const eliminarAfiliados = async (id) => {
+
+    const idLimpio = typeof id === 'object' ? (id.id || id.idUsuario) : id;
+
+    if (!idLimpio) {
+        console.error("No se puede eliminar sin un ID válido");
+        return;
+    }
+
+
+        const confirmar = await confirmarEliminar("¿Eliminar al afiliado?");
+        if (confirmar) {
+            try {
+               console.log("Eliminando afiliado");
+       await eliminarDatos(`/api/afiliados/${idLimpio}`);
+       await cargarAfiliados();
+
+        alertaExito("Afiliado eliminado correctamente");
+        
+    } catch (error) {
+        console.error("Error en eliminarAfiliados:", error);
+    }
+}
+}
+ 
+
        
            const handleCloseModal = () => {
                setShowModal(false);
                setPreviewImage(null);
+               setAfiliadoSeleccionado(null);
                reset();
            };
        
@@ -79,30 +169,34 @@ export default function Afiliados() {
                    <Header seccion="Afiliados" />
        
                    <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
-            <AfiliadoCard
-                nombre="Ana"
-                apellidoP="Martínez"
-                apellidoM="Pérez"
-                genero="Femenino"
-                edad={19}
-                telefono="777 987 6543"
-                    onEdit={() => handleEditar({
-                           id: 1,
-                           nombre: "Ana",
-                           apellidoP: "Martinez",
-                           apellidoM: "Pérez",
-                           genero: "Femenino",
-                           edad: 19,
-                           telefono: "777 987 6543",
-                       })}
-               />
+            
+             {afiliados.length > 0 ? (
+                    afiliados.map((b) => (
+                        
+                        <AfiliadoCard
+                            key={b.id} 
+                            nombre={b.nombres || b.nombre}
+                            apellidoP={b.apellidoP}
+                            apellidoM={b.apellidoM}
+                            genero={b.genero}
+                            edad={b.edad}
+                            telefono={b.telefono}
+                            imagen={b.foto ? `data:image/jpeg;base64,${b.foto}` : null}
+                            onEdit={() => handleEditar(b)}
+                            onDelete={() => eliminarAfiliados(b.id)}
+                        />
+                    ))
+                ) : (
+                    <p>No se encontraron afiliados registrados.</p>
+                )}
+            
    
                    </div>
        
                    {showModal && (
                        <div className="modal-overlay">
                            <div className="modal-container-custom">
-                               <h2 className="modal-title">{"Editar Beneficiario"}</h2>
+                               <h2 className="modal-title">{"Editar Afiliado"}</h2>
        
                                <form onSubmit={handleSubmit(onSubmit, onError)}>
                                    <div className="modal-grid-columns">

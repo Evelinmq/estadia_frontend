@@ -18,6 +18,7 @@ export default function AfiliadoCard({
     }) {
     const nombreCompleto = [nombre, apellidoP, apellidoM].filter(Boolean).join(" ");
 
+    
     return (
         <div className="user-card">
             {/* Encabezado____________________ */}
