@@ -7,6 +7,9 @@ import { alertaExito, alertaCamposVacios } from "../Utils/alerts";
 import "./ModalGlobal.css";
 import Input from "../Components/Inputs/Input.jsx";
 import { obtenerDatos } from "../Utils/api.js";
+import Select from "../Components/Inputs/Select.jsx";
+import { eliminarDatos, actualizarDatos } from "../Utils/api.js";
+import { confirmarEliminar } from "../Utils/alerts";
 
 export default function Beneficiarios() {
 
@@ -15,98 +18,162 @@ export default function Beneficiarios() {
     const [beneficiarios, setBeneficiarios] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
     const [beneficiarioSeleccionado, setBeneficiarioSeleccionado] = useState(null);
+    const [listaMunicipios, setListaMunicipios] = useState([]);
     
-        const {
-            register,
-            handleSubmit,
-            reset,
-            watch,
-            setValue,
-            formState: { errors },
-        } = useForm({
-            mode: "onChange"
-        });
+       const isEditing = !!beneficiarioSeleccionado;
+           
+               const {
+                   register,
+                   handleSubmit,
+                   reset,
+                   watch,
+                   setValue,
+                   formState: { errors },
+               } = useForm({
+                   mode: "onChange"
+               });
     
-        const onError = () => {
-            if (Object.keys(errors).length > 0) {
-                alertaCamposVacios();
-            }
-        };
-
-
-        const cargarBeneficiarios = async () => {
-    try {
-      const data = await obtenerDatos('/api/beneficiarios');
-      setBeneficiarios(data);
-    }catch (error) {
-      console.error('Error al cargar beneficiarios:', error);
-    }
-  };
-
-  useEffect(() => {
-    cargarBeneficiarios();
-  }, []);
-
-  // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
-const onSubmit = async (data) => {
-    try {
-      data.nombre = data.nombre.trim();
-
-      if (isEditing && beneficiarioSeleccionado) {
-       //Editar
-       await actualizarDatos(`/api/beneficiarios/${beneficiarioSeleccionado.id}`, data);
-        alertaExito("Carrera actualizada correctamente");
-         handleCloseModal();
-      }
-
-      cargarBeneficiarios();
-      reset();
-      setShowModal(false);
-    } catch (error) {
-      alertaError("Error al procesar la solicitud");
-      console.error("Error:", error);
-    }
-  };
+               register("id");
+           
+               useEffect(() => {
+                           fetch('http://localhost:8080/api/beneficiarios/Municipios')
+                           .then(res => res.json())
+                           .then(data => setListaMunicipios(data));}, []);
+           
+               const onError = () => {
+                   if (Object.keys(errors).length > 0) {
+                       alertaCamposVacios();
+                   }
+               };
     
-        const handleEditar = (user) => {
+              
+    
+               const handleEditar = (user) => {
+                
+        setBeneficiarioSeleccionado(user);
+        const idCorrecto = user.id;
+    
         reset({
-            id: user.id,
-            nombres: user.nombre,
+            id: idCorrecto,
+            nombre: user.nombre || "",
             apellidoP: user.apellidoP || "",
             apellidoM: user.apellidoM || "",
             genero: user.genero || "",
             edad: user.edad || "",
-            telefono: user.telefono || "",
-            municipio: user.municipio || "",
+           id_Municipio: user.id_Municipio || "",
             colonia: user.colonia || "",
-            correo: user.correo,
+            correo: user.correo || "",
+            telefono: user.telefono || "",
             fotografia: null
         });
-        if (user.fotografia) {
-            setPreviewImage(user.fotografia);
-        }
+    
+        const fotoExistente = user.foto
+            ? `data:image/jpeg;base64,${user.foto}`
+            : null;
+    
+        setPreviewImage(fotoExistente);
+    
         setShowModal(true);
-    
+        
     };
+    
+            const cargarBeneficiarios = async () => {
+               try {
+                 const data = await obtenerDatos('/api/beneficiarios');
+                 setBeneficiarios(data);
+               }catch (error) {
+                 console.error('Error al cargar Beneficiarios:', error);
+               }
+             };
+           
+             useEffect(() => {
+               cargarBeneficiarios();
+             }, []);
+           
+             // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
+           const onSubmit = async (data) => {
+               try {
+                if (data.nombre) data.nombre = data.nombre.trim()
+    
+                if (isEditing) {
+                    
+                    const beneficiarioId = data.id || (beneficiarioSeleccionado && beneficiarioSeleccionado.id);
+    
+                    if (!beneficiarioId) {
+                    alertaError("El beneficiario no contiene un ID válido.");
+                    return;
+                }
+                
+                const datosEnviar = {
+                    nombre: data.nombre, 
+                    apellidoP: data.apellidoP,
+                    apellidoM: data.apellidoM,
+                    genero: data.genero,   
+                    edad: parseInt(data.edad, 10),
+                    id_Municipio: data.id_Municipio,
+                    colonia: data.colonia,
+                    correo: data.correo,
+                    telefono: data.telefono,
+                    foto: previewImage ? (previewImage.includes(",") ? previewImage.split(",")[1] : previewImage) : null
+                };
+    
+               
+                await actualizarDatos(`/api/beneficiarios/${beneficiarioId}`, datosEnviar);
+                alertaExito("Beneficiario actualizado correctamente");
+            }
+                 await cargarBeneficiarios();
+                 handleCloseModal();
+               } catch (error) {
+                 alertaError("Error al procesar la solicitud");
+                
+               }
+             };
+       
+       
+           const handleImageChange = (e) => {
+               const file = e.target.files[0];
+               if (file) {
+                   const reader = new FileReader();
+                   reader.onloadend = () => {
+                       setPreviewImage(reader.result); 
+                   };
+                   reader.readAsDataURL(file);
+               }
+           };
+    
+    
+         const eliminarBeneficiario = async (id) => {
+    
+            console.log("ID recibido para eliminar:", id); 
 
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result); 
-            };
-            reader.readAsDataURL(file);
+        if (!id) {
+        console.error("No se puede eliminar sin un ID válido");
+        return;
+       }
+    
+            const confirmar = await confirmarEliminar("¿Eliminar al beneficiario?");
+            if (confirmar) {
+                try {
+                   console.log("Eliminando beneficiario");
+           await eliminarDatos(`/api/beneficiarios/${id}`);
+           await cargarBeneficiarios();
+    
+            alertaExito("Beneficiario eliminado correctamente");
+            
+        } catch (error) {
+            console.error("Error en eliminar beneficiario:", error);
         }
-    };
+    }
+    }
+     
     
-        const handleCloseModal = () => {
-            setShowModal(false);
-            setPreviewImage(null);
-            reset();
-        };
-    
+           
+               const handleCloseModal = () => {
+                   setShowModal(false);
+                   setPreviewImage(null);
+                   setBeneficiarioSeleccionado(null);
+                   reset();
+               };
         return (
 
             <div style={{ padding: "24px" }}>
@@ -118,7 +185,7 @@ const onSubmit = async (data) => {
         beneficiarios.map((b) => (
             <BeneficiarioCard
                 key={b.id} 
-                nombre={b.nombres || b.nombre}
+                nombre={ b.nombre}
                 apellidoP={b.apellidoP}
                 apellidoM={b.apellidoM}
                 genero={b.genero}
@@ -127,7 +194,11 @@ const onSubmit = async (data) => {
                 municipio={b.municipio}
                 colonia={b.colonia}
                 correo={b.correo}
+                imagen={b.foto ? `data:image/jpeg;base64,${b.foto}` : null}
                 onEdit={() => handleEditar(b)}
+                onDelete={() => eliminarBeneficiario(b.id)}
+                
+                        
             />
         ))
     ) : (
@@ -150,8 +221,8 @@ const onSubmit = async (data) => {
                                         label="Nombre/s"
                                         TYPE="text"
                                         PLACEHOLDER="Nombre completo"
-                                        error={errors.nombres}
-                                        {...register("nombres", {
+                                        error={errors.nombre}
+                                        {...register("nombre", {
                                             required: "El nombre es obligatorio",
                                             pattern: {
                                                 value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -195,19 +266,16 @@ const onSubmit = async (data) => {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <Input
+                                       <Select
                                         label="Genero"
-                                        TYPE="text"
-                                        PLACEHOLDER="Genero"
                                         error={errors.genero}
-                                        {...register("genero", {
-                                            required: "El genero es obligatorio",
-                                            pattern: {
-                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                message: "Solo se permiten letras"
-                                            }
-                                        })}
-                                        />
+                                        {...register("genero", { required: "El genero es obligatorio" })}>
+                                            <option value="">Selecciona una opción</option>
+                                            <option value={0}>Hombre</option>
+                                             <option value={1}>Mujer</option>
+                                              <option value={2}>No binario</option>
+                                               <option value={3}>Otro</option>
+                                               </Select>
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
@@ -246,53 +314,35 @@ const onSubmit = async (data) => {
                                     </div>
 
                                      <div className="form-group" style={{ width: '100%' }}>
-                                       <Input
+                                    <Input
+                                     label="Correo"
+                                    TYPE="text"
+                                    PLACEHOLDER="Correo"
+                                     error={errors.correo}
+                                    {...register("correo", {
+                                    required: "El correo es obligatorio",
+                                    pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Formato de correo inválido"}
+
+                                })}/>
+                                </div>
+
+                                     <div className="form-group" style={{ width: '100%' }}>
+                                       <Select
                                         label="Municipio"
-                                        TYPE="text"
-                                        PLACEHOLDER="Municipio"
-                                        error={errors.municipio}
-                                        {...register("municipio", {
-                                            required: "El municipio es obligatorio",
-                                            pattern: {
-                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                message: "Solo se permiten letras"
-                                            }
-                                        })}
-                                        />
+                                         error={errors.municipio}
+                                         {...register("id_Municipio", { required: "El municipio es obligatorio" })}>
+                                             <option value="">Selecciona un municipio</option>
+                                              {listaMunicipios.map((municipio) => (
+                                                 <option key={municipio.id} value={municipio.id}>
+                                                    {municipio.nombre}
+                                                    </option>
+                                                ))}
+                                                </Select>
                                     </div>
 
-                                     <div className="form-group" style={{ width: '100%' }}>
-                                       <Input
-                                        label="Colonia"
-                                        TYPE="text"
-                                        PLACEHOLDER="Colonia"
-                                        error={errors.colonia}
-                                        {...register("colonia", {
-                                            required: "La colonia es obligatoria",
-                                            pattern: {
-                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                message: "Solo se permiten letras"
-                                            }
-                                        })}
-                                        />
-                                    </div>
-
-
-                                     <div className="form-group" style={{ width: '100%' }}>
-                                       <Input
-                                        label="Correo electrónico"
-                                        TYPE="text"
-                                        PLACEHOLDER="Correo electrónico"
-                                        error={errors.correo}
-                                        {...register("correo", {
-                                            required: "El correo electrónico es obligatorio",
-                                            pattern: {
-                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message: "Ingrese un correo electrónico válido"
-                                            }
-                                        })}
-                                        />
-                                    </div>
+                                 
 
                                     {/* IMAGEN */}
                                     <div className="form-group" style={{ width: '100%' }}>

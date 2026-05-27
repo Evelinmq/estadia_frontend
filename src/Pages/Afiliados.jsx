@@ -7,6 +7,7 @@ import { alertaExito, alertaCamposVacios, alertaError, confirmarEliminar} from "
 import "./ModalGlobal.css";
 import Input from "../Components/Inputs/Input.jsx";
 import { obtenerDatos, actualizarDatos, eliminarDatos } from "../Utils/api.js";
+import Select from "../Components/Inputs/Select.jsx";
 
 export default function Afiliados() {
 
@@ -252,19 +253,16 @@ export default function Afiliados() {
                                        </div>
    
                                         <div className="form-group" style={{ width: '100%' }}>
-                                          <Input
-                                           label="Genero"
-                                           TYPE="text"
-                                           PLACEHOLDER="Genero"
-                                           error={errors.genero}
-                                           {...register("genero", {
-                                               required: "El genero es obligatorio",
-                                               pattern: {
-                                                   value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                   message: "Solo se permiten letras"
-                                               }
-                                           })}
-                                           />
+                                          <Select
+                                          label="Genero"
+                                          error={errors.genero}
+                                           {...register("genero", { required: "El genero es obligatorio" })}>
+                                            <option value="">Selecciona una opción</option>
+                                            <option value={0}>Hombre</option>
+                                             <option value={1}>Mujer</option>
+                                              <option value={2}>No binario</option>
+                                               <option value={3}>Otro</option>
+                                                </Select>
                                        </div>
 
                                        </div>

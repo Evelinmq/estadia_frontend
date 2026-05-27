@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { alertaExito, alertaCamposVacios } from "../Utils/alerts.js";
+import { alertaExito, alertaCamposVacios, alertaError } from "../Utils/alerts.js";
 import Input  from "../Components/Inputs/Input.jsx";
 import "./ModalGlobal.css"; 
 import { useNavigate } from 'react-router-dom';
+import { enviarDatos } from '../Utils/api.js';
+import { useEffect } from 'react';
+import Select from '../Components/Inputs/Select.jsx';
 
 export default function RegistroBeneficiarios() {
 
@@ -13,7 +16,17 @@ export default function RegistroBeneficiarios() {
     const [currentPage, setCurrentPage] = useState(1);
            const [showModal, setShowModal] = useState(false);
            const [beneficiarios, setBeneficiarios] = useState([]);
-           const [previewImage, setPreviewImage] = useState(null)
+           const [previewImage, setPreviewImage] = useState(null);
+           const [listaMunicipios, setListaMunicipios] = useState([]);
+           
+           useEffect(() => {
+            fetch('http://localhost:8080/api/beneficiarios/Municipios')
+            .then(res => res.json())
+            .then(data => setListaMunicipios(data));}, []);
+
+
+
+           
            
                const {
                    register,
@@ -26,11 +39,38 @@ export default function RegistroBeneficiarios() {
                    mode: "onChange"
                });
            
-               const onSubmit = (data) => {
-                   alertaExito("Beneficiario registrado con éxito");
-                   handleCloseModal();
+               const onSubmit = async (data) => {
+                   try {
+                       const payload = {
+                           nombre: data.nombre.trim(),
+                           apellidoP: data.apellidoP.trim(),
+                           apellidoM: data.apellidoM.trim(),
+                           genero: data.genero,           
+                           edad: parseInt(data.edad, 10),
+                           telefono: data.telefono.trim(),
+                           id_Municipio: data.id_Municipio.trim(),
+                           colonia: data.colonia.trim(),
+                           correo: data.correo.trim(),
+                           foto: previewImage ? previewImage.split(',')[1] : null 
+                       };
+               
+                       await enviarDatos('/api/beneficiarios', payload);
+                       
+                       alertaExito("Beneficiario registrado con éxito");
+                       setPreviewImage(null);
+                       setShowModal(false);
+                       reset();
+                       
+                   } catch (error) {
+                    if (error.response?.status === 409) {
+                         alertaError("Este correo ya está en uso. Intenta con otro.");
+                        }else{
+                       alertaError("Error al procesar la solicitud");
+                        }
+                       console.error("Error:", error);
+                        
+                   }
                };
-           
                const onError = () => {
                    if (Object.keys(errors).length > 0) {
                        alertaCamposVacios();
@@ -46,6 +86,9 @@ export default function RegistroBeneficiarios() {
                    genero: user.genero || "",
                    edad: user.edad || "",
                    telefono: user.telefono || "",
+                   id_Municipio: user.id_Municipio || "",
+                    colonia: user.colonia || "",
+                    correo: user.correo || "",
                    fotografia: null
                });
                if (user.fotografia) {
@@ -54,6 +97,7 @@ export default function RegistroBeneficiarios() {
                setShowModal(true);
            
            };
+
        
        
            const handleImageChange = (e) => {
@@ -86,7 +130,7 @@ export default function RegistroBeneficiarios() {
                                                        TYPE="text"
                                                        PLACEHOLDER="Nombre completo"
                                                        error={errors.nombres}
-                                                       {...register("nombres", {
+                                                       {...register("nombre", {
                                                            required: "El nombre es obligatorio",
                                                            pattern: {
                                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -130,19 +174,16 @@ export default function RegistroBeneficiarios() {
                                                    </div>
                
                                                     <div className="form-group" style={{ width: '100%' }}>
-                                                      <Input
-                                                       label="Genero"
-                                                       TYPE="text"
-                                                       PLACEHOLDER="Genero"
-                                                       error={errors.genero}
-                                                       {...register("genero", {
-                                                           required: "El genero es obligatorio",
-                                                           pattern: {
-                                                               value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                               message: "Solo se permiten letras"
-                                                           }
-                                                       })}
-                                                       />
+                                                     <Select
+                                                        label="Genero"
+                                                        error={errors.genero}
+                                                        {...register("genero", { required: "El genero es obligatorio" })}>
+                                                        <option value="">Selecciona una opción</option>
+                                                        <option value={0}>Hombre</option>
+                                                        <option value={1}>Mujer</option>
+                                                        <option value={2}>No binario</option>
+                                                        <option value={3}>Otro</option>
+                                                        </Select>  
                                                    </div>
 
                                                    <div className="form-group" style={{ width: '100%' }}>
@@ -183,19 +224,39 @@ export default function RegistroBeneficiarios() {
                                                    </div>
 
                                                     <div className="form-group" style={{ width: '100%' }}>
-                                                                                          <Input
-                                                                                           label="Municipio"
-                                                                                           TYPE="text"
-                                                                                           PLACEHOLDER="Municipio"
-                                                                                           error={errors.municipio}
-                                                                                           {...register("municipio", {
-                                                                                               required: "El municipio es obligatorio",
-                                                                                               pattern: {
-                                                                                                   value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                                                                                                   message: "Solo se permiten letras"
-                                                                                               }
-                                                                                           })}
-                                                                                           />
+                                                      <Input
+                                                      label="Correo"
+                                                      TYPE="text"
+                                                      PLACEHOLDER="Correo"
+                                                      error={errors.correo}
+                                                      {...register("correo", {
+                                                        required: "El correo es obligatorio",
+                                                        pattern: {
+                                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                                            message: "Formato de correo inválido"},
+                                                            validate: async (value) => {
+                                                                try {
+                                                                    const response = await fetch(`http://localhost:8080/api/beneficiarios/verificarCorreo?email=${encodeURIComponent(value)}`);
+                                                                    const existe = await response.json();
+                                                                    return !existe || "Este correo ya está registrado";
+                                                                } catch (error) {
+                                                                    return "Error al verificar el correo";
+                                                                }
+                                                            }
+                                                        })}/>
+                                                   </div>
+
+                                                    <div className="form-group" style={{ width: '100%' }}>
+                                                                                         <Select
+                                                                                         label="Municipio"
+                                                                                         error={errors.municipio}
+                                                                                         {...register("id_Municipio", { required: "El municipio es obligatorio" })}>
+                                                                                            <option value="">Selecciona un municipio</option>
+                                                                                            {listaMunicipios.map((municipio) => (
+                                                                                                <option key={municipio.id} value={municipio.id}>
+                                                                                                    {municipio.nombre}
+                                                                                                 </option>))}
+                                                                                                 </Select>
                                                                                        </div>
                                                    <div className="form-group" style={{ width: '100%' }}>
                                                                                           <Input

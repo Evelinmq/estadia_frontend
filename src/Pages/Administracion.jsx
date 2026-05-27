@@ -1,13 +1,14 @@
 import { useState } from "react";
 import DataTable from "../Components/Admin/Datatable.jsx";
 import {Header} from "../Components/Structure/Header.jsx";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import Input from "../Components/Inputs/Input.jsx";
-import { alertaCamposVacios } from "../Utils/alerts.js";
-import { obtenerDatos } from "../Utils/api.js";
+import { alertaCamposVacios, alertaError, alertaExito, confirmarEliminar } from "../Utils/alerts.js";
+import { obtenerDatos, actualizarDatos, eliminarDatos, enviarDatos } from "../Utils/api.js";
 
-function InputField({ label, type = "text", placeholder, value, onChange }) {
+
+function InputField( {label, type = "text", placeholder, value, onChange, ...props}) {
     const [visible, setVisible] = useState(false);
     const isPassword = type === "password";
     const inputType = isPassword ? (visible ? "text" : "password") : type;
@@ -22,6 +23,7 @@ function InputField({ label, type = "text", placeholder, value, onChange }) {
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
+                    {...props}
                     autoComplete={isPassword ? "current-password" : "email"}
                 />
                 {isPassword && (
@@ -91,27 +93,52 @@ export default function Administracion() {
         } = useForm({
             mode: "onChange"
         });
+        const passwordValue = watch("contrasena");
 
 
         const handleEditar = (user) => {
         reset({
             id: user.id,
-            nombres: user.nombre,
+            nombre: user.nombre,
             apellidoP: user.apellidoP || "",
             apellidoM: user.apellidoM || "",
             correo: user.correo,
-            contraseña: user.contraseña,
-            confirmarContraseña: user.confirmarContraseña
+            contrasena: ""
+            
         });
-       
+        setAdministradorSeleccionado(user)
+        setIsEditing(true);
+    
         setShowModal(true);
     
     };
             // Funciones de Modal
-            const handleOpenModal = (editMode = false) => {
-                setIsEditing(editMode);
-                setShowModal(true);
-            };
+           const handleOpenModal = (editMode = false, user = null) => {
+            setIsEditing(editMode);
+            if (editMode && user) {
+                setAdministradorSeleccionado(user);
+                reset({
+                    nombre: user.nombre,
+                    apellidoP: user.apellidoP || "",
+                    apellidoM: user.apellidoM || "",
+                    correo: user.correo,
+                    password: "", 
+                    confirmarPassword: ""
+                });
+            } else {
+                setAdministradorSeleccionado(null);
+                reset({
+                    nombre: "",
+            apellidoP: "",
+            apellidoM: "",
+            correo: "",
+            password: "",
+            confirmarPassword: ""
+        });
+    }
+    
+    setShowModal(true);
+};
         
             const handleCloseModal = () => {
                 setShowModal(false);
@@ -133,24 +160,25 @@ export default function Administracion() {
                
                  // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
                const onSubmit = async (data) => {
-                   try {
-                     data.nombre = data.nombre.trim();
-               
-                     if (isEditing && Adm) {
-                      //Editar
-                      await actualizarDatos(`/api/admin/${AdministradorSeleccionado.id}`, data);
-                       alertaExito("Afiliado actualizado correctamente");
-                        handleCloseModal();
-                     }
-               
-                     cargarAdministradores();
-                     reset();
-                     setShowModal(false);
-                   } catch (error) {
-                     alertaError("Error al procesar la solicitud");
-                     console.error("Error:", error);
-                   }
-                 };
+        try {
+            data.nombre = data.nombre?.trim();
+
+            if (isEditing && AdministradorSeleccionado) {
+                await actualizarDatos(`/api/admin/${AdministradorSeleccionado.id}`, data);
+                alertaExito("Administrdor actualizado correctamente");
+            } else {
+                await enviarDatos('/api/admin', data);
+                alertaExito("Administrador guardado correctamente");
+            }
+
+            cargarAdministradores();
+            setShowModal(false);
+            reset();
+        } catch (error) {
+            alertaError("Error al procesar la solicitud");
+            console.error("Error:", error);
+        }
+    };
 
             
             const onError = () => {
@@ -159,18 +187,21 @@ export default function Administracion() {
                 }
             };
         
-            const eliminarAdministrador = async (id) => {
-                const confirmar = await confirmarEliminar();
-                if (confirmar) {
-                    try {
-                        // Simulación de eliminación
-                        setProgramas(administrador.filter(p => p.id !== id));
-                        alertaExito("Administrador eliminado correctamente");
-                    } catch (error) {
-                        alertaError("No se pudo eliminar el programa");
-                    }
-                }
-            };
+        const eliminarAdministrador = async (id) => {
+                
+        const confirmar = await confirmarEliminar("¿Eliminar Administrador?");
+        if (confirmar) {
+            try {
+                await eliminarDatos(`/api/admin/${id}`);
+                alertaExito("Administrador eliminado correctamente");
+                cargarAdministradores();
+               
+            } catch (error) {
+                alertaError("No se pudo eliminar el Administrador");
+            }
+        }
+    };
+            
 
     return (
         <div style={{ padding: "24px" }}>
@@ -181,7 +212,7 @@ export default function Administracion() {
                 columns={columns}
                 rows={admins}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={(row) => eliminarAdministrador(row.id)}
             />
         </div>
         
@@ -189,7 +220,7 @@ export default function Administracion() {
                 <div className="modal-overlay">
                     <div className="modal-container-custom">
                         <h2 className="modal-title">
-                            {isEditing ? "Editar Programa" : "Agregar Programa"}
+                            {isEditing ? "Editar Administrador" : "Agregar Administrador"}
                         </h2>
 
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -202,7 +233,7 @@ export default function Administracion() {
                                                                TYPE="text"
                                                                PLACEHOLDER="Nombre completo"
                                                                error={errors.nombres}
-                                                               {...register("nombres", {
+                                                               {...register("nombre", {
                                                                    required: "El nombre es obligatorio",
                                                                    pattern: {
                                                                        value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -267,11 +298,10 @@ export default function Administracion() {
                                                                 label="Contraseña:"
                                                                 type="password"
                                                                 placeholder="Contraseña"
-                                                                value={password}
-                                                                onChange={(e) => setPassword(e.target.value)}
+                                                                
                                                                 error={errors.password}
-                                                                {...register("password", {
-                                                                    required: "La contraseña es obligatoria",
+                                                                {...register("contrasena", {
+                                                                    required: isEditing ? false : "La contraseña es obligatoria",
                                                                     minLength: {
                                                                         value: 6,
                                                                          message: "La contraseña debe tener al menos 6 caracteres"
@@ -290,13 +320,11 @@ export default function Administracion() {
                                                                     label="Confirmar contraseña:"
                                                                     type="password"
                                                                     placeholder="Repite tu contraseña"
-                                                                    value={confirPasswrod} 
-                                                                    onChange={(e) => setConfirPassword(e.target.value)}
                                                                     error={errors.confirmarPassword}
                                                                     {...register("confirmarPassword", {
                                                                         required: "Confirmar la contraseña es obligatorio",
-                                                                        validate: (valueForm) => 
-                                                                            password === confirPasswrod || "Las contraseñas no coinciden"})} />
+                                                                        validate: (value) => 
+                                                                            value === passwordValue || "Las contraseñas no coinciden"})} />
                                                                             {errors.confirmarPassword && (
                                                                                 <span className="error" style={{ color: '#ef4444', fontSize: '12px' }}>
                                                                                     {errors.confirmarPassword.message}
