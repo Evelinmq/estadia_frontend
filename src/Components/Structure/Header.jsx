@@ -29,12 +29,12 @@ export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", on
 }
 
 // Administración, Programas y Secciones
-export function HeaderConAgregar({ searchPlaceholder = "Buscar", onAdd }) {
+export function HeaderConAgregar({ searchPlaceholder = "Buscar", onAdd, onSearch }) {
     return (
         <header className="header">
             <Logo />
             <div className="header-controls">
-                <SearchInput placeholder={searchPlaceholder} />
+                <SearchInput placeholder={searchPlaceholder} onSearch={onSearch} />
             </div>
             <AddButton onClick={onAdd} />
         </header>
@@ -63,7 +63,7 @@ const PLACEHOLDERS = {
 const CON_FILTROS = ["beneficiarios", "afiliados"]
 const CON_AGREGAR = ["administracion", "programas", "secciones", "alianzas"]
 
-export function Header({ seccion = "beneficiarios", onExport, onAdd }) {
+export function Header({ seccion = "beneficiarios", onExport, onAdd, onSearch }) {
     const key = seccion.toLowerCase()
     const placeholder = PLACEHOLDERS[key] ?? `Buscar ${seccion}`
 
@@ -71,7 +71,7 @@ export function Header({ seccion = "beneficiarios", onExport, onAdd }) {
         return <HeaderConFiltros searchPlaceholder={placeholder} onExport={onExport} />
 
     if (CON_AGREGAR.includes(key))
-        return <HeaderConAgregar searchPlaceholder={placeholder} onAdd={onAdd} />
+        return <HeaderConAgregar searchPlaceholder={placeholder} onAdd={onAdd} onSearch={onSearch} />
 
     return <HeaderSolo />
 }

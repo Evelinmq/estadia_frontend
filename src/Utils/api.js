@@ -13,7 +13,7 @@ export const obtenerDatos = async (endpoint) => {
         const response = await fetch(`${BASE_URL}${endpoint}`, {
             method: 'GET',
             headers: getHeaders(),
-            //credentials: 'include'
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -55,7 +55,7 @@ export const actualizarDatos = async (endpoint, data) => {
             method: 'PUT',
             headers: getHeaders(), 
             body: JSON.stringify(data),
-            //credentials: 'include'
+            credentials: 'include'
         });
 
         if (!response.ok) {
