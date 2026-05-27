@@ -9,7 +9,10 @@ const SearchIcon = () => (
     </svg>
 )
 
-export function SearchInput({ placeholder = "Buscar", value, onChange }) {
+export function SearchInput({ placeholder = "Buscar", onSearch }) {
+    const handleChange = (e) => {
+        onSearch?.(e.target.value);
+    }
     return (
         <div className="search-wrapper">
       <span className="search-icon">
@@ -19,8 +22,7 @@ export function SearchInput({ placeholder = "Buscar", value, onChange }) {
                 type="text"
                 placeholder={placeholder}
                 className="search-input"
-                value={value}
-                onChange={onChange}
+                onChange={handleChange}
             />
         </div>
     )
