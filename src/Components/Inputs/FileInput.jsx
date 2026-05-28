@@ -2,6 +2,13 @@ import '../Estilos.css'
 import { forwardRef } from 'react';
 
 const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", accept = "image/*", style, ...props }, ref) => {
+
+    const getImageSrc = (preview) => {
+        if (!preview) return null;
+        if (preview.startsWith('blob:') || preview.startsWith('http')) return preview;
+        return `data:image/jpeg;base64,${preview}`;
+    };
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {label && <label className="label">{label}</label>}
@@ -28,7 +35,7 @@ const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", 
                 >
                     {previewImage ? (
                         <img
-                            src={previewImage}
+                            src={getImageSrc(previewImage)}
                             alt="Vista previa"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
