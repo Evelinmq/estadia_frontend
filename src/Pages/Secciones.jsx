@@ -20,6 +20,9 @@ const MIMES_PERMITIDOS = [
     'image/svg+xml',
 ];
 
+const MAX_SIZE_MB = 50;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
 export default function Secciones() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -100,6 +103,12 @@ export default function Secciones() {
 
         if (!MIMES_PERMITIDOS.includes(file.type)) {
             alertaError("Solo se permiten archivos JPEG, PNG o SVG");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > MAX_SIZE_BYTES) {
+            alertaError(`El archivo no debe exceder los ${MAX_SIZE_MB}MB`);
             e.target.value = "";
             return;
         }
@@ -291,7 +300,10 @@ export default function Secciones() {
                 </div>
             )}
 
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage} />
         </div>
     );
 }

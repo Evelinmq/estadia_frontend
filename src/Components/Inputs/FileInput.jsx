@@ -28,7 +28,7 @@ const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", 
                 >
                     {previewImage ? (
                         <img
-                            src={`data:image/jpeg;base64,${previewImage}`}
+                            src={previewImage}
                             alt="Vista previa"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
