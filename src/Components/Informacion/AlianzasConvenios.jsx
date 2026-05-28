@@ -1,14 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { obtenerDatos } from "../../Utils/api";
 
-const ALLIES = [
-    { id: 1, name: "Aliado 1", src: null },
-    { id: 2, name: "Aliado 2", src: null },
-    { id: 3, name: "Aliado 3", src: null },
-    { id: 4, name: "Aliado 4", src: null },
-    { id: 5, name: "Aliado 5", src: null },
-    { id: 6, name: "Aliado 6", src: null },
-    { id: 7, name: "Aliado 7", src: null },
-];
 
 const GAP = 24;
 
@@ -16,15 +8,22 @@ function useVisible() {
     const [visible, setVisible] = useState(
         typeof window !== "undefined" && window.innerWidth <= 600 ? 2 : 5
     );
+
     useEffect(() => {
-        const onResize = () => setVisible(window.innerWidth <= 600 ? 2 : 5);
+        const onResize = () =>
+            setVisible(window.innerWidth <= 600 ? 2 : 5);
+
         window.addEventListener("resize", onResize);
+
         return () => window.removeEventListener("resize", onResize);
     }, []);
+
     return visible;
 }
 
-export default function AlianzasConvenios({ allies = ALLIES }) {
+
+export default function AlianzasConvenios() {
+    const [allies, setAllies] = useState([]);
     const visible = useVisible();
     const wrapperRef = useRef(null);
     const [cardW, setCardW] = useState(160);
@@ -72,6 +71,33 @@ export default function AlianzasConvenios({ allies = ALLIES }) {
 
     const step = cardW + GAP;
     const totalDots = maxIndex + 1;
+
+    useEffect(() => {
+
+    const cargarAlianzas = async () => {
+
+        try {
+
+            const data = await obtenerDatos('/api/Alianza');
+
+            const formateadas = data.map((item) => ({
+                id: item.id,
+                name: item.name,
+                src: item.image
+                    ? `data:image/jpeg;base64,${item.image}`
+                    : null
+            }));
+
+            setAllies(formateadas);
+
+        } catch (error) {
+            console.error("Error al cargar alianzas:", error);
+        }
+    };
+
+    cargarAlianzas();
+
+}, []);
 
     return (
         <section style={styles.section}>

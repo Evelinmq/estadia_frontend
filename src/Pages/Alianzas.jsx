@@ -7,16 +7,15 @@ import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from 
 import Input from "../Components/Inputs/Input.jsx";
 import FileInput from "../Components/Inputs/FileInput.jsx";
 import "./ModalGlobal.css";
+import { obtenerDatos, eliminarDatos, actualizarDatos, enviarDatos } from "../Utils/api.js";
 
 export default function Alianzas() {
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
-
-    const [aliados, setAliados] = useState([
-        { id: 1, titulo: "Bancos de alimentos de México", imagen: null }
-    ]);
+    const [alianza, setAlianza] = useState([]);
+    const [AlianzaSeleccionado, setAlianzaSeleccionado] = useState(null);
 
     const {
         register,
@@ -28,16 +27,8 @@ export default function Alianzas() {
         mode: "onChange"
     });
 
-    const imagenSeleccionada = watch("imagen");
+    register("id");
 
-    useEffect(() => {
-        if (imagenSeleccionada && imagenSeleccionada.length > 0) {
-            const file = imagenSeleccionada[0];
-            const url = URL.createObjectURL(file);
-            setPreviewImage(url);
-            return () => URL.revokeObjectURL(url);
-        }
-    }, [imagenSeleccionada]);
 
     const handleOpenModal = (editMode = false) => {
         setIsEditing(editMode);
@@ -50,11 +41,65 @@ export default function Alianzas() {
         reset();
     };
 
-    const onSubmit = (data) => {
-        console.log("Datos del aliado:", data);
-        alertaExito(isEditing ? "Aliado actualizado" : "Aliado creado correctamente");
-        handleCloseModal();
-    };
+    const cargarAlianzas = async () => {
+               try {
+                 const data = await obtenerDatos('/api/Alianza');
+                 setAlianza(data);
+               }catch (error) {
+                 console.error('Error al cargar alianzas:', error);
+               }
+             };
+           
+             useEffect(() => {
+               cargarAlianzas();
+             }, []);
+
+             const handleEditar = (user) => {
+                setIsEditing(true);
+                setAlianzaSeleccionado(user);
+                reset({
+                    id: user.id,
+                    nombre: user.name || "",
+                    imagen: null
+                });
+                setPreviewImage(user.image || null);
+                setShowModal(true);
+            };
+
+
+
+        const onSubmit = async (data) => {
+           try {
+            data.nombre = data.nombre?.trim();
+
+            const datosEnviar = {
+            nombre: data.nombre,
+            imagen: previewImage ||null
+        };
+
+            if (isEditing && AlianzaSeleccionado) {
+                
+                const alianzaId = data.id || (AlianzaSeleccionado && AlianzaSeleccionado.id);
+
+                if (!alianzaId) {
+                alertaError("El afiliado no contiene un ID válido.");
+                return;
+            }
+            
+           
+            await actualizarDatos(`/api/Alianza/${alianzaId}`, datosEnviar);
+            alertaExito("Alianza actualizad correctamente");
+        }else{
+            await enviarDatos('/api/Alianza', datosEnviar);
+            alertaExito("Alianza guardada correctamente")
+        }
+             await cargarAlianzas();
+             handleCloseModal();
+           } catch (error) {
+             alertaError("Error al procesar la solicitud");
+            
+           }
+         };
 
     const onError = () => {
         if (Object.keys(errors).length > 0) {
@@ -62,17 +107,42 @@ export default function Alianzas() {
         }
     };
 
-    const eliminarAliado = async (id) => {
-        const confirmar = await confirmarEliminar();
-        if (confirmar) {
-            try {
-                setAliados(aliados.filter(a => a.id !== id));
-                alertaExito("Aliado eliminado correctamente");
+   const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            const base64 = reader.result.split(",")[1];
+            setPreviewImage(base64);
+        };
+
+        reader.readAsDataURL(file);
+    }
+};
+     const eliminarAlianza = async (id) => {
+        
+             
+            if (!id) {
+            console.error("No se puede eliminar sin un ID válido");
+            return;
+           }
+        
+                const confirmar = await confirmarEliminar("¿Deseas eliminar la alianza?");
+                if (confirmar) {
+                    try {
+                       console.log("Eliminando beneficiario");
+               await eliminarDatos(`/api/Alianza/${id}`);
+               await cargarAlianzas();
+        
+                alertaExito("Alianza eliminado correctamente");
+                
             } catch (error) {
-                alertaError("No se pudo eliminar el aliado");
+                console.error("Error en eliminar beneficiario:", error);
             }
         }
-    };
+        }
 
     return (
         <div style={{ padding: "24px" }}>
@@ -85,16 +155,17 @@ export default function Alianzas() {
                 gap: '25px',
                 marginTop: '30px'
             }}>
-                {aliados.map((aliado) => (
+                {alianza.map((aliado) => (
                     <ImageCard
                         key={aliado.id}
-                        titulo={aliado.titulo}
-                        imagen={aliado.imagen}
-                        onEdit={() => handleOpenModal(true)}
-                        onDelete={() => eliminarAliado(aliado.id)}
+                        titulo={aliado.name}
+                        imagen={aliado.image ? `data:image/jpeg;base64,${aliado.image}` : null}
+                        onEdit={() => handleEditar(aliado)}
+                        onDelete={() => eliminarAlianza(aliado.id)}
                     />
                 ))}
             </div>
+        
 
             {/* MODAL ALIANZAS */}
             {showModal && (
@@ -131,7 +202,8 @@ export default function Alianzas() {
                                     previewImage={previewImage}
                                     error={errors.imagen}
                                     {...register("imagen", {
-                                        required: !isEditing ? "La imagen es obligatoria" : false
+                                        required: !isEditing ? "La imagen es obligatoria" : false,
+                                        onChange: (e) => handleFileChange(e)
                                     })}
                                 />
 
