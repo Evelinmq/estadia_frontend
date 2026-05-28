@@ -234,17 +234,21 @@ export default function Programas() {
                 gap: '25px',
                 marginTop: '30px'
             }}>
-                {programas
-                    .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
-                    .map((prog) => (
-                    <ImageCard
-                        key={prog.id}
-                        titulo={prog.sectionName}
-                        imagen={getImagenUrl(prog.id)}
-                        onEdit={() => handleOpenModal(prog)}
-                        onDelete={() => eliminarPrograma(prog.id)}
-                    />
-                ))}
+                {programas.length > 0 ? (
+                    programas
+                        .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
+                        .map((prog) => (
+                        <ImageCard
+                            key={prog.id}
+                            titulo={prog.sectionName}
+                            imagen={getImagenUrl(prog.id)}
+                            onEdit={() => handleOpenModal(prog)}
+                            onDelete={() => eliminarPrograma(prog.id)}
+                        />
+                    ))
+                ) : (
+                    <p>No se encontraron programas registrados.</p>
+                )}
             </div>
 
             {/* MODAL PROGRAMAS */}

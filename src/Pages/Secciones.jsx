@@ -223,18 +223,22 @@ export default function Secciones() {
                     marginTop: '30px',
                 }}
             >
-                {secciones
-                    .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
-                    .map((sec) => (
-                    <SectionCard
-                        key={sec.id}
-                        titulo={sec.name}
-                        descripcion={sec.description}
-                        imagen={getImagenUrl(sec.id)}
-                        onEdit={() => handleOpenModal(sec)}
-                        onDelete={() => eliminar(sec.id)}
-                    />
-                ))}
+                {secciones.length > 0 ? (
+                    secciones
+                        .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
+                        .map((sec) => (
+                        <SectionCard
+                            key={sec.id}
+                            titulo={sec.name}
+                            descripcion={sec.description}
+                            imagen={getImagenUrl(sec.id)}
+                            onEdit={() => handleOpenModal(sec)}
+                            onDelete={() => eliminar(sec.id)}
+                        />
+                    ))
+                ) : (
+                    <p>No se encontraron secciones registradas.</p>
+                )}
             </div>
 
             {/* MODAL */}
