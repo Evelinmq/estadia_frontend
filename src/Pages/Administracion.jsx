@@ -12,6 +12,7 @@ function InputField( {label, type = "text", placeholder, value, onChange, ...pro
     const [visible, setVisible] = useState(false);
     const isPassword = type === "password";
     const inputType = isPassword ? (visible ? "text" : "password") : type;
+    
 
     return (
         <div className="lf-field">
@@ -69,10 +70,26 @@ export default function Administracion() {
      const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [admins, setAdmins] = useState(datosIniciales);
+    const [admins, setAdmins] = useState([]);
     const [password, setPassword] = useState("");
     const [confirPasswrod, setConfirPassword] = useState("");
     const [AdministradorSeleccionado, setAdministradorSeleccionado] = useState(null);
+
+    const [terminoBusqueda, setTerminoBusqueda] = useState("");
+
+
+
+useEffect(() => {
+  cargarAdministradores(); 
+}, []);
+
+
+useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    cargarAdministradores(terminoBusqueda);
+  }, 500);
+  return () => clearTimeout(delayDebounceFn);
+}, [terminoBusqueda]);
 
     const handleEdit = (row, index) => {
         console.log("Editar", row, index);
@@ -145,18 +162,22 @@ export default function Administracion() {
                 reset();
             };
 
-        const cargarAdministradores = async () => {
-                   try {
-                     const data = await obtenerDatos('/api/admin');
-                     setAdmins(data);
-                   }catch (error) {
-                     console.error('Error al cargar Administradores:', error);
-                   }
-                 };
-               
-                 useEffect(() => {
-                   cargarAdministradores();
-                 }, []);
+        
+const cargarAdministradores = async (termino = "") => {
+  try {
+     
+    const url = termino 
+      ? `/api/admin/buscar?nombre=${encodeURIComponent(termino)}` 
+      : '/api/admin';
+      
+    const data = await obtenerDatos(url);
+
+    
+    setAdmins(data || []);
+  } catch (error) {
+    console.error('Error al cargar Administradores:', error);
+  }
+};
                
                  // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
                const onSubmit = async (data) => {
@@ -207,7 +228,9 @@ export default function Administracion() {
         <div style={{ padding: "24px" }}>
 
         <div style={{ padding: "24px" }}>
-            <Header seccion="administracion" onAdd={() => handleOpenModal(false)}/>
+            <Header seccion="administracion" onAdd={() => handleOpenModal(false)}
+                onSearch={(valor) => {
+                setTerminoBusqueda(valor) }}/>
             <DataTable
                 columns={columns}
                 rows={admins}

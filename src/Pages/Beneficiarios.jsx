@@ -19,6 +19,19 @@ export default function Beneficiarios() {
     const [previewImage, setPreviewImage] = useState(null);
     const [beneficiarioSeleccionado, setBeneficiarioSeleccionado] = useState(null);
     const [listaMunicipios, setListaMunicipios] = useState([]);
+     const [terminoBusqueda, setTerminoBusqueda] = useState("");
+
+
+useEffect(() => {
+  cargarBeneficiarios(); 
+}, []);
+
+    useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    cargarBeneficiarios(terminoBusqueda);
+  }, 500);
+  return () => clearTimeout(delayDebounceFn);
+}, [terminoBusqueda]);
     
        const isEditing = !!beneficiarioSeleccionado;
            
@@ -76,20 +89,24 @@ export default function Beneficiarios() {
         setShowModal(true);
         
     };
+
+
+    const cargarBeneficiarios = async (termino = "") => {
+  try {
+     
+    const url = termino 
+  ? `/api/beneficiarios/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
+  : "/api/beneficiarios";
+      
+    const data = await obtenerDatos(url);
+
     
-            const cargarBeneficiarios = async () => {
-               try {
-                 const data = await obtenerDatos('/api/beneficiarios');
-                 setBeneficiarios(data);
-               }catch (error) {
-                 console.error('Error al cargar Beneficiarios:', error);
-               }
-             };
-           
-             useEffect(() => {
-               cargarBeneficiarios();
-             }, []);
-           
+    setBeneficiarios(data || []);
+  } catch (error) {
+    console.error('Error al cargar beneficiarios:', error);
+  }
+};
+
              // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
            const onSubmit = async (data) => {
                try {
@@ -177,7 +194,9 @@ export default function Beneficiarios() {
         return (
 
             <div style={{ padding: "24px" }}>
-                <Header seccion="beneficiarios" />
+                <Header seccion="beneficiarios"
+                onSearch={(valor) => {
+                setTerminoBusqueda(valor) }} />
     
                 <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
 

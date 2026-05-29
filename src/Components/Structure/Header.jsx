@@ -5,6 +5,7 @@ import { ExportAllButton } from '../Buttons/ExportarAllButton.jsx'
 import { AddButton } from '../Buttons/AddButton.jsx';
 import LogoSrc from '../../Img/logo.png';
 
+
 const Logo = () => (
     <img
         src={LogoSrc}
@@ -14,12 +15,13 @@ const Logo = () => (
 )
 
 // Beneficiarios y Afiliados
-export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", onExport }) {
+export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", onExport, onSearch }) {
     return (
         <header className="header">
             <Logo />
             <div className="header-controls">
-                <SearchInput placeholder={searchPlaceholder} />
+                <SearchInput placeholder={searchPlaceholder} 
+                onSearch={onSearch}/>
                 <DatePicker label="Fecha Inicial" />
                 <DatePicker label="Fecha Final" />
             </div>
@@ -68,7 +70,7 @@ export function Header({ seccion = "beneficiarios", onExport, onAdd, onSearch })
     const placeholder = PLACEHOLDERS[key] ?? `Buscar ${seccion}`
 
     if (CON_FILTROS.includes(key))
-        return <HeaderConFiltros searchPlaceholder={placeholder} onExport={onExport} />
+        return <HeaderConFiltros searchPlaceholder={placeholder} onExport={onExport} onSearch={onSearch} />
 
     if (CON_AGREGAR.includes(key))
         return <HeaderConAgregar searchPlaceholder={placeholder} onAdd={onAdd} onSearch={onSearch} />

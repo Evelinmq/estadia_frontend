@@ -17,6 +17,22 @@ export default function Afiliados() {
        const [afiliados, setAfiliados] = useState([]);
        const [previewImage, setPreviewImage] = useState(null);
        const [AfiliadoSeleccionado, setAfiliadoSeleccionado] = useState(null);
+       const [terminoBusqueda, setTerminoBusqueda] = useState("");
+
+
+
+useEffect(() => {
+  cargarAfiliados(); 
+}, []);
+
+
+useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    cargarAfiliados(terminoBusqueda);
+  }, 500);
+  return () => clearTimeout(delayDebounceFn);
+}, [terminoBusqueda]);
+
 
        const isEditing = !!AfiliadoSeleccionado;
        
@@ -68,18 +84,16 @@ export default function Afiliados() {
     
 };
 
-        const cargarAfiliados = async () => {
-           try {
-             const data = await obtenerDatos('/api/afiliados');
-             setAfiliados(data);
-           }catch (error) {
-             console.error('Error al cargar Afiliados:', error);
-           }
-         };
-       
-         useEffect(() => {
-           cargarAfiliados();
-         }, []);
+       const cargarAfiliados = async (termino = "") => {
+        try {
+            const url = termino ? `/api/afiliados/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
+            : "/api/afiliados";
+            const data = await obtenerDatos(url);
+            setAfiliados(data || []);
+        } catch (error) {
+            console.error('Error al cargar beneficiarios:', error);
+       }
+    };
        
          // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
        const onSubmit = async (data) => {
@@ -167,7 +181,9 @@ export default function Afiliados() {
            return (
    
                <div style={{ padding: "24px" }}>
-                   <Header seccion="Afiliados" />
+                   <Header seccion="Afiliados" 
+                   onSearch={(valor) => {
+                setTerminoBusqueda(valor) }}/>
        
                    <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
             
