@@ -3,6 +3,7 @@ import Encabezado from '../../Components/Structure/Encabezado.jsx';
 import PieDePagina from '../../Components/Structure/PieDePagina.jsx';
 import HeaderProgramas from '../../Components/Informacion/HeaderProgramas.jsx';
 import { useSecciones } from './SeccionesContext.jsx';
+import {useEffect} from "react";
 
 function TarjetaImagen({ imagen, titulo }) {
     return (
@@ -37,10 +38,16 @@ const imgStyles = {
 // Página principal del detalle
 export default function DetalleSeccion() {
     const { slug } = useParams();                    // lee el slug de la URL
-    const { obtenerPorSlug } = useSecciones();
+    const { obtenerPorSlug, cargarImagenesDeSeccion } = useSecciones();
     const navigate = useNavigate();
 
     const seccion = obtenerPorSlug(slug);
+
+    useEffect(() => {
+        if (seccion?.id) {
+            cargarImagenesDeSeccion(seccion.id);
+        }
+    }, [seccion?.id]);
 
     // Sección no encontrada
     if (!seccion) {
