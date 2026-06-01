@@ -15,15 +15,15 @@ const Logo = () => (
 )
 
 // Beneficiarios y Afiliados
-export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", onExport, onSearch }) {
+export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", onExport, onSearch, onDateChange, fechas }) {
     return (
         <header className="header">
             <Logo />
             <div className="header-controls">
                 <SearchInput placeholder={searchPlaceholder} 
                 onSearch={onSearch}/>
-                <DatePicker label="Fecha Inicial" />
-                <DatePicker label="Fecha Final" />
+                <DatePicker label="Fecha Inicial" value={fechas?.inicio} onChange={(val) => onDateChange('inicio', val)} />
+                <DatePicker label="Fecha Final" value={fechas?.fin} onChange={(val) => onDateChange('fin', val)} />
             </div>
             <ExportAllButton onClick={onExport} />
         </header>
@@ -65,12 +65,12 @@ const PLACEHOLDERS = {
 const CON_FILTROS = ["beneficiarios", "afiliados"]
 const CON_AGREGAR = ["administracion", "programas", "secciones", "alianzas"]
 
-export function Header({ seccion = "beneficiarios", onExport, onAdd, onSearch }) {
+export function Header({ seccion = "beneficiarios", onExport, onAdd, onSearch, onDateChange, fechas }) {
     const key = seccion.toLowerCase()
     const placeholder = PLACEHOLDERS[key] ?? `Buscar ${seccion}`
 
     if (CON_FILTROS.includes(key))
-        return <HeaderConFiltros searchPlaceholder={placeholder} onExport={onExport} onSearch={onSearch} />
+        return <HeaderConFiltros searchPlaceholder={placeholder} onExport={onExport} onSearch={onSearch} onDateChange={onDateChange} fechas={fechas} />
 
     if (CON_AGREGAR.includes(key))
         return <HeaderConAgregar searchPlaceholder={placeholder} onAdd={onAdd} onSearch={onSearch} />

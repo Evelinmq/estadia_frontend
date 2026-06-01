@@ -42,3 +42,9 @@
     cursor: pointer;
     border: none;
 }
+
+.date-value {
+    font-size: 13px;
+    color: #333;
+    pointer-events: none;
+}

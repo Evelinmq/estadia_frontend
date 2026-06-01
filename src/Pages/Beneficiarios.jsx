@@ -19,8 +19,13 @@ export default function Beneficiarios() {
     const [previewImage, setPreviewImage] = useState(null);
     const [beneficiarioSeleccionado, setBeneficiarioSeleccionado] = useState(null);
     const [listaMunicipios, setListaMunicipios] = useState([]);
-     const [terminoBusqueda, setTerminoBusqueda] = useState("");
+    const [terminoBusqueda, setTerminoBusqueda] = useState("");
+    const [fechas, setFechas] = useState({ inicio: "", fin: "" });
 
+    const handleDateChange = (tipo, valor) => {
+        console.log(tipo, valor);
+    setFechas(prev => ({ ...prev, [tipo]: valor }));
+};
 
 useEffect(() => {
   cargarBeneficiarios(); 
@@ -28,10 +33,10 @@ useEffect(() => {
 
     useEffect(() => {
   const delayDebounceFn = setTimeout(() => {
-    cargarBeneficiarios(terminoBusqueda);
+    cargarBeneficiarios(terminoBusqueda, fechas.inicio, fechas.fin);
   }, 500);
   return () => clearTimeout(delayDebounceFn);
-}, [terminoBusqueda]);
+}, [terminoBusqueda, fechas.fin, fechas.inicio]);
     
        const isEditing = !!beneficiarioSeleccionado;
            
@@ -91,15 +96,18 @@ useEffect(() => {
     };
 
 
-    const cargarBeneficiarios = async (termino = "") => {
+    const cargarBeneficiarios = async (termino = "", fechaInicio = "", fechaFin = "") => {
   try {
      
-    const url = termino 
-  ? `/api/beneficiarios/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
-  : "/api/beneficiarios";
+    let url = "/api/beneficiarios" 
+
+    if(fechaInicio && fechaFin) {
+        url = `/api/beneficiarios/filtro?fechaInicio=${encodeURIComponent(fechaInicio)}&fechaFin=${encodeURIComponent(fechaFin)}`;
+    }else if (termino) {
+        url = `/api/beneficiarios/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
+    }
       
     const data = await obtenerDatos(url);
-
     
     setBeneficiarios(data || []);
   } catch (error) {
@@ -196,7 +204,9 @@ useEffect(() => {
             <div style={{ padding: "24px" }}>
                 <Header seccion="beneficiarios"
                 onSearch={(valor) => {
-                setTerminoBusqueda(valor) }} />
+                setTerminoBusqueda(valor) }}
+                onDateChange={handleDateChange}
+                fechas={fechas} />
     
                 <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
 

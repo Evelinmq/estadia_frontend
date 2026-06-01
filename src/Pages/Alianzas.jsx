@@ -16,6 +16,7 @@ export default function Alianzas() {
     const [previewImage, setPreviewImage] = useState(null);
     const [alianza, setAlianza] = useState([]);
     const [AlianzaSeleccionado, setAlianzaSeleccionado] = useState(null);
+    const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
     const {
         register,
@@ -41,14 +42,27 @@ export default function Alianzas() {
         reset();
     };
 
-    const cargarAlianzas = async () => {
-               try {
-                 const data = await obtenerDatos('/api/Alianza');
-                 setAlianza(data);
-               }catch (error) {
-                 console.error('Error al cargar alianzas:', error);
-               }
-             };
+
+    useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    cargarAlianzas(terminoBusqueda);
+  }, 500);
+  return () => clearTimeout(delayDebounceFn);
+}, [terminoBusqueda]);
+
+
+const cargarAlianzas = async (termino = "") => {
+        try {
+            const url = termino ? `/api/Alianza/busquedaAlianza?nombre=${encodeURIComponent(termino)}`
+            : "/api/Alianza";
+            const data = await obtenerDatos(url);
+            setAlianza(data || []);
+        } catch (error) {
+            console.error('Error al cargar alianzas:', error);
+       }
+    };
+
+    
            
              useEffect(() => {
                cargarAlianzas();
@@ -65,6 +79,8 @@ export default function Alianzas() {
                 setPreviewImage(user.image || null);
                 setShowModal(true);
             };
+
+
 
 
 
@@ -146,7 +162,9 @@ export default function Alianzas() {
 
     return (
         <div style={{ padding: "24px" }}>
-            <Header seccion="alianzas" onAdd={() => handleOpenModal(false)} />
+            <Header seccion="alianzas" onAdd={() => handleOpenModal(false)}
+                onSearch={(valor) => {
+                setTerminoBusqueda(valor) }} />
 
             {/*tarjetas de Aliados */}
             <div className="grid-alianzas" style={{

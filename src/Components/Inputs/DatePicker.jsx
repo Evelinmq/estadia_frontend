@@ -19,7 +19,7 @@ const CalendarIcon = () => (
     </svg>
 );
 
-export function DatePicker({ label = "Fecha" }) {
+export function DatePicker({ label = "Fecha", onChange, value }) {
     const inputRef = useRef(null);
 
     const openPicker = () => {
@@ -32,6 +32,12 @@ export function DatePicker({ label = "Fecha" }) {
         <div className="date-wrapper" onClick={openPicker}>
             <span className="date-label">{label}</span>
 
+           <span className="date-value">
+                {value
+                    ? new Date(value + "T00:00:00").toLocaleDateString("es-MX")
+                    : ""}
+            </span>
+
             <span className="date-icon">
                 <CalendarIcon />
             </span>
@@ -40,6 +46,8 @@ export function DatePicker({ label = "Fecha" }) {
                 ref={inputRef}
                 type="date"
                 className="date-input"
+                value={value || ""}
+                onChange={(e) => onChange(e.target.value)}
             />
         </div>
     );

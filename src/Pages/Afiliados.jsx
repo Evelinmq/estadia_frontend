@@ -18,6 +18,12 @@ export default function Afiliados() {
        const [previewImage, setPreviewImage] = useState(null);
        const [AfiliadoSeleccionado, setAfiliadoSeleccionado] = useState(null);
        const [terminoBusqueda, setTerminoBusqueda] = useState("");
+       const [fechas, setFechas] = useState({ inicio: "", fin: "" });
+
+    const handleDateChange = (tipo, valor) => {
+        console.log(tipo, valor);
+    setFechas(prev => ({ ...prev, [tipo]: valor }));
+};
 
 
 
@@ -28,10 +34,10 @@ useEffect(() => {
 
 useEffect(() => {
   const delayDebounceFn = setTimeout(() => {
-    cargarAfiliados(terminoBusqueda);
+    cargarAfiliados(terminoBusqueda, fechas.inicio, fechas.fin);
   }, 500);
   return () => clearTimeout(delayDebounceFn);
-}, [terminoBusqueda]);
+}, [terminoBusqueda, fechas.inicio, fechas.fin]);
 
 
        const isEditing = !!AfiliadoSeleccionado;
@@ -84,16 +90,24 @@ useEffect(() => {
     
 };
 
-       const cargarAfiliados = async (termino = "") => {
-        try {
-            const url = termino ? `/api/afiliados/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
-            : "/api/afiliados";
-            const data = await obtenerDatos(url);
-            setAfiliados(data || []);
-        } catch (error) {
-            console.error('Error al cargar beneficiarios:', error);
-       }
-    };
+       const cargarAfiliados = async (termino = "", fechaInicio = "", fechaFin = "") => {
+  try {
+     
+    let url = "/api/afiliados" 
+
+    if(fechaInicio && fechaFin) {
+        url = `/api/afiliados/filtro?fechaInicio=${encodeURIComponent(fechaInicio)}&fechaFin=${encodeURIComponent(fechaFin)}`;
+    }else if (termino) {
+        url = `/api/afiliados/buscar?nombre=${encodeURIComponent(termino)}&apellidoP=${encodeURIComponent(termino)}&apellidoM=${encodeURIComponent(termino)}`
+    }
+      
+    const data = await obtenerDatos(url);
+    
+    setAfiliados(data || []);
+  } catch (error) {
+    console.error('Error al cargar afiliados:', error);
+  }
+};
        
          // SUBMIT PARA AGREGAR Y ENVIAR A BACKEND
        const onSubmit = async (data) => {
@@ -183,7 +197,9 @@ useEffect(() => {
                <div style={{ padding: "24px" }}>
                    <Header seccion="Afiliados" 
                    onSearch={(valor) => {
-                setTerminoBusqueda(valor) }}/>
+                setTerminoBusqueda(valor) }}
+                onDateChange={handleDateChange}
+                fechas={fechas}/>
        
                    <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
             
