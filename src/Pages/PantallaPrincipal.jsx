@@ -26,8 +26,8 @@ export default function PantallaPrincipal() {
             <div className="card-informacion">
                 <QuienesSomos />
                 <h2 className="subtitulo-pantalla">Nuestra Misión y Visión</h2>
-                <Mision descripcion="​Somos una organización civil sin fines de lucro dedicada a mejorar la calidad de vida de los sectores más vulnerables en Morelos y sus alrededores. Nuestra labor se centra en brindar asistencia integral en materia de salud, alimentación, vivienda y servicios jurídicos, promoviendo al mismo tiempo el desarrollo cultural, educativo y la defensa de los derechos humanos. Buscamos empoderar a la comunidad mediante la capacitación para el trabajo, la protección del patrimonio cultural y el fomento de la participación ciudadana organizada." />
-                <Vision descripcion="Consolidarnos como la organización líder y referente en el estado de Morelos por nuestra capacidad de transformar el entorno social de las comunidades indígenas y grupos vulnerables. Aspiramos a un futuro donde cada ciudadano tenga acceso pleno a la salud, educación de calidad y justicia social, logrando un desarrollo regional sustentable, inclusivo y en total armonía con la cultura y el medio ambiente de nuestra región." />
+                <Mision />
+                <Vision />
             </div>
 
             <div>
