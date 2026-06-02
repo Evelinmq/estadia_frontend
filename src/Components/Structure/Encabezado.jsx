@@ -37,8 +37,8 @@ export const Encabezado = () => {
                 navigate("/"); setMenuAbierto(false);  }}>Inicio</a>
                 <a href="#" className={`navegacion-link ${esActivo("/voluntariado")}`} onClick={(e) => { e.preventDefault(); 
                 navigate("/voluntariado"); setMenuAbierto(false);  }}>Voluntariado</a> 
-                <a href="#" className={`navegacion-link ${esActivo("/paginaSecciones")}`} onClick={(e) => { e.preventDefault(); 
-                navigate("/paginaSecciones"); setMenuAbierto(false);  }}>Programas</a>
+                <a href="#" className={`navegacion-link ${esActivo("/secciones")}`} onClick={(e) => { e.preventDefault();
+                navigate("/secciones"); setMenuAbierto(false);  }}>Programas</a>
                 <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>
                     <img src={icono} alt="Icono" />
                 </a>

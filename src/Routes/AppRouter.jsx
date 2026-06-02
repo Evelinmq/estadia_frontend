@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PaginaSecciones from '../Pages/Secciones/PaginaSecciones.jsx';
 import DetalleSeccion from '../Pages/Secciones/DetalleSeccion.jsx';
-// Importa aquí tus otras páginas (Inicio, etc.)
 
 export default function AppRouter() {
     return (

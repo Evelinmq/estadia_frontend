@@ -1,79 +1,92 @@
-import './App.css';
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import Sidebar from "./Components/Structure/Sidebar.jsx";
-import Beneficiarios from "./Pages/Beneficiarios";
+import PantallaPrincipal from "./Pages/PantallaPrincipal.jsx";
+
+import PaginaSecciones from "./Pages/Secciones/PaginaSecciones.jsx";
+import DetalleSeccion from "./Pages/Secciones/DetalleSeccion.jsx";
+import PaginaVoluntariado from "./Pages/PaginaVoluntariado.jsx";
+import RegistroBeneficiarios from "./Pages/RegistroBeneficiarios.jsx";
+import RegistroAfiliados from "./Pages/RegistroAfiliados.jsx";
+
+import Login from "./Auth/Login.jsx";
+import ForgotPassword from "./Auth/ForgotPassword.jsx";
+import NewPassword from "./Auth/NewPasword.jsx";
+import VerifyCode from "./Auth/VerifyCode.jsx";
+
+import Beneficiarios from "./Pages/Beneficiarios.jsx";
 import Afiliados from "./Pages/Afiliados";
 import Administracion from "./Pages/Administracion";
 import Programas from "./Pages/Programas";
 import Secciones from "./Pages/Secciones";
 import Alianzas from "./Pages/Alianzas";
 import Objetivos from "./Pages/Objetivos.jsx";
-import PantallaPrincipal from "./Pages/PantallaPrincipal.jsx";
-import RegistroAfiliados from "./Pages/RegistroAfiliados.jsx"
-import RegistroBeneficiarios from './Pages/RegistroBeneficiarios.jsx';
-import PaginaVoluntariado from './Pages/PaginaVoluntariado.jsx';
-import PaginaSecciones from './Pages/Secciones/PaginaSecciones.jsx';
-import Login from './Auth/Login.jsx';
 
-function PublicLayout() {
+import ProtectedRoutes from "./Routes/ProtectedRoutes.jsx";
+import AdminLayout from "./Routes/AdminLayout.jsx";
+import {SeccionesProvider} from "./Pages/Secciones/SeccionesContext.jsx";
+
+export default function App() {
     return (
-        <div className="public-page-content">
-            <Outlet />
-        </div>
-    );
-}
-
-
-function AdminLayout() {
-    return (
-        <>
-            <Sidebar />
-            <div className="sidebar-page-content">
-                <Outlet /> 
-            </div>
-        </>
-    );
-}
-
-
-function App() {
-
-    return (
-        <BrowserRouter>
 
         <Routes>
 
-        <Route element={<PublicLayout />}>
-        <Route path="/pantalla-principal" element={<AdminLayout />} />
-        </Route>
-            
-                <Route element={<AdminLayout />}>
-                    <Route path="/beneficiarios" element={<Beneficiarios />} />
-                    <Route path="/afiliados" element={<Afiliados />} />
-                    <Route path="/administracion" element={<Administracion />} />
-                    <Route path="/programas" element={<Programas />} />
-                    <Route path="/secciones" element={<Secciones />} />
-                    <Route path="/alianzas" element={<Alianzas />} />
-                    <Route path="/objetivos" element={<Objetivos />} />
+            {/*Rutas publicas*/}
+            <Route path="/" element={<PantallaPrincipal />} />
+            <Route path="/voluntariado" element={<PaginaVoluntariado />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios />} />
+            <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
+
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/newPassword" element={<NewPassword />} />
+            <Route path="/verify" element={<VerifyCode />} />
+
+            <Route path="/secciones"
+                   element={
+                       <SeccionesProvider>
+                           <PaginaSecciones />
+                       </SeccionesProvider>
+
+                   } />
+
+            <Route
+                path="/secciones/:slug"
+                   element={
+                       <SeccionesProvider>
+                           <DetalleSeccion />
+                       </SeccionesProvider>
+                   }
+            />
+
+            {/*Rutas privadas*/}
+            <Route
+                element={
+                     <ProtectedRoutes
+                        allowedRoles={["ADMIN"]}
+                     />
+                }
+            >
+                <Route path="/admin" element={<AdminLayout />} >
+                    <Route path="beneficiarios" element={<Beneficiarios />} />
+
+                    <Route path="afiliados" element={<Afiliados />} />
+
+                    <Route path="administracion" element={<Administracion />} />
+
+                    <Route path="programas" element={<Programas />} />
+
+                    <Route path="secciones" element={<Secciones />} />
+
+                    <Route path="alianzas" element={<Alianzas />} />
+
+                    <Route path="objetivos" element={<Objetivos />} />
+
                 </Route>
+            </Route>
+            
+            <Route path="*" element={<Navigate to="/" replace />} />
 
-                <Route path="/" element={<Navigate to="/pantalla-principal" />} />
-           </Routes>
-           
-           
-           <Routes>
-                <Route path="/voluntariado" element={<PaginaVoluntariado />} />
-                <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
-                <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios/>} />
-                <Route path="/paginaSecciones" element={<PaginaSecciones/>} />
-                <Route path="/login" element={<Login />} />
-               
-            </Routes>
+        </Routes>
 
-
-        </BrowserRouter>
     );
 }
-
-export default App;
