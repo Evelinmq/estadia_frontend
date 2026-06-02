@@ -212,6 +212,7 @@ useEffect(() => {
 
                     {beneficiarios.length > 0 ? (
         beneficiarios.map((b) => (
+
             <BeneficiarioCard
                 key={b.id} 
                 nombre={ b.nombre}
