@@ -342,6 +342,7 @@
 
     .encabezado {
         padding: 10px 15px;
+        overflow-x: visible;
     }
 
     .menu-hamburguesa {
@@ -368,7 +369,8 @@
     }
 
     .navegacion-menu.desplegado {
-        display: flex;
+        display: flex !important;
+        flex-direction: column;
     }
 
     .botones-grupo {
@@ -379,7 +381,12 @@
     .botones-grupo button {
         width: 100%; 
     }
+
+    .navegacion-menu .navegacion-link:first-child {
+        margin-left: 0;
+    }
 }
+
 
 
 .error {
