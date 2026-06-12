@@ -51,9 +51,9 @@ export default function PieDePagina() {
     <div className="footer-column">
         <h3 className="Titulo-inferior">REDES SOCIALES</h3>
         <div className="social-icons-wrapper">
-        <a href="#" className="navegacion-link-Inferior"><img src={Whats} alt="Whats" /></a>
-        <a href="#" className="navegacion-link-Inferior"><img src={facebook} alt="facebook" /></a>
-        <a href="#" className="navegacion-link-Inferior"><img src={instagram} alt="Instagram" /></a>
+        <a href="https://wa.me/7772578970" className="navegacion-link-Inferior"><img src={Whats} alt="WhatsApp" /></a>
+        <a href="https://www.facebook.com/share/1BHRCH3KsL/" className="navegacion-link-Inferior"><img src={facebook} alt="Facebook" /></a>
+        <a href="https://www.instagram.com/juventudportemixco?igsh=MThuNmJiOWxzZHBzNw==" className="navegacion-link-Inferior"><img src={instagram} alt="Instagram" /></a>
         </div>
     <div className="extra-info links-verticales">
         <div className="contacto-item">

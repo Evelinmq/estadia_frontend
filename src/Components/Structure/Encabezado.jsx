@@ -39,7 +39,7 @@ export const Encabezado = () => {
                 navigate("/voluntariado"); setMenuAbierto(false);  }}>Voluntariado</a> 
                 <a href="#" className={`navegacion-link ${esActivo("/secciones")}`} onClick={(e) => { e.preventDefault();
                 navigate("/secciones"); setMenuAbierto(false);  }}>Programas</a>
-                <a href="#" className="navegacion-link" onClick={() => setMenuAbierto(false)}>
+                <a href="https://wa.me/7772578970" className="navegacion-link" onClick={() => setMenuAbierto(false)}>
                     <img src={icono} alt="Icono" />
                 </a>
                 
