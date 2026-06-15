@@ -1,17 +1,47 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../Auth/AuthContext.jsx";
-
+import { useEffect } from "react";
 
 function ProtectedRoutes({ allowedRoles }) {
-    const {user} = useContext(AuthContext);
+
+    const token = localStorage.getItem("token");
+    const usuarioRaw = localStorage.getItem("usuario");
+
+    useEffect(() => {
+
+    window.history.pushState(null, "", window.location.href);
     
-    if (!user) {
-        return <Navigate to="/" replace />;
+    const bloqueo = (e) => {
+        window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", bloqueo);
+    
+    return () => {
+        window.removeEventListener("popstate", bloqueo);
+    };
+    }, [token, usuarioRaw]);
+    
+    
+        if (!token || !usuarioRaw) {
+        return <Navigate to="/login" replace />;
     }
 
-    if (allowedRoles && !allowedRoles.includes(user.tipoUsuario)) {
-        return <Navigate to="/" replace />
+    const usuario = JSON.parse(usuarioRaw);
+
+    const userRol = (usuario.rol ?? "").toUpperCase();
+
+    const hasAccess = allowedRoles.some(rol =>{
+        const rolUpper = rol.toUpperCase();
+
+        return rolUpper === userRol || userRol.includes
+        (rolUpper);
+    });
+
+   
+    if (!hasAccess) {
+        return <Navigate to="/admin" replace />
     }
 
     return <Outlet/>

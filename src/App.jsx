@@ -62,7 +62,7 @@ export default function App() {
             <Route
                 element={
                      <ProtectedRoutes
-                        allowedRoles={["ADMIN"]}
+                        allowedRoles={["ROLE_ADMIN"]}
                      />
                 }
             >

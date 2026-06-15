@@ -3,13 +3,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 const navItems = [
-    { label: "Beneficiarios",  svgFile: "Beneficiarios.svg",   path: "/beneficiarios"  },
-    { label: "Afiliados",      svgFile: "Afiliados.svg",        path: "/afiliados"      },
-    { label: "Administración", svgFile: "Administracion.svg",   path: "/administracion" },
-    { label: "Programas",      svgFile: "Programas.svg",        path: "/programas"      },
-    { label: "Secciones",      svgFile: "Secciones.svg",        path: "/secciones"      },
-    { label: "Alianzas",       svgFile: "Alianzas.svg",         path: "/alianzas"       },
-    { label: "Objetivos",      svgFile: "Objetivos.svg",        path: "/objetivos"      },
+    { label: "Beneficiarios",  svgFile: "Beneficiarios.svg",   path: "/admin/beneficiarios"  },
+    { label: "Afiliados",      svgFile: "Afiliados.svg",        path: "/admin/afiliados"      },
+    { label: "Administración", svgFile: "Administracion.svg",   path: "/admin/administracion" },
+    { label: "Programas",      svgFile: "Programas.svg",        path: "/admin/programas"      },
+    { label: "Secciones",      svgFile: "Secciones.svg",        path: "/admin/secciones"      },
+    { label: "Alianzas",       svgFile: "Alianzas.svg",         path: "/admin/alianzas"       },
+    { label: "Objetivos",      svgFile: "Objetivos.svg",        path: "/admin/objetivos"      },
 ];
 
 export default function Sidebar() {
@@ -18,7 +18,8 @@ export default function Sidebar() {
 
     const handleLogout = () => {
         setMobileOpen(false);
-        navigate("/login");
+        localStorage.clear();
+        navigate("/", { replace: true });
     };
 
     return (
@@ -47,7 +48,8 @@ export default function Sidebar() {
                             className={({ isActive }) =>
                                 `sidebar__item${isActive ? " sidebar__item--active" : ""}`
                             }
-                            onClick={() => setMobileOpen(false)}
+                            onClick={() => 
+                                setMobileOpen(false)}
                         >
               <span className="sidebar__icon">
                 <img

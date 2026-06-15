@@ -10,6 +10,8 @@ function InputField({ label, type = "text", placeholder, value, onChange }) {
     const isPassword = type === "password";
     const inputType = isPassword ? (visible ? "text" : "password") : type;
 
+    const navigate = useNavigate();
+
     return (
         <div className="lf-field">
             <label className="lf-label">{label}</label>
@@ -56,7 +58,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
 
     // const { login } = useContext(AuthContext);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleForgotPassword = () => {
         navigate("/recuperar-password");
@@ -72,7 +74,7 @@ function Login() {
 
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/api/usuarios/login", {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ correo, password }),
@@ -81,15 +83,17 @@ function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem("token", data.token);
+
+                localStorage.setItem("token", data.accessToken);
                 localStorage.setItem("usuario", JSON.stringify(data));
 
-                const rol = (data.rol ?? "").toLowerCase();
+                const rol = (data.rol ?? "").toUpperCase();
 
-                if (rol.includes("admin") || rol.includes("administrador")) {
+                if (rol === "ADMIN" || rol === "ROLE_ADMIN") {
                     // login(data.correo, "admin", data.token);
                     // navigate("/dashboard");
                     alertaExito("Inicio de sesión exitoso");
+                    navigate("/admin/beneficiarios");
                 } else {
                     alert("No tienes permisos de administrador.");
                 }
@@ -153,7 +157,7 @@ function Login() {
                         <button
                             type="button"
                             className="lf-btn lf-btn--secondary"
-                            onClick={() => window.history.back()}
+                            onClick={() => navigate("/")}
                         >
                             Regresar
                         </button>
