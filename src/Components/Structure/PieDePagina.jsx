@@ -44,7 +44,7 @@ export default function PieDePagina() {
         <a href={"#"} className="navegacion-link-Inferior espacio" onClick={(e) => { e.preventDefault(); 
                 navigate("/voluntariado");   }}>Voluntariado</a>
         <a href={"#"} className="navegacion-link-Inferior espacio"onClick={(e) => { e.preventDefault(); 
-                navigate("/paginaSecciones");   }}>Programas</a>
+                navigate("/secciones");   }}>Programas</a>
         </div>
     </div>
 
