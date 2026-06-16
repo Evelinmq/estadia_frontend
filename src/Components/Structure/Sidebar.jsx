@@ -17,20 +17,17 @@ const navItems = [
 export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const navigate = useNavigate();
-    
+
 
 
     const handleLogout = async () => {
-
-        const confirmar = await alertaCerrarSesion();
-
-        if (confirmar) {
+        const resultado = await alertaCerrarSesion();
+        
+        if (resultado.isConfirmed) {
             setMobileOpen(false);
             localStorage.clear();
             navigate("/", { replace: true });
         }
-
-
     };
 
     return (
