@@ -20,15 +20,15 @@ function ForgotPassword() {
 
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/api/usuarios/recuperar-password", {
+            const response = await fetch("http://localhost:8080/api/auth/recuperar-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ correo }),
+                body: JSON.stringify({ correo : correo}),
             });
 
             if (response.ok) {
                 alertaExito("Código enviado. Revisa tu correo.");
-                navigate("/verificar-codigo", { state: { correo } });
+                navigate("/verify", { state: { correo } });
             } else {
                 const data = await response.json();
                 alertaError(data.mensaje ?? "No se pudo enviar el código.");

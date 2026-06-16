@@ -61,7 +61,7 @@ function Login() {
     const navigate = useNavigate();
 
     const handleForgotPassword = () => {
-        navigate("/recuperar-password");
+        navigate("/forgotPassword");
     };
 
     const handleLogin = async (e) => {
