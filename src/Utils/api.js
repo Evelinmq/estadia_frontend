@@ -2,12 +2,16 @@ const BASE_URL = 'http://localhost:8080';
 
 
 const getHeaders = () => {
-     const token = localStorage.getItem("token");
-     
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+    const token = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
     };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return headers;
 };
 
 // obtener

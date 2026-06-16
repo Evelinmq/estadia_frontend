@@ -66,6 +66,9 @@ export default function Objetivos() {
     const onSubmit = async (data) => {
 
         try {
+
+            const descripcionLimpia = data.descripcion?.trim();
+
                 await actualizarDatos(`/api/goal/${idEdicion}`, {
                     id: idEdicion,
                     name: objetivoSeleccionado,
@@ -77,7 +80,7 @@ export default function Objetivos() {
                 if (obj.id === idEdicion) {
                     return {
                         ...obj,
-                        description: data.descripcion
+                        description: descripcionLimpia
                     };
                 }
                 return obj;
