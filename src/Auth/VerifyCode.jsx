@@ -47,14 +47,14 @@ function VerifyCode() {
     const handleVerify = async (code) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/api/usuarios/verificar-codigo", {
+            const response = await fetch("http://localhost:8080/api/auth/validarCodigo", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ correo, codigo: code }),
             });
 
             if (response.ok) {
-                navigate("/nueva-password", { state: { correo, codigo: code } });
+                navigate("/newPassword", { state: { correo, codigo: code } });
             } else {
                 const data = await response.json();
                 alertaError(data.mensaje ?? "Código incorrecto. Intenta de nuevo.");

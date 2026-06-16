@@ -95,10 +95,10 @@ function NewPassword() {
 
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/api/usuarios/nueva-password", {
+            const response = await fetch("http://localhost:8080/api/auth/actualizarPassword", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ correo, codigo, nuevaPassword: password }),
+                body: JSON.stringify({ correo, codigo, contrasena: password }),
             });
 
             if (response.ok) {
