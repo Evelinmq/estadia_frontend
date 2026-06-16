@@ -149,15 +149,24 @@ export default function Programas() {
             let metodo;
 
             if (isEditing) {
-                url = `${BASE_URL}/api/program/${programaSeleccionado.id}`;
-                metodo = "PUT";
+                url = `${BASE_URL}/api/program/update/${programaSeleccionado.id}`;
+                metodo = "POST";
             } else {
                 url = `${BASE_URL}/api/program`;
                 metodo = "POST";
             }
 
+            const token = localStorage.getItem("token");
+            const headers = {};
+
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
+            }
+
+
             const respuesta = await fetch(url, {
                 method: metodo,
+                headers: headers,
                 body: formData,
                 credentials: 'include',
             });
