@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
+import {alertaCerrarSesion, alertaError, alertaExito, confirmarEliminar} from "../../Utils/alerts.js";
+import {eliminarDatos} from "../../Utils/api.js";
 
 const navItems = [
     { label: "Beneficiarios",  svgFile: "Beneficiarios.svg",   path: "/admin/beneficiarios"  },
@@ -15,11 +17,20 @@ const navItems = [
 export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const navigate = useNavigate();
+    
 
-    const handleLogout = () => {
-        setMobileOpen(false);
-        localStorage.clear();
-        navigate("/", { replace: true });
+
+    const handleLogout = async () => {
+
+        const confirmar = await alertaCerrarSesion();
+
+        if (confirmar) {
+            setMobileOpen(false);
+            localStorage.clear();
+            navigate("/", { replace: true });
+        }
+
+
     };
 
     return (

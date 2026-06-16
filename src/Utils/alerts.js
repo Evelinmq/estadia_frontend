@@ -50,6 +50,17 @@ export const alertaSinCambios = () => {
     });
 };
 
+export const alertaCerrarSesion = () => {
+    return swalBase.fire( {
+        icon: "question",
+        title: "Cerrar Sesión",
+        text: "¿Deseas cerrar sesión?",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar"
+    })
+}
+
 export const confirmarEliminar = async () => {
 
     const resultado = await swalBase.fire({
