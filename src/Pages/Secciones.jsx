@@ -120,6 +120,13 @@ export default function Secciones() {
     // Submit (POST/PUT)
     const onSubmit = async (data) => {
         try {
+            const token = localStorage.getItem("token");
+            const headers = {};
+
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
+            }
+
             if (!isEditing && !archivo) {
                 alertaError("La imagen es obligatoria para crear una sección");
                 return;
@@ -136,8 +143,8 @@ export default function Secciones() {
             let metodo;
 
             if (isEditing) {
-                url = `${BASE_URL}/api/section/${seccionSeleccionada.id}`;
-                metodo = "PUT";
+                url = `${BASE_URL}/api/section/update/${seccionSeleccionada.id}`;
+                metodo = "POST";
             } else {
                 url = `${BASE_URL}/api/section`;
                 metodo = "POST";
@@ -145,6 +152,7 @@ export default function Secciones() {
 
             const respuesta = await fetch(url, {
                 method: metodo,
+                headers: headers,
                 body: formData,
                 credentials: 'include',
             });
@@ -167,11 +175,14 @@ export default function Secciones() {
         const confirmar = await confirmarEliminar("¿Eliminar esta sección?");
         if (confirmar) {
             try {
+
                 await eliminarDatos(`/api/section/${id}`);
                 await cargarSecciones();
                 alertaExito("Sección eliminada correctamente");
+
+
             } catch (error) {
-                alertaError("No se pudo eliminar la sección");
+                alertaError(error.message || "No se pudo eliminar la sección");
                 console.error("Error al eliminar la sección: ", error);
             }
         }

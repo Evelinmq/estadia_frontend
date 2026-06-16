@@ -7,6 +7,7 @@ const getHeaders = () => {
         'Content-Type': 'application/json'
     };
 
+
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
@@ -86,7 +87,10 @@ export const eliminarDatos = async (endpoint) => {
         });
 
         if (!response.ok) {
-            throw new Error(`No se pudo eliminar el registro en ${endpoint} (Status: ${response.status})`);
+            if (!response.ok) {
+                const mensaje = await response.text();
+                throw new Error(mensaje);
+            }
         }
 
         return true;
