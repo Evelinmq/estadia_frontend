@@ -46,7 +46,7 @@ export const Encabezado = () => {
                 
                 <div className="botones-grupo">
                     <Button label="Iniciar Sesión" onClick={() => navigate("/login")} />
-                    <Button label="Donación" onClick={() => navigate("/") }img={donacion} />
+                    <Button label="Donación" onClick={() => navigate("/donaciones") }img={donacion} />
                     <Button label="Registrarse" onClick={() => navigate("/registroBeneficiarios")} />
                 </div>
             </nav>

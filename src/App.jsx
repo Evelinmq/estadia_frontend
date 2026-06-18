@@ -13,6 +13,8 @@ import ForgotPassword from "./Auth/ForgotPassword.jsx";
 import NewPassword from "./Auth/NewPasword.jsx";
 import VerifyCode from "./Auth/VerifyCode.jsx";
 
+import Donaciones from "./Pages/Donaciones.jsx";
+
 import Beneficiarios from "./Pages/Beneficiarios.jsx";
 import Afiliados from "./Pages/Afiliados";
 import Administracion from "./Pages/Administracion";
@@ -40,6 +42,8 @@ export default function App() {
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/newPassword" element={<NewPassword />} />
             <Route path="/verify" element={<VerifyCode />} />
+
+            <Route path="/donaciones" element={<Donaciones/>} />
 
             <Route path="/secciones"
                    element={

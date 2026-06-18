@@ -383,3 +383,142 @@
     }
 }
 
+/* Contenedor principal gris claro de fondo */
+.donaciones-page {
+    min-height: 100vh;
+    background-color: #F8F9FA; /* Fondo suave para resaltar la tarjeta */
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Títulos fuera o dentro de la tarjeta (según prefieras, aquí van centrados) */
+.donaciones-title {
+    text-align: center;
+    color: #4A0042;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.donaciones-welcome {
+    text-align: center;
+    color: #4A0042;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Separación uniforme entre inputs */
+}
+
+/* Estilizado del Checkbox de Privacidad */
+.privacy-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #4A0042;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.privacy-check input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px; /* evita que se comprima */
+    flex-shrink: 0;  /* evita que flex lo aplaste */
+    border: 2px solid #B01A8A;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    display: inline-flex;  /* cambiado de flex a inline-flex */
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background-color: #FFF7FE;
+    vertical-align: middle; /* alineación extra por si acaso */
+    margin-right: 10px;
+}
+
+/* Estado seleccionado (Con palomita) */
+.privacy-check input[type="checkbox"]:checked {
+    background-color: #B01A8A;
+    border-color: #B01A8A;
+}
+
+/* Añadir la palomita blanca (✓) */
+.privacy-check input[type="checkbox"]:checked::before {
+    content: "✓";
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* Botones de acción */
+.form-actions-card {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.btn-cancelar {
+    background-color: #E2D9E2;
+    color: #4A0042;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancelar:hover {
+    background-color: #D3C6D3;
+}
+
+.btn-guardar {
+    background-color: #8E0073;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-guardar:hover {
+    background-color: #4A0042;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 24px 16px;
+    }
+    .form-actions-card {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    .btn-cancelar, .btn-guardar {
+        width: 100%;
+        text-align: center;
+    }
+}

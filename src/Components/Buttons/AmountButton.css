@@ -1,0 +1,101 @@
+.amount-container {
+    width: 100%;
+}
+
+.amount-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4A0042;
+    margin-bottom: 8px;
+}
+
+/* Grid responsivo real */
+.amount-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas en PC */
+    gap: 10px;
+}
+
+.amount-btn {
+    background-color: #FFF7FE;
+    color: #B01A8A;
+    border: 1.5px solid #B01A8A;
+    border-radius: 8px; /* Cambiado a 8px para hacer juego con los inputs de beneficiarios */
+    padding: 12px 4px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.amount-btn:hover {
+    background-color: #B01A8A;
+    color: #ffffff;
+}
+
+.amount-btn--selected {
+    background-color: #8E0073;
+    color: #ffffff;
+    border-color: #8E0073;
+}
+
+/* Responsivo para los montos */
+@media (max-width: 600px) {
+    .amount-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columnas en tablets/móviles grandes */
+    }
+}
+
+@media (max-width: 400px) {
+    .amount-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas muy chicas */
+    }
+}
+
+/* El resto de tus estilos para .amount-custom-wrap e inputs se quedan igual... */
+
+/* Campo personalizado */
+.amount-custom-wrap {
+    position: relative;
+    margin-top: 10px;
+}
+
+
+.amount-custom-input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 48px;
+    padding: 0 16px 0 52px;
+    border: 1.5px solid #B01A8A;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    color: #370030;
+    background-color: #FFF7FE;
+    outline: none;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.amount-custom-input::-webkit-outer-spin-button,
+.amount-custom-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.amount-custom-input:focus {
+    border-color: #4A0042;
+    box-shadow: 0 0 0 3px rgba(74, 0, 66, 0.15);
+}
+
+/* Mensaje de error */
+.amount-error {
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 6px;
+    text-align: left;
+}
