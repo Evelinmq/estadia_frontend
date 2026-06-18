@@ -1,5 +1,5 @@
 import './Informacion.css';
-import imagenPrueba from '../../Img/imagenPrueba.png';
+import imagen1 from "../../Img/imagen1.png";
 
 export default function QuienesSomos() {
 
@@ -7,7 +7,7 @@ export default function QuienesSomos() {
     return(
         <div className="tarjeta-organizacion">
             <div className="tarjeta-imagen">
-                <img  src={imagenPrueba} alt="QuienesSomos" className="img-QuienesSomos"/>
+                <img  src={imagen1} alt="QuienesSomos" className="img-QuienesSomos"/>
             </div>
             <div className="tarjeta-contenido">
                 <h3 className="tarjeta-titulo">¡Juventud por Temixco!</h3>
