@@ -8,6 +8,7 @@ import ReactPlayer from 'react-player';
 import Valores from "../Components/Informacion/Valores.jsx";
 import AlianzasConvenios from "../Components/Informacion/AlianzasConvenios.jsx";
 import PieDePagina from "../Components/Structure/PieDePagina.jsx";
+import videoEstadias from "../Img/videoEstadias.mp4";
 
 export default function PantallaPrincipal() {
 
@@ -21,7 +22,7 @@ export default function PantallaPrincipal() {
                 <h2 className="titulo-pantalla">¿Quiénes somos?</h2>
             </div>
             <div className="card-video"> 
-                <ReactPlayer src="https://youtu.be/w81Yj4uWir0?si=ilZ5SxdLz_6iYzG4" controls={true} width="100%" height="100%" className="video-pantalla"/> 
+                <ReactPlayer src={videoEstadias} l controls={true} width="100%" height="100%" className="video-pantalla"/> 
             </div>
             <div className="card-informacion">
                 <QuienesSomos />
