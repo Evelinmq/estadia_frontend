@@ -141,15 +141,6 @@ export default function Donaciones () {
                                         pattern: {
                                             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                             message: "Formato de correo inválido"},
-                                        validate: async (value) => {
-                                            try {
-                                                const response = await fetch(`http://localhost:8080/api/beneficiarios/verificarCorreo?email=${encodeURIComponent(value)}`);
-                                                const existe = await response.json();
-                                                return !existe || "Este correo ya está registrado";
-                                            } catch (error) {
-                                                return "Error al verificar el correo";
-                                            }
-                                        }
                                     })}/>
                             </div>
 
@@ -161,7 +152,8 @@ export default function Donaciones () {
                                             required: "Debes aceptar el aviso de privacidad"
                                         })}
                                     />
-                                    Estoy de acuerdo con el aviso de privacidad
+
+                                    Estoy de acuerdo con el <a className="link" href="https://www.paypal.com/mx/legalhub/paypal/privacy-full">Aviso de privacidad de Paypal</a>
                                 </label>
 
                                 {errors.privacidad && (

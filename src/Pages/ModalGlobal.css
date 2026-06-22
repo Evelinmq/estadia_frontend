@@ -508,6 +508,10 @@
     background-color: #4A0042;
 }
 
+.link {
+    color: #6a0d5f;
+}
+
 /* Responsivo para móviles */
 @media (max-width: 600px) {
     .form-container {
