@@ -1,31 +1,30 @@
-import {Button} from "../Buttons/Button.jsx";
-import './Programa.css'
-
+import { Button } from "../Buttons/Button.jsx";
+import './Programa.css';
 
 export default function TarjetaPrograma({ titulo, descripcion, imagen }) {
     return (
         <div className="programa-card">
-            <div className="Imagen-programa-card">
+            <div className="contenedor-imagen">
                 {imagen ? (
-                    <img src={imagen} alt={titulo} className="Imagen-programa-card" />
+                    <img src={imagen} alt={titulo} className="imagen-circular" />
                 ) : (
-                    <div className="Imagen-programa-card">
+                    <div className="sin-imagen">
                         <span>Sin imagen</span>
                     </div>
                 )}
             </div>
 
             <div className="info-wrapper">
-                <h3 className="Programa-titulo">{titulo} </h3>
-                <p className="Programa-descripcion">{descripcion} </p>
-            <div className="compartir-link">
-               <span>🔗</span> Compartir
+                <h3 className="Programa-titulo">{titulo}</h3>
+                <p className="Programa-descripcion">{descripcion}</p>
+                <div className="compartir-link">
+                    <span>🔗</span> Compartir
+                </div>
+            </div>
+
+            <div className="Acciones-botones">
+                <Button label={"Ver más"} />
             </div>
         </div>
-        <div className="Acciones-botones">
-            <Button label={"Ver más"}/>
-        </div>
-    </div>
-
     );
 }

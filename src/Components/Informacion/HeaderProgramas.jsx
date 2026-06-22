@@ -27,57 +27,55 @@ export default function HeaderProgramas({ titulo = "Emprende tu negocio" }) {
 const styles = {
     section: {
         width: "100%",
-        padding: "2rem 0 2.5rem",
+        padding: "2rem 1rem",
+        boxSizing: "border-box",
     },
     label: {
         textAlign: "center",
-        fontSize: 48,
+        fontSize: "clamp(2rem, 5vw, 3rem)",
         fontWeight: 700,
-        letterSpacing: "0.08em",
+        letterSpacing: "0.02em",
         color: "#4A0042",
-        marginBottom: "1.25rem",
-    },
-    wrapper: {
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
+        marginBottom: "0 0 1.25rem 0",
+        fontFamily: "'Poppins', sans-serif",
     },
     second: {
         color: "#400339",
-        fontSize: 24,
         display: "flex",
-        overflow: "hidden",
-        flex: 1,
-        padding: "8px 0",
-        alignItems: "center",
         justifyContent: "center",
-        marginLeft: "50px",
-        marginRight: "50px",
-        flexShrink: 0,
+        padding: "8px 0",
+        margin: "0 auto 2rem",
+        maxWidth: "800px", /* Evita que el texto se estire feo en monitores enormes */
         textAlign: "center",
+    },
+    secondText: {
+        fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", /* Dinámico para evitar textos gigantes en móvil */
+        lineHeight: 1.4,
+        margin: 0,
+    },
+    wrapper: {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
     },
     card: {
-        height: 138,
-        flexShrink: 0,
+        minHeight: "100px", /* minHeight en lugar de height fijo permite que la caja crezca si el texto se pasa de renglones */
+        width: "100%",
+        maxWidth: "600px",   /* Se ve compacto y elegante en PC, pero ocupa el 100% en móvil */
         backgroundColor: "#D8CBD6",
-        borderRadius: 12,
+        borderRadius: 15,
         display: "flex",
-        overflow: "hidden",
-        flex: 1,
-        padding: "8px 0",
         alignItems: "center",
         justifyContent: "center",
-        margin: "50px",
+        padding: "20px",     /* Espaciado interno seguro */
+        boxSizing: "border-box",
     },
-    contact: {
-        fontSize: 32,
+contact: {
+    fontSize: "clamp(1.2rem, 3vw, 1.8rem)", /* Tamaño de letra fluido */
         fontWeight: 750,
         color: "#4A0042",
-        alignItems: "center",
         textAlign: "center",
-        padding: "8px 0",
-        margin: "25px",
-        display: "flex",
-        overflow: "hidden",
+        margin: 0,
+        lineHeight: 1.3,
     },
 };
