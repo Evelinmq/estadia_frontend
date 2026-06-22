@@ -6,6 +6,7 @@ import Select from "../Components/Inputs/Select.jsx";
 import Input from "../Components/Inputs/Input.jsx";
 import "./ModalGlobal.css";
 import FileInput from "../Components/Inputs/FileInput.jsx";
+import { enviarDatos } from "../Utils/api.js";
 import {AmountButton} from "../Components/Buttons/AmountButton.jsx";
 
 export default function Donaciones () {
@@ -15,6 +16,7 @@ export default function Donaciones () {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+
 
     const {
         register,
@@ -30,30 +32,32 @@ export default function Donaciones () {
             return;
         }
 
-
         try {
 
+            const donationData = {
+                ...data,
+                monto
+            };
 
-            let url;
-            let metodo;
+            console.log(donationData);
 
-            url = `${BASE_URL}/api/donacion`;
-            metodo = "POST";
+            await enviarDatos(
+                "/api/Donacion/",
+                donationData
+            );
 
-            const respuesta = await fetch(url, {
-                method: metodo,
-                body: formData,
-                credentials: 'include',
-            });
+            alertaExito("Donación registrada correctamente");
 
-            if (!respuesta.ok) {
-                throw new Error(`Error en el servidor: ${respuesta.status}`);
-            }
+            reset();
+            setMonto(null);
 
-            alertaExito("Donación exitosa");
         } catch (error) {
-            alertaError("Lo sentimos, ocurrió un error al procesar la solicitud");
+
             console.error(error);
+
+            alertaError(
+                "Lo sentimos, ocurrió un error al procesar la solicitud. Intenta de nuevo mas tarde."
+            );
         }
     };
 
@@ -62,7 +66,7 @@ export default function Donaciones () {
             <div className="registro-card-view">
             <div>
                 <h1 className="donaciones-title">Donar</h1>
-                <h2 className="donaciones-welcome">¡Con tu apoyo, ayudas a que nuestros programas lleguen más lejos!</h2>
+                <h2 className="donaciones-welcome">Tu aportación ayuda a financiar nuestros programas y actividades en beneficio de la comunidad.</h2>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-container">
@@ -153,7 +157,7 @@ export default function Donaciones () {
                                         })}
                                     />
 
-                                    Estoy de acuerdo con el <a className="link" href="https://www.paypal.com/mx/legalhub/paypal/privacy-full">Aviso de privacidad de Paypal</a>
+                                    He leído y acepto el <a className="link" href="https://www.paypal.com/mx/legalhub/paypal/privacy-full">Aviso de privacidad</a>
                                 </label>
 
                                 {errors.privacidad && (
