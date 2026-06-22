@@ -45,11 +45,11 @@ const styles = {
         justifyContent: "center",
         padding: "8px 0",
         margin: "0 auto 2rem",
-        maxWidth: "800px", /* Evita que el texto se estire feo en monitores enormes */
+        maxWidth: "800px",
         textAlign: "center",
     },
     secondText: {
-        fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", /* Dinámico para evitar textos gigantes en móvil */
+        fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
         lineHeight: 1.4,
         margin: 0,
     },
@@ -59,19 +59,19 @@ const styles = {
         justifyContent: "center",
     },
     card: {
-        minHeight: "100px", /* minHeight en lugar de height fijo permite que la caja crezca si el texto se pasa de renglones */
+        minHeight: "100px",
         width: "100%",
-        maxWidth: "600px",   /* Se ve compacto y elegante en PC, pero ocupa el 100% en móvil */
+        maxWidth: "600px",
         backgroundColor: "#D8CBD6",
         borderRadius: 15,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "20px",     /* Espaciado interno seguro */
+        padding: "20px",
         boxSizing: "border-box",
     },
 contact: {
-    fontSize: "clamp(1.2rem, 3vw, 1.8rem)", /* Tamaño de letra fluido */
+    fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
         fontWeight: 750,
         color: "#4A0042",
         textAlign: "center",

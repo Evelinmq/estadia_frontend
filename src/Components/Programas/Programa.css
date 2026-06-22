@@ -4,17 +4,16 @@
     background-color: #EADDE9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     border-radius: 15px;
-    padding: 25px 40px; /* Más aire a los lados en PC */
-    width: 85%;         /* Ocupa la gran mayoría de la pantalla */
-    max-width: 1000px;  /* Límite amplio para pantallas gigantes (Monitores 4K) */
-    gap: 35px;          /* Más separación entre componentes en PC */
+    padding: 25px 40px;
+    width: 85%;
+    max-width: 1000px;
+    gap: 35px;
     margin: 25px auto;
     box-sizing: border-box;
 }
 
-/* Contenedor circular de la imagen */
 .contenedor-imagen, .sin-imagen {
-    width: 130px;       /* Un poco más grande en PC para que no se pierda */
+    width: 130px;
     height: 130px;
     border-radius: 50%;
     overflow: hidden;
@@ -25,14 +24,12 @@
     justify-content: center;
 }
 
-/* Estilo para la imagen real adentro del círculo */
 .imagen-circular {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Envoltura de textos */
 .info-wrapper {
     flex-grow: 1;
     min-width: 0;
@@ -43,7 +40,7 @@
 
 /* Título */
 .Programa-titulo {
-    font-size: 24px;    /* Un poquito más grande en PC */
+    font-size: 24px;
     font-weight: 800;
     text-transform: uppercase;
     color: #4A0042;
@@ -79,12 +76,10 @@
     display: flex;
     gap: 10px;
     flex-shrink: 0;
-    align-self: center; /* Centra verticalmente el botón con respecto a la tarjeta */
+    align-self: center;
 }
 
-/* --- RESPONSIVE / DISEÑO ADAPTABLE --- */
-
-/* Ajustes para Tablets / Laptops pequeñas */
+/* RESPONSIVE  */
 @media (max-width: 768px) {
     .programa-card {
         width: 90%;
@@ -97,7 +92,7 @@
     }
 }
 
-/* Ajustes para Celulares */
+/* Celulares */
 @media (max-width: 480px) {
     .programa-card {
         flex-direction: column;
