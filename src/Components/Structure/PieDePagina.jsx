@@ -71,7 +71,7 @@ export default function PieDePagina() {
     <div className="footer-column buttons-section">
         <h3 className="Titulo-inferior">ÚNETE A NOSOTROS</h3>
         <ButtonPieDePagina  label="Registrarse" onClick={() => navigate("/registroBeneficiarios")} />
-        <ButtonPieDePagina label="Donar"/>
+        <ButtonPieDePagina label="Donar" onClick={() => navigate("/donaciones")} />
     </div>
 
 </footer>
