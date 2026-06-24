@@ -2,35 +2,52 @@
     display: flex;
     align-items: center;
     background-color: #EADDE9;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     border-radius: 15px;
-    padding: 20px 40px;
-    width: 90%;
-    gap: 25px;
-    margin: 20px auto;
+    padding: 25px 40px;
+    width: 85%;
+    max-width: 1000px;
+    gap: 35px;
+    margin: 25px auto;
+    box-sizing: border-box;
 }
 
-/* Título */
-.Programa-titulo {
-    font-size: 22px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #4A0042;
-    text-align: left;
-    margin-bottom: 5px;
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Imagen circular */
-.Imagen-programa-card {
-    width: 110px;
-    height: 110px;
+.contenedor-imagen, .sin-imagen {
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
     border: 2px solid #4A0042;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.imagen-circular {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info-wrapper {
+    flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Título */
+.Programa-titulo {
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #4A0042;
+    text-align: left;
+    margin: 0 0 8px 0;
+    font-family: 'Poppins', sans-serif;
+}
 
 /* Descripción */
 .Programa-descripcion {
@@ -42,27 +59,53 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.info-wrapper {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* Botones */
-.Acciones-botones {
-    display: flex;
-    gap: 10px;
-    margin-top: 4px;
-}
-
+/* Compartir */
 .compartir-link {
     display: flex;
     align-items: center;
     gap: 5px;
     color: #4A0042;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 12px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
+}
+
+/* Botones */
+.Acciones-botones {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* RESPONSIVE  */
+@media (max-width: 768px) {
+    .programa-card {
+        width: 90%;
+        padding: 20px;
+        gap: 20px;
+    }
+    .contenedor-imagen {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    .programa-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .Programa-titulo, .Programa-descripcion, .compartir-link {
+        text-align: center;
+    }
+    .compartir-link {
+        justify-content: center;
+    }
+    .Acciones-botones {
+        margin-top: 10px;
+    }
 }
