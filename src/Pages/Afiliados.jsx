@@ -69,12 +69,20 @@ useEffect(() => {
     setAfiliadoSeleccionado(user);
     const idCorrecto = user.id;
 
+    const generoMap = {
+            HOMBRE: 0,
+            MUJER: 1,
+            "NO_BINARIO": 2,
+            OTRO: 3
+        };
+    
+
     reset({
         id: idCorrecto,
         nombres: user.nombre || "",
         apellidoP: user.apellidoP || "",
         apellidoM: user.apellidoM || "",
-        genero: user.genero || "",
+        genero: generoMap[user.genero] ?? "",
         edad: user.edad || "",
         telefono: user.telefono || "",
         fotografia: null

@@ -67,17 +67,24 @@ useEffect(() => {
               
     
                const handleEditar = (user) => {
+
                 
         setBeneficiarioSeleccionado(user);
         const idCorrecto = user.id;
+
+        const generoMap = {
+            HOMBRE: 0,
+            MUJER: 1,
+            "NO_BINARIO": 2,
+            OTRO: 3
+        };
     
         reset({
             id: idCorrecto,
             nombre: user.nombre || "",
             apellidoP: user.apellidoP || "",
             apellidoM: user.apellidoM || "",
-            genero: user.genero || "",
-            edad: user.edad || "",
+           genero: generoMap[user.genero] ?? "",
            id_Municipio: user.id_Municipio || "",
             colonia: user.colonia || "",
             correo: user.correo || "",
@@ -299,6 +306,7 @@ useEffect(() => {
                                        <Select
                                         label="Genero"
                                         error={errors.genero}
+                                        value={watch("genero")}
                                         {...register("genero", { required: "El genero es obligatorio" })}>
                                             <option value="">Selecciona una opción</option>
                                             <option value={0}>Hombre</option>
@@ -371,6 +379,23 @@ useEffect(() => {
                                                 ))}
                                                 </Select>
                                     </div>
+
+                                    <div className="form-group" style={{ width: '100%' }}>
+                                       <Input
+                                        label="Colonia"
+                                        TYPE="text"
+                                        PLACEHOLDER="Colonia"
+                                        error={errors.colonia}
+                                        {...register("colonia", {
+                                            required: "La colonia es obligatoria",
+                                            pattern: {
+                                                value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                                                message: "Solo se permiten letras"
+                                            }
+                                        })}
+                                        />
+                                    </div>
+
 
                                  
 
