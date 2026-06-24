@@ -28,6 +28,13 @@ export default function Alianzas() {
         mode: "onChange"
     });
 
+    const MIMES_PERMITIDOS = [
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'image/svg+xml',
+    ];
+
     register("id");
 
 
