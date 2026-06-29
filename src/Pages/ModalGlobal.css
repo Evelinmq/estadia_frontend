@@ -440,7 +440,7 @@
     border-radius: 4px;
     outline: none;
     cursor: pointer;
-    display: inline-flex;  /* cambiado de flex a inline-flex */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
@@ -570,4 +570,12 @@ footer {
     .seccion-registro-pasos {
         padding-bottom: 80px;
     }
+}
+
+/* Mensaje pagos */
+.processing-message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 500;
+    color: #8E0073;
 }

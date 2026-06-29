@@ -34,6 +34,14 @@ export const alertaExito = (mensaje = "Operación realizada correctamente") => {
     });
 };
 
+export const alertaAgradecimiento = (mensaje = "Tu aportación ayudará a financiar programas y actividades en beneficio de la comunidad.\n") => {
+    return swalBase.fire({
+        icon: "success",
+        title: "¡Gracias por tu donación! \n💜",
+        text: mensaje
+    })
+}
+
 export const alertaError = (mensaje = "Ocurrió un error") => {
     return swalBase.fire({
         icon: "error",

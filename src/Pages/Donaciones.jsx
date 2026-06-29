@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { alertaExito, alertaCamposVacios, confirmarEliminar, alertaError } from "../Utils/alerts";
-import Select from "../Components/Inputs/Select.jsx";
+import { alertaAgradecimiento, alertaError } from "../Utils/alerts";
 import Input from "../Components/Inputs/Input.jsx";
 import "./ModalGlobal.css";
-import FileInput from "../Components/Inputs/FileInput.jsx";
 import { enviarDatos } from "../Utils/api.js";
 import {AmountButton} from "../Components/Buttons/AmountButton.jsx";
 import { PayPalScriptProvider, PayPalButtons} from "@paypal/react-paypal-js";
@@ -16,6 +14,7 @@ export default function Donaciones () {
     const [montoError, setMontoError] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [procesandoPago, setProcesandoPago] = useState(false);
 
     const {
         register,
@@ -147,14 +146,18 @@ export default function Donaciones () {
                                 </div>
 
                                 <div className="form-actions-card">
-                                    <button type="button" className="btn-cancelar"  onClick={()=> navigate("/pantalla-principal")}>
+                                    <button
+                                        type="button"
+                                        className="btn-cancelar"
+                                        disabled={procesandoPago}
+                                        onClick={()=> navigate("/pantalla-principal")}>
                                         Cancelar
                                     </button>
                                 </div>
                                 <div style={{ marginTop: "20px" }}>
                                     <PayPalButtons
                                         key={`${isValid}-${monto}`}
-                                        disabled={!isValid || !monto}
+                                        disabled={!isValid || !monto || procesandoPago}
                                         onClick={(data, actions) => {
                                             const formData = getValues();
                                             if (!monto || monto <= 0) {
@@ -167,52 +170,69 @@ export default function Donaciones () {
                                             }
                                             return actions.resolve();
                                         }}
-                                        onApprove={(data, actions) => {
-                                            return actions.order.capture().then(async (details) => {
+                                        onApprove={async (data) => {
+                                            setProcesandoPago(true);
+
+                                            try {
                                                 const formData = getValues();
+
                                                 const donationData = {
                                                     ...formData,
                                                     monto,
-                                                    estado: "COMPLETADA",
-                                                    paypal_order_id: details.id
+                                                    paypalOrderId: data.orderID
                                                 };
 
-                                                try {
-                                                    console.log("DONATION DATA:", donationData);
-                                                    const respuesta = await enviarDatos(
-                                                        "/api/Donacion/",
-                                                        donationData
+                                                await enviarDatos(
+                                                    "/api/Donacion/paypal/capture-order",
+                                                    donationData
+                                                );
+
+                                                alertaAgradecimiento();
+                                                navigate("/pantalla-principal")
+
+                                                reset();
+                                                setMonto(null);
+                                            } catch (error) {
+                                                console.error(error);
+
+                                                if (error.message.includes("503")) {
+                                                    alertaError(
+                                                        "El servicio de pagos no está disponible temporalmente. Intenta nuevamente en unos minutos."
                                                     );
-                                                    console.log("RESPUESTA:", respuesta);
-
-                                                    alertaExito("Tu donación ha sido procesada con éxito. Agradecemos enormemente tu apoyo a nuestra comunidad.");
-
-                                                    reset();
-                                                    setMonto(null);
-                                                    navigate("/")
-
-                                                } catch (error) {
-                                                    console.error("ERROR AL GUARDAR:", error);
-                                                    alertaError("Ocurrió un error al registrar tu donación en el sistema.");
+                                                } else {
+                                                    alertaError(
+                                                        "No pudimos confirmar tu donación en este momento. Si el cargo se realizó, por favor contacta a la asociación."
+                                                    );
                                                 }
-                                            });
+
+                                            } finally {
+                                                setProcesandoPago(false);
+                                            }
                                         }}
-                                        createOrder={(data, actions) => {
-                                            return actions.order.create({
-                                                purchase_units: [
-                                                    {
-                                                        amount: {
-                                                            value: monto?.toString() || "0"
-                                                        }
-                                                    }
-                                                ]
-                                            });
-                                        }}
-                                        onError={(err) => {
-                                            console.error(err);
-                                            alertaError("Error al procesar el pago");
+                                        createOrder={async () => {
+                                            console.log("CREANDO ORDEN");
+
+                                            const response =
+                                                await enviarDatos(
+                                                    "/api/Donacion/paypal/create-order",
+                                                    { monto }
+                                                );
+
+                                            console.log("ORDER:", response);
+
+                                            return response.orderId;
                                         }}
                                     />
+                                    {procesandoPago && (
+                                        <div className="processing-container">
+                                            <div className="spinner"></div>
+                                            <p>
+                                                Procesando tu donación... 💜
+                                                <br />
+                                                Por favor, no cierres esta ventana.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
