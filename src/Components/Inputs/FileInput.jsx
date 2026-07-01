@@ -1,13 +1,29 @@
 import '../Estilos.css'
-import { forwardRef } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
 
-const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", accept = "image/*", style, ...props }, ref) => {
+const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", accept = "image/*,video/*", style, ...props }, ref) => {
+    const [esVideo, setEsVideo] = useState(false);
 
     const getImageSrc = (preview) => {
         if (!preview) return null;
         if (preview.startsWith('blob:') || preview.startsWith('http')) return preview;
         return `data:image/jpeg;base64,${preview}`;
     };
+
+    useEffect(() => {
+        const src = getImageSrc(previewImage);
+        if (!src) {
+            setEsVideo(false);
+            return;
+        }
+
+        if (src.startsWith('data:') && src.includes('video')) {
+            setEsVideo(true);
+            return;
+        }
+
+        setEsVideo(false);
+    }, [previewImage]);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -34,15 +50,32 @@ const FileInput = forwardRef(({ label, error, previewImage, id = "file-upload", 
                     }}
                 >
                     {previewImage ? (
-                        <img
-                            src={getImageSrc(previewImage)}
-                            alt="Vista previa"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
+                        esVideo ? (
+                            /* Vista previa para Video (Modo editar de la API o nuevo archivo cargado) */
+                            <video
+                                src={getImageSrc(previewImage)}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                muted
+                                loop
+                                autoPlay
+                                playsInline
+                            />
+                        ) : (
+                            /* Vista previa para Imagen */
+                            <img
+                                src={getImageSrc(previewImage)}
+                                alt="Vista previa"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                onError={() => {
+                                    // Si metemos un video (sea Blob local o URL remota) y el <img> falla, activamos el reproductor
+                                    setEsVideo(true);
+                                }}
+                            />
+                        )
                     ) : (
                         <div style={{ textAlign: 'center', color: '#878787', padding: '10px' }}>
                             <span style={{ fontSize: '28px', lineHeight: '1', display: 'block', marginBottom: '4px' }}>+</span>
-                            <p style={{ margin: '0', fontSize: '14px' }}>Añadir imagen</p>
+                            <p style={{ margin: '0', fontSize: '14px' }}>Añadir imagen o video</p>
                         </div>
                     )}
                 </div>

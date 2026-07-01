@@ -182,7 +182,19 @@ export default function Secciones() {
 
 
             } catch (error) {
-                alertaError(error.message || "No se pudo eliminar la sección");
+                let mensajeAmigable = "No se pudo eliminar la sección";
+
+                try {
+                    // Intentamos convertir el texto feo en un objeto JS
+                    const objetoError = JSON.parse(error.message);
+                    if (objetoError && objetoError.message) {
+                        mensajeAmigable = objetoError.message;
+                    }
+                } catch (e) {
+                    if (error.message) mensajeAmigable = error.message;
+                }
+                
+                alertaError(mensajeAmigable);
                 console.error("Error al eliminar la sección: ", error);
             }
         }
