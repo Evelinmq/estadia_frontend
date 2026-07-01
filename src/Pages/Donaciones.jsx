@@ -145,17 +145,17 @@ export default function Donaciones () {
                                     )}
                                 </div>
 
-                                <div className="form-actions-card">
-                                    <button
-                                        type="button"
-                                        className="btn-cancelar"
-                                        disabled={procesandoPago}
-                                        onClick={()=> navigate("/pantalla-principal")}>
-                                        Cancelar
-                                    </button>
-                                </div>
+
                                 <div style={{ marginTop: "20px" }}>
                                     <PayPalButtons
+                                        style={{
+                                            layout: "vertical",
+                                            color: "white",
+                                            shape: "rect",
+                                            label: "donate",
+                                            height: 45
+                                        }}
+
                                         key={`${isValid}-${monto}`}
                                         disabled={!isValid || !monto || procesandoPago}
                                         onClick={(data, actions) => {
@@ -233,6 +233,16 @@ export default function Donaciones () {
                                             </p>
                                         </div>
                                     )}
+                                </div>
+
+                                <div className="form-actions-card">
+                                    <button
+                                        type="button"
+                                        className="btn-cancelar"
+                                        disabled={procesandoPago}
+                                        onClick={()=> navigate("/pantalla-principal")}>
+                                        Cancelar
+                                    </button>
                                 </div>
                             </div>
                         </div>
