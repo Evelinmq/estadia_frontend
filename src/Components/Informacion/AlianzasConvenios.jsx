@@ -6,12 +6,12 @@ const GAP = 24;
 
 function useVisible() {
     const [visible, setVisible] = useState(
-        typeof window !== "undefined" && window.innerWidth <= 600 ? 2 : 5
+        typeof window !== "undefined" && window.innerWidth <= 600 ? 1 : 5
     );
 
     useEffect(() => {
         const onResize = () =>
-            setVisible(window.innerWidth <= 600 ? 2 : 5);
+            setVisible(window.innerWidth <= 600 ? 1 : 5);
 
         window.addEventListener("resize", onResize);
 
@@ -35,7 +35,14 @@ export default function AlianzasConvenios() {
     const calcCardW = useCallback(() => {
         if (!wrapperRef.current) return;
         const w = wrapperRef.current.offsetWidth;
-        setCardW(Math.floor((w - GAP * (visible - 1)) / visible));
+
+        if (window.innerWidth <= 600) {
+            const disponible = w - 32;
+            setCardW(Math.floor(disponible * 0.75));
+        } else {
+            const anchoInternoReal = w - 32;
+            setCardW(Math.floor((anchoInternoReal - GAP * (visible - 1)) / visible));
+        }
     }, [visible]);
 
     useEffect(() => {
@@ -185,19 +192,23 @@ const styles = {
     section: {
         width: "100%",
         padding: "2rem 0 2.5rem",
+        boxSizing: "border-box",
     },
     label: {
         textAlign: "center",
-        fontSize: 48,
+        fontSize: "min(48px, 8vw)",
         fontWeight: 700,
         letterSpacing: "0.08em",
         color: "#4A0042",
         marginBottom: "1.25rem",
+        padding: "0 16px"
     },
     carouselWrapper: {
         position: "relative",
         display: "flex",
+        padding: "0 16px",
         alignItems: "center",
+        boxSizing: "borderBox",
     },
     trackOuter: {
         overflow: "hidden",
@@ -231,7 +242,7 @@ const styles = {
     },
     fadeLeft: {
         position: "absolute",
-        left: 0,
+        left: 16,
         top: 0,
         bottom: 0,
         width: 48,
@@ -241,7 +252,7 @@ const styles = {
     },
     fadeRight: {
         position: "absolute",
-        right: 0,
+        right: 16,
         top: 0,
         bottom: 0,
         width: 48,
