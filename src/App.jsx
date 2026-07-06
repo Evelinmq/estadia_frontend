@@ -27,70 +27,78 @@ import ProtectedRoutes from "./Routes/ProtectedRoutes.jsx";
 import AdminLayout from "./Routes/AdminLayout.jsx";
 import {SeccionesProvider} from "./Pages/Secciones/SeccionesContext.jsx";
 
+import ScrollToTop from "./Components/Scroll/ScrollToTop.jsx";
+
 export default function App() {
     return (
 
-        <Routes>
+        <>
+            <ScrollToTop/>
 
-            {/*Rutas publicas*/}
-            <Route path="/" element={<PantallaPrincipal />} />
-            <Route path="/voluntariado" element={<PaginaVoluntariado />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios />} />
-            <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
+            <Routes>
 
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/newPassword" element={<NewPassword />} />
-            <Route path="/verify" element={<VerifyCode />} />
+                {/*Rutas publicas*/}
+                <Route path="/" element={<PantallaPrincipal />} />
+                <Route path="/voluntariado" element={<PaginaVoluntariado />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/registroBeneficiarios" element={<RegistroBeneficiarios />} />
+                <Route path="/registroAfiliados" element={<RegistroAfiliados />} />
 
-            <Route path="/donaciones" element={<Donaciones/>} />
+                <Route path="/forgotPassword" element={<ForgotPassword />} />
+                <Route path="/newPassword" element={<NewPassword />} />
+                <Route path="/verify" element={<VerifyCode />} />
 
-            <Route path="/secciones"
-                   element={
-                       <SeccionesProvider>
-                           <PaginaSecciones />
-                       </SeccionesProvider>
+                <Route path="/donaciones" element={<Donaciones/>} />
 
-                   } />
+                <Route path="/secciones"
+                       element={
+                           <SeccionesProvider>
+                               <PaginaSecciones />
+                           </SeccionesProvider>
 
-            <Route
-                path="/secciones/:slug"
-                   element={
-                       <SeccionesProvider>
-                           <DetalleSeccion />
-                       </SeccionesProvider>
-                   }
-            />
+                       } />
 
-            {/*Rutas privadas*/}
-            <Route
-                element={
-                     <ProtectedRoutes
-                        allowedRoles={["ROLE_ADMIN"]}
-                     />
-                }
-            >
-                <Route path="/admin" element={<AdminLayout />} >
-                    <Route path="beneficiarios" element={<Beneficiarios />} />
+                <Route
+                    path="/secciones/:slug"
+                    element={
+                        <SeccionesProvider>
+                            <DetalleSeccion />
+                        </SeccionesProvider>
+                    }
+                />
 
-                    <Route path="afiliados" element={<Afiliados />} />
+                {/*Rutas privadas*/}
+                <Route
+                    element={
+                        <ProtectedRoutes
+                            allowedRoles={["ROLE_ADMIN"]}
+                        />
+                    }
+                >
+                    <Route path="/admin" element={<AdminLayout />} >
+                        <Route path="beneficiarios" element={<Beneficiarios />} />
 
-                    <Route path="administracion" element={<Administracion />} />
+                        <Route path="afiliados" element={<Afiliados />} />
 
-                    <Route path="programas" element={<Programas />} />
+                        <Route path="administracion" element={<Administracion />} />
 
-                    <Route path="secciones" element={<Secciones />} />
+                        <Route path="programas" element={<Programas />} />
 
-                    <Route path="alianzas" element={<Alianzas />} />
+                        <Route path="secciones" element={<Secciones />} />
 
-                    <Route path="objetivos" element={<Objetivos />} />
+                        <Route path="alianzas" element={<Alianzas />} />
 
+                        <Route path="objetivos" element={<Objetivos />} />
+
+                    </Route>
                 </Route>
-            </Route>
-            
-            <Route path="*" element={<Navigate to="/" replace />} />
 
-        </Routes>
+                <Route path="*" element={<Navigate to="/" replace />} />
+
+            </Routes>
+
+        </>
+
 
     );
 }

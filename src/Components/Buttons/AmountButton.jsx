@@ -3,14 +3,15 @@ import './AmountButton.css';
 
 const AMOUNTS = [100, 200, 300, 400];
 
-// 1. Agregamos "value" a las props
 export function AmountButton({ onChange, value }) {
     const [selected, setSelected] = useState(null);
     const [customMode, setCustomMode] = useState(false);
     const [customValue, setCustomValue] = useState('');
     const [error, setError] = useState('');
 
-    // 2. Escuchamos si el valor externo cambia a null o vacío para resetear el componente
+    const MIN_AMOUNT = 50.00;
+
+
     useEffect(() => {
         if (value === null || value === "") {
             setSelected(null);
@@ -40,11 +41,36 @@ export function AmountButton({ onChange, value }) {
     };
 
     const handleCustomChange = (e) => {
-        const val = e.target.value.replace(/\D/g, '');
-        setCustomValue(val);
+        let val = e.target.value.replace(',', '.');
+        const regex = /^\d*\.?\d{0,2}$/;
 
-        if (onChange) {
-            onChange(val ? parseInt(val, 10) : null);
+        if (val === '' || regex.test(val)) {
+            setCustomValue(val);
+
+            if (onChange) {
+                const numericValue = parseFloat(val);
+                if (!isNaN(numericValue) && numericValue >= MIN_AMOUNT) {
+                    setError('');
+                    onChange(numericValue);
+                } else {
+                    onChange(null);
+                }
+            }
+        }
+    };
+
+    const handleBlur = () => {
+        const numericValue = parseFloat(customValue);
+
+        if (customValue === '') {
+            setError('');
+            return;
+        }
+
+        if (isNaN(numericValue) || numericValue < MIN_AMOUNT) {
+            setError(`El monto mínimo para donaciones es de $${MIN_AMOUNT}.00 MXN.`);
+        } else {
+            setError('');
         }
     };
 
@@ -76,11 +102,12 @@ export function AmountButton({ onChange, value }) {
                     <input
                         className="amount-custom-input"
                         type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="Ingresa un monto"
+                        inputMode="decimal"
+                        pattern="[0-9]*[.,]?[0-9]*"
+                        placeholder="$ 0.00 (MXN)"
                         value={customValue}
                         onChange={handleCustomChange}
+                        onBlur={handleBlur}
                     />
                 </div>
             )}
