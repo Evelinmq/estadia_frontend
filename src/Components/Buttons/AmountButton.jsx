@@ -1,13 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AmountButton.css';
 
 const AMOUNTS = [100, 200, 300, 400];
 
-export function AmountButton({ onChange }) {
+// 1. Agregamos "value" a las props
+export function AmountButton({ onChange, value }) {
     const [selected, setSelected] = useState(null);
     const [customMode, setCustomMode] = useState(false);
     const [customValue, setCustomValue] = useState('');
     const [error, setError] = useState('');
+
+    // 2. Escuchamos si el valor externo cambia a null o vacío para resetear el componente
+    useEffect(() => {
+        if (value === null || value === "") {
+            setSelected(null);
+            setCustomMode(false);
+            setCustomValue('');
+            setError('');
+        }
+    }, [value]);
 
     const handleFixed = (amount) => {
         if (customMode && parseFloat(customValue) > 0) {
@@ -29,18 +40,17 @@ export function AmountButton({ onChange }) {
     };
 
     const handleCustomChange = (e) => {
-        const value = e.target.value.replace(/\D/g, '');
-
-        setCustomValue(value);
+        const val = e.target.value.replace(/\D/g, '');
+        setCustomValue(val);
 
         if (onChange) {
-            onChange(value ? parseInt(value, 10) : null);
+            onChange(val ? parseInt(val, 10) : null);
         }
     };
 
     return (
         <div className="amount-container">
-            <label className="amount-label">Monto:</label>
+            <label className="amount-label">Monto</label>
             <div className="amount-grid">
                 {AMOUNTS.map((amount) => (
                     <button

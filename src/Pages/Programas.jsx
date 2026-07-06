@@ -26,7 +26,7 @@ const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 export default function Programas() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const ITEMS_POR_PAGINA = 8;
+    const ITEMS_POR_PAGINA = 10;
     const [showModal, setShowModal] = useState(false);
     const [programas, setProgramas] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
@@ -58,6 +58,7 @@ export default function Programas() {
                 setProgramas(data);
             } else {
                 setProgramas([]);
+                setTotalPages(1);
             }
 
             setImageVersion(Date.now());
@@ -65,12 +66,12 @@ export default function Programas() {
             alertaError("Ocurrió un error al cargar los programas");
             console.error('Error al cargar los programas: ', error);
             setProgramas([]);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
-    //Carga de secciones
     const cargarSecciones = async () => {
         try {
             const data = await obtenerDatos('/api/section');
@@ -82,7 +83,7 @@ export default function Programas() {
     }
 
     useEffect(() => {
-        const obtenerDatos = async () => {
+        const iniciarDatos = async () => {
             try {
                 await cargarProgramas();
                 await cargarSecciones();
@@ -92,7 +93,7 @@ export default function Programas() {
             }
         };
 
-        obtenerDatos();
+        iniciarDatos();
     }, []);
 
     // Funciones de Modal
@@ -163,7 +164,6 @@ export default function Programas() {
                 headers["Authorization"] = `Bearer ${token}`;
             }
 
-
             const respuesta = await fetch(url, {
                 method: metodo,
                 headers: headers,
@@ -191,6 +191,11 @@ export default function Programas() {
         if (confirmar) {
             try {
                 await eliminarDatos(`/api/program/${id}`);
+
+                if (currentPage > 1 && programas.length % ITEMS_POR_PAGINA === 1) {
+                    setCurrentPage(prev => prev - 1);
+                }
+
                 await cargarProgramas();
                 alertaExito("Imagen eliminada correctamente");
             } catch (error) {
@@ -214,7 +219,6 @@ export default function Programas() {
         }
     };
 
-    // url para cada una de las imagenes
     const getImagenUrl = (id) => `${BASE_URL}/api/program/file/${id}?v=${imageVersion}`;
 
     //Buscador
@@ -222,41 +226,72 @@ export default function Programas() {
         try {
             setLoading(true);
             const data = await obtenerDatos(`/api/program/bySectionName?sectionName=${encodeURIComponent(busqueda)}`);
-            setProgramas(data);
+
+            if (Array.isArray(data)) {
+                setProgramas(data);
+                const paginas = Math.ceil(data.length / ITEMS_POR_PAGINA);
+                setTotalPages(paginas === 0 ? 1 : paginas);
+            } else {
+                setProgramas([]);
+                setTotalPages(1);
+            }
+            setCurrentPage(1); // Reiniciar a la primera página tras buscar
             setImageVersion(Date.now());
         } catch (error) {
             alertaError("Ocurrió un error al buscar las imagenes por porgrama");
             console.error(error);
+            setProgramas([]);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ padding: "24px" }}>
-            <Header seccion="programas" onAdd={() => handleOpenModal(false)} onSearch={handleSearch} />
+        <div style={{
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "calc(100vh - 48px)",
+            justifyContent: "space-between"
+        }}>
+            {/* Contenedor Superior */}
+            <div style={{ width: "100%" }}>
+                <Header seccion="programas" onAdd={() => handleOpenModal(false)} onSearch={handleSearch} />
 
-            {/* Listado de Programas */}
-            <div className="grid-programas" style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                gap: '25px',
-                marginTop: '30px'
-            }}>
-                {programas.length > 0 ? (
-                    programas
-                        .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
-                        .map((prog) => (
-                        <ImageCard
-                            key={prog.id}
-                            titulo={prog.sectionName}
-                            imagen={getImagenUrl(prog.id)}
-                            onEdit={() => handleOpenModal(prog)}
-                            onDelete={() => eliminarPrograma(prog.id)}
-                        />
-                    ))
+                {/* Renderizado de estados */}
+                {loading ? (
+                    <div style={{ textAlign: "center", marginTop: "50px", color: "#666" }}>
+                        <p>Cargando programas...</p>
+                    </div>
+                ) : programas.length > 0 ? (
+                    <div className="grid-programas"
+                         style={{
+                             display: 'grid',
+                             gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                             gap: '24px',
+                             marginTop: '30px',
+                             justifyContent: 'center',
+                             justifyItems: 'center'
+                         }}
+                    >
+                        {programas
+                            .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
+                            .map((prog) => (
+                                <ImageCard
+                                    key={prog.id}
+                                    titulo={prog.sectionName}
+                                    imagen={getImagenUrl(prog.id)}
+                                    onEdit={() => handleOpenModal(prog)}
+                                    onDelete={() => eliminarPrograma(prog.id)}
+                                />
+                            ))
+                        }
+                    </div>
                 ) : (
-                    <p>No se encontraron programas registrados.</p>
+                    <div style={{ textAlign: "center", marginTop: "80px", color: "#999", fontSize: "1.1rem" }}>
+                        <p>No se encontraron programas registrados.</p>
+                    </div>
                 )}
             </div>
 
@@ -271,7 +306,6 @@ export default function Programas() {
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
                             <div className="modal-center">
 
-                                {/* SELECT DE SECCIÓN */}
                                 <Select
                                     label="Sección:"
                                     error={errors.seccionId}
@@ -285,16 +319,13 @@ export default function Programas() {
                                     ))}
                                 </Select>
 
-                                {/* IMAGEN */}
                                 <FileInput
                                     label="Imagen:"
                                     previewImage={previewImage}
                                     error={errors.imagen}
                                     accept={MIMES_PERMITIDOS.join(',')}
                                     {...register("imagen", {
-                                        required: !isEditing
-                                            ? "La imagen es obligatoria"
-                                            : false
+                                        required: !isEditing ? "La imagen es obligatoria" : false
                                     })}
                                     onChange={handleImageChange}
                                 />

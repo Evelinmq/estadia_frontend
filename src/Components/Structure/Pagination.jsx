@@ -8,7 +8,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
     };
 
     const handleNext = () => {
-        if (currentPage > totalPages) onPageChange(currentPage + 1);
+        // CORREGIDO: Debe ser menor que el total de páginas
+        if (currentPage < totalPages) onPageChange(currentPage + 1);
     };
 
     // páginas a mostrar con "..." cuando hay muchas
@@ -38,9 +39,10 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <div className="pagination">
             {/* Botón anterior */}
             <button
-                className={`pagination__btn pagination__arrow${currentPage === 1 ? " pagination__btn--disabled" : ""}`}
+                className={`pagination__btn pagination__arrow ${currentPage === 1 ? "pagination__btn--disabled" : ""}`}
                 onClick={handlePrev}
                 disabled={currentPage === 1}
+                aria-label="Página anterior"
             >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
@@ -49,32 +51,33 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 
             {/* Números */}
             {getPages().map((page, index) =>
-                    page === "..." ? (
-                        <span key={`dots-${index}`} className="pagination__dots">
-            …
-          </span>
-                    ) : (
-                        <button
-                            key={page}
-                            className={`pagination__btn ${
-                                currentPage === page ? "pagination__btn--active" : ""
-                            }`}
-                            onClick={() => onPageChange(page)}
-                            aria-label={`Página ${page}`}
-                            aria-current={currentPage === page ? "page" : undefined}
-                        >
-                            {page}
-                        </button>
-                    )
+                page === "..." ? (
+                    <span key={`dots-${index}`} className="pagination__dots">
+                        …
+                    </span>
+                ) : (
+                    <button
+                        key={page}
+                        className={`pagination__btn ${
+                            currentPage === page ? "pagination__btn--active" : ""
+                        }`}
+                        onClick={() => onPageChange(page)}
+                        aria-label={`Página ${page}`}
+                        aria-current={currentPage === page ? "page" : undefined}
+                    >
+                        {page}
+                    </button>
+                )
             )}
 
             {/* Botón siguiente */}
+            {/* CORREGIDO: Ahora evalúa totalPages, ejecuta handleNext y usa clases correctas */}
             <button
-                className={`pagination__btn pagination__arrow${currentPage === 1 ? " pagination__btn--disabled" : ""}`}
-                onClick={handlePrev}
-                disabled={currentPage === 1}
+                className={`pagination__btn pagination__arrow ${currentPage === totalPages ? "pagination__btn--disabled" : ""}`}
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                aria-label="Página siguiente"
             >
-                {/* SVG para una flecha más exacta */}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>

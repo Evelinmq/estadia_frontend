@@ -6,8 +6,11 @@
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
     padding: 20px 20px 16px 20px;
-    width: 220px;
     gap: 12px;
+
+    width: 100%;
+    max-width: 280px;
+    box-sizing: border-box;
 }
 
 /* Título */
@@ -56,6 +59,7 @@
     text-align: center;
     margin: 0;
     line-height: 1.5;
+    flex-grow: 1;
 }
 
 /* Botones */

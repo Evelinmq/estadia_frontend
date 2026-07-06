@@ -3,16 +3,38 @@ import Encabezado from '../../Components/Structure/Encabezado.jsx';
 import PieDePagina from '../../Components/Structure/PieDePagina.jsx';
 import HeaderProgramas from '../../Components/Informacion/HeaderProgramas.jsx';
 import { useSecciones } from './SeccionesContext.jsx';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 function TarjetaImagen({ imagen, titulo }) {
+    const [esVideo, setEsVideo] = useState(false);
+
+    // Si cambia la URL del archivo, se reinicia el estado
+    useEffect(() => {
+        setEsVideo(false);
+    }, [imagen.url]);
+
     return (
         <div style={imgStyles.card}>
-            <img
-                src={imagen.url}
-                alt={imagen.descripcion ?? titulo}
-                style={imgStyles.img}
-            />
+            {esVideo ? (
+                <video
+                    src={imagen.url}
+                    style={imgStyles.img}
+                    controls={true}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                />
+            ) : (
+                <img
+                    src={imagen.url}
+                    alt={imagen.descripcion ?? titulo}
+                    style={imgStyles.img}
+                    onError={() => {
+                        setEsVideo(true);
+                    }}
+                />
+            )}
         </div>
     );
 }

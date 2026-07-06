@@ -26,7 +26,7 @@ const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 export default function Secciones() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const ITEMS_POR_PAGINA = 8;
+    const ITEMS_POR_PAGINA = 10;
     const [showModal, setShowModal] = useState(false);
     const [secciones, setSecciones] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
@@ -41,10 +41,13 @@ export default function Secciones() {
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
     } = useForm({ mode: "onChange" });
 
-    //Cargar secciones
+    const descripcionActual = watch("descripcion", "");
+
+    // Cargar secciones
     const cargarSecciones = async () => {
         try {
             setLoading(true);
@@ -56,6 +59,7 @@ export default function Secciones() {
                 setSecciones(data);
             } else {
                 setSecciones([]);
+                setTotalPages(1);
             }
 
             setImageVersion(Date.now());
@@ -63,13 +67,14 @@ export default function Secciones() {
             alertaError("Ocurrió un error al cargar las secciones");
             console.error('Error al cargar las Secciones: ', error);
             setSecciones([]);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        const obtenerDatos = async () => {
+        const iniciarDatos = async () => {
             try {
                 await cargarSecciones();
             } catch (error) {
@@ -78,7 +83,7 @@ export default function Secciones() {
             }
         };
 
-        obtenerDatos();
+        iniciarDatos();
     }, []);
 
     // Abrir modal
@@ -158,6 +163,9 @@ export default function Secciones() {
             });
 
             if (!respuesta.ok) {
+                if (respuesta.status === 404) {
+                    throw new Error("El texto introducido es demasiado largo.");
+                }
                 throw new Error(`Error en el servidor: ${respuesta.status}`);
             }
 
@@ -165,7 +173,7 @@ export default function Secciones() {
             await cargarSecciones();
             handleCloseModal();
         } catch (error) {
-            alertaError("Error al procesar la solicitud");
+            alertaError(error.message || "Error al procesar la solicitud");
             console.error(error);
         }
     };
@@ -175,14 +183,27 @@ export default function Secciones() {
         const confirmar = await confirmarEliminar("¿Eliminar esta sección?");
         if (confirmar) {
             try {
-
                 await eliminarDatos(`/api/section/${id}`);
+
+                if (currentPage > 1 && secciones.length % ITEMS_POR_PAGINA === 1) {
+                    setCurrentPage(prev => prev - 1);
+                }
+
                 await cargarSecciones();
                 alertaExito("Sección eliminada correctamente");
-
-
             } catch (error) {
-                alertaError(error.message || "No se pudo eliminar la sección");
+                let mensajeAmigable = "No se pudo eliminar la sección";
+
+                try {
+                    const objetoError = JSON.parse(error.message);
+                    if (objetoError && objetoError.message) {
+                        mensajeAmigable = objetoError.message;
+                    }
+                } catch (e) {
+                    if (error.message) mensajeAmigable = error.message;
+                }
+
+                alertaError(mensajeAmigable);
                 console.error("Error al eliminar la sección: ", error);
             }
         }
@@ -203,7 +224,6 @@ export default function Secciones() {
         }
     };
 
-    //  URL de imagen para cada card
     const getImagenUrl = (id) => `${BASE_URL}/api/section/imagen/${id}?v=${imageVersion}`;
 
     // Lógica para el buscador
@@ -211,44 +231,74 @@ export default function Secciones() {
         try {
             setLoading(true);
             const data = await obtenerDatos(`/api/section/byName?name=${encodeURIComponent(busqueda)}`);
-            setSecciones(data);
+
+            if (Array.isArray(data)) {
+                setSecciones(data);
+                const paginas = Math.ceil(data.length / ITEMS_POR_PAGINA);
+                setTotalPages(paginas === 0 ? 1 : paginas);
+            } else {
+                setSecciones([]);
+                setTotalPages(1);
+            }
+            setCurrentPage(1);
             setImageVersion(Date.now());
         } catch (error) {
             alertaError("Ocurrió un error al buscar las secciones");
             console.error(error);
+            setSecciones([]);
+            setTotalPages(1);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ padding: "24px" }}>
-            <Header seccion="secciones" onAdd={() => handleOpenModal(null)} onSearch={handleSearch} />
+        <div style={{
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "calc(100vh - 48px)",
+            justifyContent: "space-between"
+        }}>
+            {/* Contenedor Superior */}
+            <div style={{ width: "100%" }}>
+                <Header seccion="secciones" onAdd={() => handleOpenModal(null)} onSearch={handleSearch} />
 
-            <div
-                className="grid-secciones"
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                    gap: '20px',
-                    marginTop: '30px',
-                }}
-            >
-                {secciones.length > 0 ? (
-                    secciones
-                        .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
-                        .map((sec) => (
-                        <SectionCard
-                            key={sec.id}
-                            titulo={sec.name}
-                            descripcion={sec.description}
-                            imagen={getImagenUrl(sec.id)}
-                            onEdit={() => handleOpenModal(sec)}
-                            onDelete={() => eliminar(sec.id)}
-                        />
-                    ))
+                {/* Renderizado de estados controlado */}
+                {loading ? (
+                    <div style={{ textAlign: "center", marginTop: "50px", color: "#666" }}>
+                        <p>Cargando secciones...</p>
+                    </div>
+                ) : secciones.length > 0 ? (
+                    <div
+                        className="grid-secciones"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                            gap: '24px',
+                            marginTop: '30px',
+                            justifyContent: 'center',
+                            justifyItems: 'center'
+                        }}
+                    >
+                        {secciones
+                            .slice((currentPage - 1) * ITEMS_POR_PAGINA, currentPage * ITEMS_POR_PAGINA)
+                            .map((sec) => (
+                                <SectionCard
+                                    key={sec.id}
+                                    titulo={sec.name}
+                                    descripcion={sec.description}
+                                    imagen={getImagenUrl(sec.id)}
+                                    onEdit={() => handleOpenModal(sec)}
+                                    onDelete={() => eliminar(sec.id)}
+                                />
+                            ))
+                        }
+                    </div>
                 ) : (
-                    <p>No se encontraron secciones registradas.</p>
+                    <div style={{ textAlign: "center", marginTop: "80px", color: "#999", fontSize: "1.1rem" }}>
+                        <p>No se encontraron secciones registradas.</p>
+                    </div>
                 )}
             </div>
 
@@ -285,7 +335,11 @@ export default function Secciones() {
                                         validate: (val) =>
                                             val.trim() === val || "Sin espacios al inicio o final",
                                     })}
+                                    maxLength={255}
                                 />
+                                <small style={{ color: descripcionActual.length > 255 ? "#ef4444" : "#8E0073", display: "block", marginTop: "2px" }}>
+                                    {descripcionActual.length} / 255 caracteres
+                                </small>
 
                                 <FileInput
                                     label="Imagen:"
@@ -293,9 +347,7 @@ export default function Secciones() {
                                     error={errors.imagen}
                                     accept={MIMES_PERMITIDOS.join(',')}
                                     {...register("imagen", {
-                                        required: !isEditing
-                                            ? "La imagen es obligatoria"
-                                            : false,
+                                        required: !isEditing ? "La imagen es obligatoria" : false,
                                     })}
                                     onChange={handleImageChange}
                                 />
@@ -318,7 +370,8 @@ export default function Secciones() {
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage} />
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 }
