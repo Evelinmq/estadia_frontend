@@ -100,3 +100,28 @@ export const eliminarDatos = async (endpoint) => {
         throw error;
     }
 };
+
+
+    export const obtenerArchivo = async (endpoint) => {
+    try {
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
+            method: 'GET',
+            headers: {
+                ...getHeaders(), 
+                'Accept': 'application/pdf' 
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error al descargar archivo desde ${endpoint} (Status: ${response.status})`);
+        }
+
+       
+        return await response.blob();
+    } catch (error) {
+        console.error('Error al descargar archivo:', error);
+        throw error;
+    }
+};
+

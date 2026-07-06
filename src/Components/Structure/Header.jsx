@@ -4,6 +4,7 @@ import { DatePicker } from '../Inputs/DatePicker.jsx';
 import { ExportAllButton } from '../Buttons/ExportarAllButton.jsx'
 import { AddButton } from '../Buttons/AddButton.jsx';
 import LogoSrc from '../../Img/logo.png';
+import {  obtenerArchivo } from "../../Utils/api.js";
 
 
 const Logo = () => (
@@ -25,7 +26,7 @@ export function HeaderConFiltros({ searchPlaceholder = "Buscar beneficiario", on
                 <DatePicker label="Fecha Inicial" value={fechas?.inicio} onChange={(val) => onDateChange('inicio', val)} />
                 <DatePicker label="Fecha Final" value={fechas?.fin} onChange={(val) => onDateChange('fin', val)} />
             </div>
-            <ExportAllButton onClick={onExport} />
+           <ExportAllButton onClick={onExport} />
         </header>
     )
 }

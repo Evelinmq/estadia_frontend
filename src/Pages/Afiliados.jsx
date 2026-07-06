@@ -6,7 +6,7 @@ import Pagination from "../Components/Structure/Pagination.jsx";
 import { alertaExito, alertaCamposVacios, alertaError, confirmarEliminar} from "../Utils/alerts";
 import "./ModalGlobal.css";
 import Input from "../Components/Inputs/Input.jsx";
-import { obtenerDatos, actualizarDatos, eliminarDatos } from "../Utils/api.js";
+import { obtenerDatos, actualizarDatos, eliminarDatos, obtenerArchivo } from "../Utils/api.js";
 import Select from "../Components/Inputs/Select.jsx";
 
 export default function Afiliados() {
@@ -190,6 +190,60 @@ useEffect(() => {
     }
 }
 }
+
+const handleDownloadIndividual = async (id) => {
+        try {
+            // Validamos que el ID exista
+            if (!id) return;
+            
+            const blob = await obtenerArchivo(`/api/reportes/afiliado/${id}/pdf`);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Credencial_${id}.pdf`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            alert("Error al descargar la credencial.");
+        }
+    };
+
+
+    const handleExportAll = async (afiliados, fechas, busqueda) => {
+    if (!afiliados || afiliados.length === 0) {
+        alert("No hay afiliados disponibles para descargar.");
+        return;
+    }
+
+   
+    let url = `/api/reportes/afiliado/pdf?`;
+    const params = [];
+
+    if (fechas?.inicio && fechas.inicio !== "undefined") {
+        params.push(`inicio=${encodeURIComponent(fechas.inicio)}`);
+    }
+    if (fechas?.fin && fechas.fin !== "undefined") {
+        params.push(`fin=${encodeURIComponent(fechas.fin)}`);
+    }
+  
+    if (busqueda && busqueda.trim() !== "") {
+        params.push(`busqueda=${encodeURIComponent(busqueda)}`);
+    }
+
+    url += params.join("&");
+    
+    try {
+        const blob = await obtenerArchivo(url);
+        const descargarUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = descargarUrl;
+        a.download = `Reporte_Afiliados´.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(descargarUrl);
+    } catch (error) {
+        alert("Error al descargar el reporte");
+    }
+};
  
 
        
@@ -204,10 +258,11 @@ useEffect(() => {
    
                <div style={{ padding: "24px" }}>
                    <Header seccion="Afiliados" 
-                   onSearch={(valor) => {
-                setTerminoBusqueda(valor) }}
+                onSearch={(valor) => { setTerminoBusqueda(valor) }}
                 onDateChange={handleDateChange}
-                fechas={fechas}/>
+                onExport={() => handleExportAll(afiliados, fechas, terminoBusqueda)}
+                fechas={fechas} />
+    
        
                    <div className="grid-secciones" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
             
@@ -225,6 +280,7 @@ useEffect(() => {
                             imagen={b.foto ? `data:image/jpeg;base64,${b.foto}` : null}
                             onEdit={() => handleEditar(b)}
                             onDelete={() => eliminarAfiliados(b.id)}
+                            onDownload={() => handleDownloadIndividual(b.id)}
                         />
                     ))
                 ) : (
