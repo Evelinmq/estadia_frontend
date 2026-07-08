@@ -135,7 +135,7 @@ export default function Donaciones () {
                                             })}
                                         />
 
-                                        He leído y acepto el <a className="link" href="https://www.paypal.com/mx/legalhub/paypal/privacy-full">Aviso de privacidad</a>
+                                        He leído y acepto el <a className="link" href="https://docs.google.com/document/d/19K4lHxiRcNv1wSrHp0NLWxvSUdIswtFxDjvcZBOGcIQ/edit?usp=drivesdk">Aviso de privacidad</a>
                                     </label>
 
                                     {errors.privacidad && (
