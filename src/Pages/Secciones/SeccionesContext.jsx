@@ -31,7 +31,7 @@ export function SeccionesProvider({ children }) {
                     titulo: sec.name,
                     descripcion: sec.description,
                     imagen: `${BASE_URL}/api/section/imagen/${sec.id}`,
-                    imagenes: [],
+                    imagenes: undefined,
                 }));
 
                 setSecciones(adaptadas);
@@ -49,33 +49,46 @@ export function SeccionesProvider({ children }) {
 
     const cargarImagenesDeSeccion = async (id) => {
         try {
+            console.log("Pidiendo imágenes", id);
             setLoading(true);
+
             const res = await fetch(`${BASE_URL}/api/section/${id}/programs`, {
-                credentials: 'include',
+                credentials: "include",
             });
 
+            console.log("Status:", res.status);
+
             const programas = await res.json();
+
+            console.log("Programas:", programas);
 
             const imagenes = programas
                 .filter(p => p.image !== null)
                 .map(p => ({
                     id: p.id,
                     url: `${BASE_URL}/api/section/program/image/${p.id}`,
-                    descripcion: p.name ?? '',
+                    descripcion: p.name ?? "",
                 }));
 
+            console.log("Imágenes:", imagenes);
+
             setSecciones(prev =>
-                prev.map(s => s.id === id ? { ...s, imagenes } : s)
+                prev.map(s =>
+                    s.id === id
+                        ? { ...s, imagenes }
+                        : s
+                )
             );
+
+            console.log("setSecciones ejecutado");
         } catch (e) {
-            alertaError("Ocurrió un error al cargar las imagenes");
-            console.log("Ocurrió un error al obtener las imagenes de los programas: ", e);
+            console.error(e);
         } finally {
+            console.log("finally");
             setLoading(false);
         }
-    }
+    };
 
-    // El admin llama a esto para agregar una nueva sección
     const agregarSeccion = (nuevaSeccion) => {
         const slug = nuevaSeccion.titulo
             .toLowerCase()
@@ -90,7 +103,6 @@ export function SeccionesProvider({ children }) {
         ]);
     };
 
-    // El admin llama a esto para agregar imágenes a una sección existente
     const agregarImagenes = (slug, nuevasImagenes) => {
         setSecciones((prev) =>
             prev.map((s) =>
@@ -101,7 +113,7 @@ export function SeccionesProvider({ children }) {
         );
     };
 
-    // Buscar una sección por su slug (para la ruta dinámica)
+    // Buscar una sección por su slug
     const obtenerPorSlug = (slug) =>
         secciones.find((s) => s.slug === slug) ?? null;
 
@@ -112,7 +124,7 @@ export function SeccionesProvider({ children }) {
     );
 }
 
-// Hook para consumir el contexto fácilmente
+// Hook para consumir el contexto
 export function useSecciones() {
     const ctx = useContext(SeccionesContext);
     if (!ctx) throw new Error('useSecciones debe usarse dentro de <SeccionesProvider>');

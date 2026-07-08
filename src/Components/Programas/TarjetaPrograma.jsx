@@ -1,7 +1,7 @@
 import { Button } from "../Buttons/Button.jsx";
 import './Programa.css';
 
-export default function TarjetaPrograma({ titulo, descripcion, imagen }) {
+export default function TarjetaPrograma({ titulo, descripcion, imagen, onCompartir }) {
     return (
         <div className="programa-card">
             <div className="contenedor-imagen">
@@ -17,7 +17,14 @@ export default function TarjetaPrograma({ titulo, descripcion, imagen }) {
             <div className="info-wrapper">
                 <h3 className="Programa-titulo">{titulo}</h3>
                 <p className="Programa-descripcion">{descripcion}</p>
-                <div className="compartir-link">
+                <div
+                    className="compartir-link"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onCompartir();
+                    }}
+                >
                     <span>🔗</span> Compartir
                 </div>
             </div>
