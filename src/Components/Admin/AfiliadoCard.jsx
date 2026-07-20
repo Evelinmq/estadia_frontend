@@ -24,7 +24,7 @@ export default function AfiliadoCard({
             {/* Encabezado____________________ */}
             <div className="user-card__header">
                 <img src={LogoSrc} alt="Juventud x Temixco" className="user-card__logo" />
-                <h3 className="user-card__titulo">Afiliado</h3>
+                <h3 className="user-card__titulo">Voluntariado</h3>
             </div>
 
             <div className="user-card__body">

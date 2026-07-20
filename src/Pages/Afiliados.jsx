@@ -65,7 +65,7 @@ useEffect(() => {
           
 
            const handleEditar = (user) => {
-            
+          
     setAfiliadoSeleccionado(user);
     const idCorrecto = user.id;
 
@@ -83,7 +83,7 @@ useEffect(() => {
         apellidoP: user.apellidoP || "",
         apellidoM: user.apellidoM || "",
         genero: generoMap[user.genero] ?? "",
-        edad: user.edad || "",
+        edad: user.edad ?? "",
         telefono: user.telefono || "",
         fotografia: null
     });
@@ -113,7 +113,7 @@ useEffect(() => {
     
     setAfiliados(data || []);
   } catch (error) {
-    console.error('Error al cargar afiliados:', error);
+    console.error('Error al cargar voluntariados:', error);
   }
 };
        
@@ -127,7 +127,7 @@ useEffect(() => {
                 const afiliadoId = data.id || (AfiliadoSeleccionado && AfiliadoSeleccionado.id);
 
                 if (!afiliadoId) {
-                alertaError("El afiliado no contiene un ID válido.");
+                alertaError("El voluntariado no contiene un ID válido.");
                 return;
             }
             
@@ -143,7 +143,7 @@ useEffect(() => {
 
            
             await actualizarDatos(`/api/afiliados/${afiliadoId}`, datosEnviar);
-            alertaExito("Afiliado actualizado correctamente");
+            alertaExito("Voluntariado actualizado correctamente");
         }
              await cargarAfiliados();
              handleCloseModal();
@@ -176,14 +176,14 @@ useEffect(() => {
     }
 
 
-        const confirmar = await confirmarEliminar("¿Eliminar al afiliado?");
+        const confirmar = await confirmarEliminar("¿Eliminar al voluntariado?");
         if (confirmar) {
             try {
-               console.log("Eliminando afiliado");
+               console.log("Eliminando voluntariado");
        await eliminarDatos(`/api/afiliados/${idLimpio}`);
        await cargarAfiliados();
 
-        alertaExito("Afiliado eliminado correctamente");
+        alertaExito("Voluntariado eliminado correctamente");
         
     } catch (error) {
         console.error("Error en eliminarAfiliados:", error);
@@ -204,14 +204,14 @@ const handleDownloadIndividual = async (id) => {
             a.click();
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            alert("Error al descargar la credencial.");
+            alertaError("Error al descargar la credencial.");
         }
     };
 
 
     const handleExportAll = async (afiliados, fechas, busqueda) => {
     if (!afiliados || afiliados.length === 0) {
-        alert("No hay afiliados disponibles para descargar.");
+        alertaError("No hay afiliados disponibles para descargar.");
         return;
     }
 
@@ -237,11 +237,11 @@ const handleDownloadIndividual = async (id) => {
         const descargarUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = descargarUrl;
-        a.download = `Reporte_Afiliados´.pdf`;
+        a.download = `Reporte_Voluntariados´.pdf`;
         a.click();
         window.URL.revokeObjectURL(descargarUrl);
     } catch (error) {
-        alert("Error al descargar el reporte");
+       alertaError("Error al descargar el reporte de voluntariados.");
     }
 };
  
@@ -293,7 +293,7 @@ const handleDownloadIndividual = async (id) => {
                    {showModal && (
                        <div className="modal-overlay">
                            <div className="modal-container-custom">
-                               <h2 className="modal-title">{"Editar Afiliado"}</h2>
+                               <h2 className="modal-title">{"Editar Voluntariado"}</h2>
        
                                <form onSubmit={handleSubmit(onSubmit, onError)}>
                                    <div className="modal-grid-columns">

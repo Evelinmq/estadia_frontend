@@ -42,7 +42,7 @@ export default function RegistroAfiliados() {
 
         await enviarDatos('/api/afiliados', payload);
         
-        alertaExito("Afiliado registrado con éxito");
+        alertaExito("Voluntariado registrado con éxito");
         setPreviewImage(null);
         setShowModal(false);
         reset();
@@ -95,8 +95,8 @@ export default function RegistroAfiliados() {
         <div className="registro-page-bg">
             <div className="registro-card-view">
                 <div className="registro-header"></div>
-            <h1 className="registro-title-main">Registro de Afiliados</h1>
-            <p className="registro-text-welcome">¡Bienvenido al registro de afiliados! Por favor, completa el siguiente formulario para unirte a nuestra comunidad y apoyar nuestra causa.</p>
+            <h1 className="registro-title-main">Registro de Voluntariados</h1>
+            <p className="registro-text-welcome">¡Bienvenido al registro de voluntariados! Por favor, completa el siguiente formulario para unirte a nuestra comunidad y apoyar nuestra causa.</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className="form-container">
                                                <div className="modal-grid-columns">

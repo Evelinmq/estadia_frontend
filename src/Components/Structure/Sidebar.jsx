@@ -6,7 +6,7 @@ import {eliminarDatos} from "../../Utils/api.js";
 
 const navItems = [
     { label: "Beneficiarios",  svgFile: "Beneficiarios.svg",   path: "/admin/beneficiarios"  },
-    { label: "Afiliados",      svgFile: "Afiliados.svg",        path: "/admin/afiliados"      },
+    { label: "Voluntariado",      svgFile: "Afiliados.svg",        path: "/admin/afiliados"      },
     { label: "Administración", svgFile: "Administracion.svg",   path: "/admin/administracion" },
     { label: "Programas",      svgFile: "Programas.svg",        path: "/admin/programas"      },
     { label: "Secciones",      svgFile: "Secciones.svg",        path: "/admin/secciones"      },

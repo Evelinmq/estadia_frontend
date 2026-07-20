@@ -87,6 +87,7 @@ useEffect(() => {
            genero: generoMap[user.genero] ?? "",
            id_Municipio: user.id_Municipio || "",
             colonia: user.colonia || "",
+            edad: user.edad ?? "",
             correo: user.correo || "",
             telefono: user.telefono || "",
             fotografia: null
@@ -210,14 +211,14 @@ useEffect(() => {
             a.click();
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            alert("Error al descargar la credencial.");
+            alertaError("Error al descargar la credencial.");
         }
     };
 
 
     const handleExportAll = async (beneficiarios, fechas, busqueda) => {
     if (!beneficiarios || beneficiarios.length === 0) {
-        alert("No hay beneficiarios disponibles para descargar.");
+        alertaError("No hay beneficiarios disponibles para descargar.");
         return;
     }
 
@@ -247,7 +248,7 @@ useEffect(() => {
         a.click();
         window.URL.revokeObjectURL(descargarUrl);
     } catch (error) {
-        alert("Error al descargar el reporte");
+       alertaError("Error al descargar el reporte de beneficiarios");
     }
 };
     
