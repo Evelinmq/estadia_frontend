@@ -2,83 +2,88 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Encabezado from '../../Components/Structure/Encabezado.jsx';
 import PieDePagina from '../../Components/Structure/PieDePagina.jsx';
 import HeaderProgramas from '../../Components/Informacion/HeaderProgramas.jsx';
+import TarjetaImagen from "../../Components/Programas/TarjetaImagen.jsx";
 import { useSecciones } from './SeccionesContext.jsx';
 import {useEffect, useState} from "react";
 
-function TarjetaImagen({ imagen, titulo }) {
-    const [esVideo, setEsVideo] = useState(false);
 
-    // Si cambia la URL del archivo, se reinicia el estado
-    useEffect(() => {
-        setEsVideo(false);
-    }, [imagen.url]);
-
-    return (
-        <div style={imgStyles.card}>
-            {esVideo ? (
-                <video
-                    src={imagen.url}
-                    style={imgStyles.img}
-                    controls={true}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                />
-            ) : (
-                <img
-                    src={imagen.url}
-                    alt={imagen.descripcion ?? titulo}
-                    style={imgStyles.img}
-                    onError={() => {
-                        setEsVideo(true);
-                    }}
-                />
-            )}
-        </div>
-    );
-}
-
-const imgStyles = {
-    card: {
-        borderRadius: 12,
-        overflow: 'hidden',
-        border: '1px solid #e0d0de',
-        width: 280,
-        flexShrink: 0,
-        backgroundColor: '#fff',
-        boxShadow: '0 2px 8px rgba(74,0,66,0.08)',
-    },
-    img: {
-        width: '100%',
-        height: 200,
-        objectFit: 'cover',
-        display: 'block',
-    },
-};
-
-// Página principal del detalle
 export default function DetalleSeccion() {
-    const { slug } = useParams();                    // lee el slug de la URL
-    const { obtenerPorSlug, cargarImagenesDeSeccion } = useSecciones();
+
+    const BASE_URL = "http://localhost:8080";
+
+    const { slug } = useParams();
+    const { obtenerPorSlug, loading } = useSecciones();
     const navigate = useNavigate();
 
     const seccion = obtenerPorSlug(slug);
 
-    useEffect(() => {
-        if (seccion?.id) {
-            cargarImagenesDeSeccion(seccion.id);
-        }
-    }, [seccion?.id]);
+    const [imagenes, setImagenes] = useState([]);
+    const [loadingImagenes, setLoadingImagenes] = useState(true);
 
-    // Sección no encontrada
+    useEffect(() => {
+
+        if (!seccion?.id) return;
+
+        const cargarImagenes = async () => {
+
+            try {
+
+                setLoadingImagenes(true);
+
+                const res = await fetch(
+                    `${BASE_URL}/api/section/${seccion.id}/programs`,
+                    {
+                        credentials: "include",
+                    }
+                );
+
+                const programas = await res.json();
+
+                const imgs = programas
+                    .filter(p => p.image !== null)
+                    .map(p => ({
+                        id: p.id,
+                        url: `${BASE_URL}/api/section/program/image/${p.id}`,
+                        descripcion: p.name ?? "",
+                    }));
+
+                setImagenes(imgs);
+
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoadingImagenes(false);
+            }
+
+        };
+
+        cargarImagenes();
+
+    }, [seccion]);
+
+    if (loading || loadingImagenes) {
+        return (
+            <>
+                <Encabezado />
+                <main style={styles.main}>
+                    <p style={styles.cargando}>Cargando...</p>
+                </main>
+                <PieDePagina />
+            </>
+        );
+    }
+
     if (!seccion) {
         return (
             <>
                 <Encabezado />
                 <main style={styles.main}>
                     <p style={styles.noEncontrado}>Sección no encontrada.</p>
-                    <button style={styles.volver} onClick={() => navigate('/secciones')}>
+
+                    <button
+                        style={styles.volver}
+                        onClick={() => navigate("/secciones")}
+                    >
                         ← Volver a programas
                     </button>
                 </main>
@@ -90,14 +95,12 @@ export default function DetalleSeccion() {
     return (
         <>
             <Encabezado />
-
             <HeaderProgramas titulo={seccion.titulo} />
 
             <main style={styles.main}>
-                {seccion.imagenes && seccion.imagenes.length > 0 ? (
-                    // ── Cuadrícula de imágenes ──────────────────
+                {imagenes.length > 0 ? (
                     <div style={styles.grid}>
-                        {seccion.imagenes.map((imagen, i) => (
+                        {imagenes.map((imagen, i) => (
                             <TarjetaImagen
                                 key={imagen.id ?? i}
                                 imagen={imagen}
@@ -106,9 +109,17 @@ export default function DetalleSeccion() {
                         ))}
                     </div>
                 ) : (
-                    // En caso de que aún no se suban imágenes
                     <div style={styles.sinImagenes}>
-                        <p>Lo sentimos. Aún no hay imágenes disponibles para esta sección.</p>
+                        <p>
+                            Lo sentimos. Aún no hay imágenes disponibles para esta sección.
+                        </p>
+
+                        <button
+                            style={styles.volver}
+                            onClick={() => navigate("/secciones")}
+                        >
+                            ← Volver a programas
+                        </button>
                     </div>
                 )}
             </main>
@@ -119,6 +130,12 @@ export default function DetalleSeccion() {
 }
 
 const styles = {
+    cargando: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: '#ac9cab',
+        marginTop: '3rem',
+    },
     main: {
         minHeight: '50vh',
         padding: '0 3rem 3rem',
@@ -128,6 +145,7 @@ const styles = {
         flexWrap: 'wrap',
         gap: '1.5rem',
         justifyContent: 'center',
+
     },
     sinImagenes: {
         textAlign: 'center',

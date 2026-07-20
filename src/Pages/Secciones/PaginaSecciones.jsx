@@ -3,9 +3,29 @@ import Encabezado from '../../Components/Structure/Encabezado.jsx';
 import PieDePagina from '../../Components/Structure/PieDePagina.jsx';
 import TarjetaPrograma from '../../Components/Programas/TarjetaPrograma.jsx';
 import { useSecciones } from './SeccionesContext.jsx';
+import {toast} from "../../Utils/alerts.js";
 
 export default function PaginaSecciones() {
     const { secciones } = useSecciones();
+
+    const compartirSeccion = async (seccion) => {
+        const url = `${window.location.origin}/secciones/${seccion.slug}`;
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: seccion.titulo,
+                    text: `Conoce el programa ${seccion.titulo}`,
+                    url,
+                });
+            } else {
+                await navigator.clipboard.writeText(url);
+                toast("¡Enlace copiado al portapapeles!");
+            }
+        } catch (error) {
+            console.log("Compartir cancelado", error);
+        }
+    };
 
     return (
         <>
@@ -16,7 +36,6 @@ export default function PaginaSecciones() {
 
                 <div style={styles.lista}>
                     {secciones.map((seccion) => (
-                        // Envuelve cada tarjeta en un Link para la navegación dinámica
                         <Link
                             key={seccion.id}
                             to={`/secciones/${seccion.slug}`}
@@ -26,6 +45,7 @@ export default function PaginaSecciones() {
                                 titulo={seccion.titulo}
                                 descripcion={seccion.descripcion}
                                 imagen={seccion.imagen}
+                                onCompartir={() => compartirSeccion(seccion)}
                             />
                         </Link>
                     ))}
@@ -47,31 +67,17 @@ const styles = {
         fontWeight: 700,
         color: '#4A0042',
         marginBottom: '1.5rem',
+        position: 'center',
+        alignItems: 'center',
     },
     lista: {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
     },
-    // Elimina la decoración del link para que la tarjeta se vea igual
     link: {
         textDecoration: 'none',
         color: 'inherit',
         display: 'block',
     },
 };
-
-/*
-import { SeccionesProvider } from './Pages/Secciones/SeccionesContext.jsx';
-import AppRouter from './Routes/AppRouter.jsx';
-
-function App() {
-    return (
-        <SeccionesProvider>
-            <AppRouter />
-        </SeccionesProvider>
-    );
-}
-
-export default App;
- */
